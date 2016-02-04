@@ -1,0 +1,19 @@
+Trade Exit
+==========
+
+OBJECTIVES:
+1- Build up rules for exit
+2- Cumulative rules to be in play
+3- Define if rules are met or not
+
+Objective 1:
+- Using the exit condition templates create an entry using a stored procedure for the exit strategy
+- Base this on the current stock performance data (last available stock data)
+- Limit this to only accepted trades
+
+Objective 2:
+- For all conditions associated with the current trade
+- test the actual conditions against the stock data
+
+Objective 3:
+- Output the data into a table for reference

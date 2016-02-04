@@ -1,0 +1,46 @@
+Database Interface Requirements
+===============================
+
+DBConnection object:
+	- connects using an XML reader
+	- exists as one connection throughout operation
+
+SelectQuery object:
+	- Parameter passed in is the type of object
+	- Runs the query within the connection before being returned
+		- failure results in NULL being returned
+
+InsertQuery object:
+	- Parameter passed in is the type of object
+	- Object returned ready for data input
+		- data input is a function that matches the stored procedure requirements (manually synchronised)
+	- Function to commit the data
+	- rollback checks for uncommited changes
+		- rolls back
+
+UpdateQuery object:
+	unused
+
+DeleteQuery object:
+	unused 
+
+
+Design - Based around PostgreSQL (as agnostic is silly!)
+========================================================
+DBConnection
+	- reads in the XML for logging in
+	- Provides a connection object for queries to run on
+	- Destructor will close the connection
+	- Functions:
+		- __init__()
+		- __del__()
+		- connect()
+		- get_connection()
+
+DBSelectQuery
+	- Functions
+		- __init__(db_connection)
+		- __del__()
+		- results run_query()
+	DBDataSet
+		- data result (as per postgres)

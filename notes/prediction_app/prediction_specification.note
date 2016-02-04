@@ -1,0 +1,24 @@
+Prediction Specification
+========================
+
+1
+	Perform all the mathematical calculations on insert of data into the database
+2
+	Provide a prediction based output
+	2.1
+		Showing:
+			1	-	Date of prediction (and data used)
+			2	-	Direction
+			3	-	Time by which it is expected
+			4	-	Some likelihood indicator based on previous accuracy
+	2.2
+		prediction to be split into two components.
+		2.2.1
+			expected price
+		2.2.2
+			expected time
+			
+	2.3
+		Logic for working out these both will be covered in (prediction_test)
+	2.4
+		Logic for defining what constitutes a prediction test (prediction_test_conditions)

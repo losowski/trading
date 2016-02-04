@@ -1,0 +1,26 @@
+Packages Providing yahoo finance API
+------------------------------------
+
+
+Yahoo Finance
+=============
+pip install yahoo-finance
+git clone git://github.com/lukaszbanasiak/yahoo-finance.git
+cd yahoo-finance
+python setup.py install
+
+
+
+Y Stock Quote
+=============
+pip install ystockquote
+
+GIT
+---
+git clone git://github.com/cgoldberg/ystockquote.git
+cd ystockquote
+sudo python setup.py install
+
+Testing
+-------
+python -m unittest discover

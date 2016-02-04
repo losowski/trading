@@ -1,0 +1,4 @@
+--
+-- Create the trading user for the tradingDB
+--
+CREATE ROLE trading LOGIN NOSUPERUSER INHERIT CREATEDB CREATEROLE NOREPLICATION PASSWORD 'trade';

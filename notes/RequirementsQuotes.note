@@ -1,0 +1,31 @@
+Stock Quote Requirements
+========================
+
+List of symbols
+
+Importing of Data
+	- get list of symbols
+	- iterate and get the relevant data sets
+		- potentially tag errors as you go
+
+Database Requirements
+=====================
+Tables:
+	Exchange
+		id
+		name
+	Symbol
+		id
+		exchange_id
+		name
+		symbol
+	quote
+		
+- Stored Procedures/Functions for:
+	- inserting
+		exchange
+		symbol	
+		quote
+
+- Python SQL prepared statments (select):
+	symbol	

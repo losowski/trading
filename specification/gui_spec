@@ -1,0 +1,14 @@
+GUI Specification
+=================
+
+Requirments:
+===========
+- Written in python
+- Take data from Database
+- Display the raw data
+- Display calculated values
+- Reference the calculated data using the field name
+- auto-populate list of calculated data
+- auto populate the symbols
+- Allow data to be super-imposed on eachother
+- allow different ranges of data to be displayed for the desired term

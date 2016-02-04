@@ -1,0 +1,44 @@
+GUI Development
+===============
+
+FOLDER STRUCTURE
+================
+trunk/gui/technical_analysis_gui.py
+trunk/gui/python/
+trunk/gui/xml/technical_analysis_display.xml
+trunk/gui/python/__init__.py
+trunk/gui/python/.
+
+
+General Design
+==============
+- Provide a graphical user interface for all the data that can be generated via the DB backend
+- Auto-track:
+	-- Symbols
+	-- Exchanges
+	-- Calculations
+- XML defined plotting:
+	-- Use XML to decide where the data is to be plotted at run-time
+	-- Also means that easy to drop the data as required
+	-- XML to decide where/how to plot data arrays
+	-- Local XML to record current configuration setting
+		-- Base this on a standard read-only version
+
+
+PYTHON
+======
+- Python to be added via a base-class
+	- API design (see below)
+- GUI to call the API functions
+- GUI handles data display and state management
+
+
+PYTHON API
+==========
+- Objects named after the type they fetch
+- API:
+	- Set value (text)
+	- Execute
+	- Get values (list of text strings)
+- All SQL is to be PL/pgsql functions/Prepared statements
+	- No raw SQL to be transmitted ever!

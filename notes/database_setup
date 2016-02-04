@@ -1,0 +1,21 @@
+DATABASE SETUP
+=============
+In file:
+vim  /etc/postgresql/9.1/main/pg_hba.conf
+Modify the line:
+local   all             all                                     peer
+to read:
+local   all             all                                     md5
+
+DATABASE Details
+===============
+Username: trading
+Database Name: tradeDB
+Password: trade
+
+SQL Commands
+============
+CREATE DATABiASE tradingDB OWNER trading;
+USE tradingDB;
+CREATE SCHEMA trading;
+GRANT ALL PRIVILEGES ON DATABASE tradingdb TO trading;

@@ -1,0 +1,45 @@
+Strategy Approach
+=================
+
+Overview:
+1
+	Read in the stock predictions
+2
+	Have a strategy that fulfils the demands (entry_strategy) - this is the root of strategy
+	2.1
+		Test this with a range of conditions (entry_conditions)
+	2.2
+		When a strategy meets the specified conditions store it (strategy_proposal)
+	2.3
+		Create a set of actions that will enable the strategy to be enacted
+		2.3.1
+			actions to be entered using a template (entry_actions_template)
+		2.3.2
+			Actions to be stored in a table (entry_actions)
+	2.4
+		Flag the strategy as enacted (accepted_trades) setting the date it was enacted.
+		2.4.1
+			Presumption is that a strategy is only valid on the day of prediction
+3
+	Accepted trades need an exit position to go with the entrance position
+	3.1
+		Exit conditions are to be based on a template (exit_conditions_template)
+		3.1.1
+			These will populate (exit_conditions) upon acceptance
+		3.1.2
+			The conditions of a trade will not change throughout a trade
+4
+	Exit actions will be calculated for all open trades from the date of start until the termination
+	4.1
+		A query will be drawn up using the conditions specified in exit conditions
+	4.2
+		The result of this and the data it pertains to are to be stored in (exit_actions)
+		4.2.1
+			This is to be:
+			1	-	Dated with date of data used
+			2	-	Per exit strategy
+			3-	-	Overall result
+	4.3
+		There is to be no "exit_actions" table as there is an expectation of common sense to pervail (reverse the entry actions)
+5
+	For accounting there is to be an audit table to specify what was done (but this is not yet specified)

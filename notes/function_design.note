@@ -1,0 +1,33 @@
+Function Design
+---------------
+
+Ideal Structure
+===============
+- All functions to check that there is no entry in the field before attempting to insert
+- Perform actions on INSERT only (update and delete should not happen!)
+
+Code structure
+=============
+
+SLICE of ALL DATA
+=================
+- Get the required data each calculation
+- These fields are added to the table as a set of entries
+	-- Require a period
+
+CUMULATIVE data
+===============
+- Retrieve the previous cumulative value
+- Perform mathematics as appropriate
+- Store the new cumulative value
+	-- These are added as a single entry
+	-- No Period is present
+
+
+Trigger Functions
+=================
+- Void input
+- void output
+- New data is signalled in struct "NEW" so NEW.datestamp == new datestamp information etc
+- Trigger to be called on insert to do the calculation
+

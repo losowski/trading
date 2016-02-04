@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="render.xsl"?>
+<!DOCTYPE ui SYSTEM "db_connection.dtd">
+<!-- psql -d tradingdb -U trading -w -->
+<database>
+	<type>postgresql</type>
+	<connection>
+		<host>localhost</host>
+		<database>tradingdb</database>
+		<username>trading</username>
+		<password />
+	</connection>
+</database>

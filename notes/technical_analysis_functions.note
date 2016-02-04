@@ -1,0 +1,123 @@
+Technical Analysis Functions
+============================
+
+Pending/ToDo:
+-------------
+- swing_index
+- accumulation_swing_index
+	-- depends on swing_index
+- AROON
+- Average True Range
+- Bollinger Bands
+- Breadth Thrust
+- Candlestick Patterns:
+	-- Many to mention here. Each possesses a particular logic.
+	-- Some of these technically come under graphical analysis
+- Chaikin Money Flow
+- Chaikin Oscillator
+	-- Dependent on Accumulation/Distribution line
+- Chande Momentum Oscillator
+- Commodity Selection Index
+- Correlation Analysis
+- Cumulaticve Volume Index
+- Cycles
+- Demand Index
+- Detrended Price Oscillator
+- Double Exponential Moving Average
+- Dynamic Momentum Index
+- Ease of Movement
+- Envelopes (Trading Bands)
+- Forecast Oscillator
+	-- Depends on Time Series Forecast
+- Fourier Transform
+- Herrick Payoff Index
+- Inertia
+	-- dependent on:
+		--- RVI
+		--- Linear Regression Indicator
+- Intraday Momentum Index
+- Klinger Oscillator
+- Linear Regression Indicator
+- Linear Reression Slope
+- Linear Regression Trendlines
+- Market Facilitation Index
+- Mass index
+	-- depends on Exponential Moving average
+- Median Price
+- Mesa Sine Wave
+- Momentum
+
+
+- Money Flow Index
+- Moving Average Convergence/Divergence
+- Moving Average:
+	-- Exponential 
+	-- Time Series
+	-- Triangular
+	-- Variable
+	-- Volume Adjusted
+	-- Weighted
+- Negative Volume Index
+- New High-Lows Cumulative
+- New High-Lows Ratio
+- New Highs, New Lows
+- Odd lot Balance Index
+- Odd Lot purchases/sales
+- Odd lot short ratio
+- On Balance Volume
+- Open Interest (datasource)
+- Options Analysis
+- Overbought/Oversold
+- Parabolic SAR
+
+Pending (Market Index)
+----------------------
+- Advance/Decline Line
+- Advance/Decline Ratio
+- Advancing-Declining Issues
+- Advancing, Declining, Unchanged Volumes
+- ARMS index (TRIN)
+- Open-19 TRIN
+- DOW theory
+- Large Block Ratio
+- McClellan Oscillator
+- McClellan Summation Index
+- Member Short Ratio
+
+
+Pending (Graphical Analysis)
+----------------------------
+- Andrew's Pitchfork
+- Commodity Channel Index
+- Elliot Wave Theory
+- Euivolume
+- Fibonacci Studies
+	-- Fibonacci Arcs
+	-- Fibonacci Fan Lines
+	-- Fibonacci Retracements
+	-- Fibonacci Time Zones
+- Four Precent Model
+- Gann Angles
+- Kagi
+- ODDS(tm) Probability Cones
+
+Pending (Advisors)
+------------------
+- Bull/Bear Ratio
+- Efficient Market Theory
+
+
+Pending (Fully Researched Investments)
+--------------------------------------
+- CANSLIM
+- Fundamental Analysis
+- Interest Rates
+
+
+
+###############
+# Implemented #
+###############
+- Moving Average:
+	-- Simple
+- Accumulation Distribution - pg48

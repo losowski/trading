@@ -1,0 +1,61 @@
+SPECIFICATION
+=============
+
+Requirements
+------------
+- Database structure to accept information
+- Import data
+- Add procedures to handle analysis
+- Add queries to analyse data
+- Add the openoffice screen as the front end of the database system
+
+----------------------
+- Database Structure -
+----------------------
+Table design: use Postgresql
+
+schema: tradingDB
+database name: trading
+
+
+exchange
+--------
+id
+name
+
+symbol
+------
+id
+exchange_id
+name
+
+date
+----
+id
+timestamp
+
+quote
+-----
+id
+symbol_id
+timestamp_id
+open
+close
+high
+low
+close
+volume
+adjusted_close
+
+
+---------------
+- Import Data -
+---------------
+- Use a python script
+- Write one import script per source of iformation
+- use a standard database interface class
+- XML to list all the symbols for each exchange.
+- Data to be automatically downloaded
+- Periods relevant to download to be selected based on existing database information.
+- Symbols quotes to be fetched based on available symbols in database.
+- Addition of new exchanges is simply done by importing a new XML file.

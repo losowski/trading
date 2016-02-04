@@ -1,0 +1,30 @@
+Yahoo Finance Download Paths
+============================
+
+http://ichart.finance.yahoo.com/table.csv?s=GOOG&d=5&e=29&f=2013&g=d&a=7&b=19&c=2004&ignore=.csv
+---------------------
+Start:	Aug 19 2004
+End:	Jun 29 2013
+Symbol:	GOOG
+---------------------
+
+s = Symbol
+d = 5 (jun=6-1) (enum(end month, jan=1)-1)
+e = End Date Day
+f = End Date Year
+g = d (Just accept this)
+a = 7 (enum(start month, jan=1)-1)
+b = Start Date Day
+c = Start Date Year
+
+
+http://ichart.finance.yahoo.com/table.csv?s=GOOG&a=07&b=19&c=2004&d=04&e=29&f=2013&g=d&ignore=.csv
+----------
+Start:	Aug 19 2004
+End:	May 29 2013 (may=5-1) d=4
+
+
+http://ichart.finance.yahoo.com/table.csv?s=GOOG&a=00&b=19&c=2004&d=09&e=29&f=2013&g=d&ignore=.csv
+-----------------
+Start: 	Jan 19 2004
+End:	Oct 29 2013

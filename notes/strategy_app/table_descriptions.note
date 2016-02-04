@@ -1,0 +1,39 @@
+Table Descriptions
+==================
+
+entry_strategy
+	- logic to chose trades to enter
+
+entry_conditions
+	- conditions to use when deciding which entry strategy
+
+entry_actions
+	- Actions to perform in order to action a trade
+
+entry_actions_template
+	- template of what deals to setup
+
+entry_exit_strategy
+	- means to link an entry strategy with an exit strategy (template)
+
+exit_strategy
+	- Actual strategy for the exit of a trade at a particular point in time.
+	- Created at entry action generation
+	
+exit_conditions
+	- Actual conditions for the particular exit_strategy
+	- also filled in at the time of actions generation
+
+exit_strategy_template
+	- templates for creating the exit strategy
+
+exit_conditions_template
+	- template for creating the exit conditions
+
+strategy_proposal
+	- Proposition to accept or decline for a particular trade (with proposed strategies to enter)
+	
+exit_proposal
+	- Having entered a trade, the exit proposal instance
+	- exit is always the reverse of the entry
+	- This is a record when one or more exit conditions are met

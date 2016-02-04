@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="render.xsl"?>
+<!DOCTYPE ui SYSTEM "technical_analysis.dtd">
+<technical_analysis>
+	<periods>
+		<period>
+			<days>7</days>
+			<name>seven</name>
+		</period>
+		<period>
+			<days>14</days>
+			<name>fourteen</name>
+		</period>
+		<period>
+			<days>21</days>
+			<name>twenty_one</name>
+		</period>
+		<period>
+			<days>28</days>
+			<name>twenty_eight</name>
+		</period>
+		<period>
+			<days>48</days>
+			<name>fourty_eight</name>
+		</period>
+		<period>
+			<days>90</days>
+			<name>ninety</name>
+		</period>
+	</periods>
+	<functions>
+		<function>
+			<name>moving_average</name>
+			<type>splice</type>
+		</function>
+		<function>
+			<name>accumulation_distribution</name>
+			<type>cumulative</type>
+			<columns>
+				<column>momentum</column>
+			</columns>
+		</function>
+	</functions>
+</technical_analysis>

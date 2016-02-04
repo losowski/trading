@@ -1,0 +1,58 @@
+Trade Entrance
+==============
+
+Idea
+====
+- Provide rules for entry and exit of an investment that:
+	- Utilises the best available prediction on direction and time
+	- Choses a suitable stock for an investment
+	- Provides a suitable entrance method
+	- Constantly creates exit strategies to box in a trade
+		- box in: ensure a return is made (not open-ended)
+
+Concept:
+- Stock is analysed using the analysis/prediction algorithms
+- Stock analysis is queried for conditions that would make a particular strategy effective
+- This strategy is chosen along with the conditions that would specify the strategy
+* With an entrance and independently *
+	- An exit strategy is formulated for trades that are entered and not expired
+	- This is templated
+		- template offsets for positions
+		- creates rules that box in the trade
+
+TABLES:
+=======
+entrance_strategy
+	# Provide a record that a strategy was found and the date of discovery (based on present information)
+
+entry_strategy
+	# Own a particular strategy
+
+entry_conditions
+	# Conditions with which an entry_strategy would be chosen
+
+entry_actions
+	# Real-life actions for what must be done to manifest the chosen strategy
+	# linked to entry_strategy
+
+exit
+====
+exit_strategy
+	# Exit strategy associated with the entrance_strategy
+	# Intended to make a different exit strategy for each day of strategising
+
+exit_conditions
+	# Conditions to be fulfilled to fulfill a particular exit strategy
+
+Templates
+=========
+entry_strategy_template
+	# Template for the strategy that will make this work
+
+exit_strategy_template
+	# Template to base the exit strategy on
+
+exit_conditions_template
+	# template to base the exit strategy conditions on
+
+-- templates are meant to be used for the baseline of the strategy 

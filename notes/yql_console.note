@@ -1,0 +1,6 @@
+YQL Console
+===========
+
+show tables
+
+select * from pm.finance where symbol="YHOO"

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="render.xsl"?>
+<!DOCTYPE ui SYSTEM "securityexchange.dtd">
+<securityexchange>
+	<exchange>
+		<exchange_name>NYSE</exchange_name>
+		<security>
+			<name>Google Inc.</name>
+			<symbol>GOOG</symbol>
+		</security>
+	</exchange>
+	<index>
+		<index_name>NASDAQ</index_name>
+		<symbol>GOOG</symbol>
+	</index>
+</securityexchange>

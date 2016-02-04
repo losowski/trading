@@ -1,0 +1,49 @@
+Autogenerate Functions
+======================
+
+Function:
+==========
+- Manually written function taking the following arguments:
+	- Symbol
+	- Start date
+	- Interval period (duration)
+
+BULK PROCESS
+=============
+- Handles the PROCESS command
+- Processes entire quote information for one symbol
+- Parameters
+	- Symbol
+	- Date start
+	- Date end
+
+COMPLETE CALCULATE
+==================
+- Processes BULK PROCESS for every symbol
+- Parameters
+	- Date Start
+	- Date End
+
+
+==========================
+= Autogenrated Functions =
+==========================
+
+INSERT STATEMENT
+================
+- Called on INSERT into QUOTE
+- Handles exactly 1 record
+- If need be called as part of a larger insert function
+
+Requirements:
+	- Provide a value for each entry as defined in periods
+	- Provide the sub_query for the quote ID
+
+
+
+PROCESS COMMAND
+===============
+- Calls every function handling one insert
+- Handles exactly one INSERT record (outputs many)
+
+NOTE: Only one trigger function allowed per symbol

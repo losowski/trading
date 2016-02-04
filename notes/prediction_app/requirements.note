@@ -1,0 +1,43 @@
+Prediction Requirements
+=======================
+
+Input Tables
+============
+- quote
+
+Processing Table
+================
+- Linked to symbol and date fields of quote
+- One table
+- Populated on insert to quote
+- Foreign key constraint on symbol and date
+- unique constraint on symbol and date
+
+Method of implementation
+------------------------
+- Add the fields as the new functions are available
+- One function to call on insert (triggered off quote insert)
+- Calls the sub functions
+- Another function to check missing data and call the major function for insert
+
+
+Processing
+==========
+- Python application reads in the data
+- combines the information in numerous ways
+	- resovles any conflicts in a voting system manner
+- Comes up with some value it ithinks is right
+- Logs out all the information involved in analysing data
+- Pushes the value into the DB
+
+
+Output Table
+============
+prediction
+----------
+id
+symbol
+date_of_prediction
+start_date
+price_expected
+end_date

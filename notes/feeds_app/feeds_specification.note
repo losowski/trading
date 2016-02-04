@@ -1,0 +1,40 @@
+Feeds Specification
+===================
+
+1
+	Provide a means to update the daily stock symbols
+	1.1
+		Fetch data for:
+		1.1.1
+			All known symbols
+		1.1.2
+			All dates missing between beginning of record and present day
+		1.1.3
+			To do so without repeated load
+			1.1.3.1
+				Have a definitive completion regardless of number of times ran
+	1.2
+		Interface with a data source
+		1.2.1
+			Yahoo Finance
+
+2
+	Populate symbols
+	2.1
+		Using a list
+	2.2
+		Maintain:
+		2.2.1
+			Company/Index name
+		2.2.2
+			Company/Index symbol
+			2.2.2.1
+				Support the ability to support changes of symbol
+				2.2.2.1.1
+					This can be done in any way (including updating), just so long as there is a continuous history for a trading entity
+		2.2.3
+			Exchange the Company/Index trades on
+		2.2.4
+			Location of that exchange
+			2.2.4.1
+				Different options rules apply to different markets, so to trade on multiple markets this information is necessary
