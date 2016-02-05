@@ -1,7 +1,6 @@
 ﻿-- Functions to calculate the moving gradient
 
 CREATE OR REPLACE FUNCTION trading_schema.pCalcGradient(
-	p_symbol						trading_schema.symbol.name%TYPE,
 	p_datestamp1					trading_schema.quote.datestamp%TYPE,
 	p_price1						trading_schema.quote.open_price%TYPE,
 	p_datestamp2					trading_schema.quote.datestamp%TYPE,
@@ -18,7 +17,77 @@ BEGIN
 	v_gradient = v_diff_price / v_diff_days
 	RETURN v_gradient;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;:
+
+
+
+--- Function to fill in the gradient values for each entry
+CREATE OR REPLACE FUNCTION trading_schema.pInsGradient(
+	p_symbol						trading_schema.symbol.name%TYPE,
+	p_datestamp						trading_schema.quote.datestamp%TYPE,
+	p_interval						interval
+	) RETURNS money AS $$
+DECLARE
+	v_previous_open
+	v_previous_close
+	v_previus_high
+	v_previous_low
+	v_previous_date
+BEGIN
+	FOR gradient IN (
+		SELECT
+			q.datestamp,
+			q.open_price,
+			q.close_price,
+			q.high_price,
+			q.low_price
+		FROM
+			trading_schema.quote q
+			INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)
+		WHERE
+			s.name = p_symbol
+		AND
+			q.date >= p_date
+		AND
+			(q.date + p_interval) <=  p_date
+		ORDER BY
+			q.date ASC
+	)
+	LOOP
+		IF v_previous_open != NULL AND v_previous_close != NULL AND v_previous_high != NULL AND v_previous_low != NULL:
+		-- For now assume all data is one day apart
+		-- Fault detection will use weekday calculations
+		INSERT INTO
+			quote_diff
+			(
+				diff_open_price,
+				diff_close_price,
+				diff_high_price,
+				diff_low_price
+			)
+		VALUES
+			(
+				trading_schema.pCalcGradient(v_previous_date,previous_open, gradient.datestamp, gradient_open),
+				trading_schema.pCalcGradient(v_previous_date,previous_close, gradient.datestamp, gradient_close),
+				trading_schema.pCalcGradient(v_previous_date,previous_high, gradient.datestamp, gradient_high),
+				trading_schema.pCalcGradient(v_previous_date,previous_low, gradient.datestamp, gradient_low),
+			);
+		IF v_previous_open == NULL:
+			v_previous_open := gradient.open_price
+		IF v_previous_close == NULL:
+			v_previous_close := gradient.close_price
+		IF v_previous_high == NULL:
+			v_previous_high := gradient.high_price
+		IF v_previous_date == NULL:
+			v_previous_date := gradient.datestamp
+	END LOOP;
+	RETURN v_gradient;
+END;
+$$ LANGUAGE plpgsql;:
+
+
+
+
 
 -- Base function to calculate one moving gradient
 CREATE OR REPLACE FUNCTION trading_schema.pCalcAvg(
