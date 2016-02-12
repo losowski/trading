@@ -14,10 +14,10 @@ BEGIN
 	-- Calculate the gradient for this instance
 	v_diff_price	= p_price2 - p_price1;
 	v_interval_days = DAYS(p_datestamp2 - p_datestamp1);
-	v_gradient = v_diff_price / v_diff_days
+	v_gradient = v_diff_price / v_diff_days;
 	RETURN v_gradient;
 END;
-$$ LANGUAGE plpgsql;:
+$$ LANGUAGE plpgsql;
 
 
 
@@ -26,15 +26,16 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsGradient(
 	p_symbol						trading_schema.symbol.name%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE,
 	p_interval						interval
-	) RETURNS money AS $$
+	) RETURNS VOID AS $$
 DECLARE
-	v_previous_open
-	v_previous_close
-	v_previus_high
-	v_previous_low
-	v_previous_date
+	v_previous_open					trading_schema.quote.open_price%TYPE;
+	v_previous_close				trading_schema.quote.close_price%TYPE;
+	v_previus_high					trading_schema.quote.high_price%TYPE;
+	v_previous_low					trading_schema.quote.low_price%TYPE;
+	v_previous_date					trading_schema.quote.datestamp%TYPE;
+	v_gradient						RECORD;
 BEGIN
-	FOR gradient IN (
+	FOR v_gradient IN
 		SELECT
 			q.datestamp,
 			q.open_price,
@@ -52,38 +53,42 @@ BEGIN
 			(q.date + p_interval) <=  p_date
 		ORDER BY
 			q.date ASC
-	)
 	LOOP
-		IF v_previous_open != NULL AND v_previous_close != NULL AND v_previous_high != NULL AND v_previous_low != NULL:
+		IF v_previous_open != NULL AND v_previous_close != NULL AND v_previous_high != NULL AND v_previous_low != NULL THEN
 		-- For now assume all data is one day apart
 		-- Fault detection will use weekday calculations
-		INSERT INTO
-			quote_diff
-			(
-				diff_open_price,
-				diff_close_price,
-				diff_high_price,
-				diff_low_price
-			)
-		VALUES
-			(
-				trading_schema.pCalcGradient(v_previous_date,previous_open, gradient.datestamp, gradient_open),
-				trading_schema.pCalcGradient(v_previous_date,previous_close, gradient.datestamp, gradient_close),
-				trading_schema.pCalcGradient(v_previous_date,previous_high, gradient.datestamp, gradient_high),
-				trading_schema.pCalcGradient(v_previous_date,previous_low, gradient.datestamp, gradient_low),
-			);
-		IF v_previous_open == NULL:
-			v_previous_open := gradient.open_price
-		IF v_previous_close == NULL:
-			v_previous_close := gradient.close_price
-		IF v_previous_high == NULL:
-			v_previous_high := gradient.high_price
-		IF v_previous_date == NULL:
-			v_previous_date := gradient.datestamp
+			INSERT INTO
+				trading_schema.quote_diff
+				(
+					diff_open_price,
+					diff_close_price,
+					diff_high_price,
+					diff_low_price
+				)
+			VALUES
+				(
+					trading_schema.pCalcGradient(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
+					trading_schema.pCalcGradient(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
+					trading_schema.pCalcGradient(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
+					trading_schema.pCalcGradient(v_previous_date, v_previous_low,	v_gradient.datestamp, v_gradient.low_price)
+				);
+		END IF;
+		IF v_previous_open == NULL THEN
+			v_previous_open := v_gradient.open_price
+		END IF;
+		IF v_previous_close == NULL THEN
+			v_previous_close := v_gradient.close_price
+		END IF;
+		IF v_previous_high == NULL THEN
+			v_previous_high := v_gradient.high_price
+		END IF;
+		IF v_previous_date == NULL THEN
+			v_previous_date := v_gradient.datestamp
+		END IF;
 	END LOOP;
-	RETURN v_gradient;
+	RETURN; 
 END;
-$$ LANGUAGE plpgsql;:
+$$ LANGUAGE plpgsql;
 
 
 
