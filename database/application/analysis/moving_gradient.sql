@@ -30,7 +30,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsGradient(
 DECLARE
 	v_previous_open					trading_schema.quote.open_price%TYPE;
 	v_previous_close				trading_schema.quote.close_price%TYPE;
-	v_previus_high					trading_schema.quote.high_price%TYPE;
+	v_previous_high					trading_schema.quote.high_price%TYPE;
 	v_previous_low					trading_schema.quote.low_price%TYPE;
 	v_previous_date					trading_schema.quote.datestamp%TYPE;
 	v_gradient						RECORD;
@@ -74,16 +74,19 @@ BEGIN
 				);
 		END IF;
 		IF v_previous_open == NULL THEN
-			v_previous_open := v_gradient.open_price
+			v_previous_open := v_gradient.open_price;
 		END IF;
 		IF v_previous_close == NULL THEN
-			v_previous_close := v_gradient.close_price
+			v_previous_close := v_gradient.close_price;
 		END IF;
 		IF v_previous_high == NULL THEN
-			v_previous_high := v_gradient.high_price
+			v_previous_high := v_gradient.high_price;
+		END IF;
+		IF v_previous_low == NULL THEN
+			v_previous_low := v_gradient.low_price;
 		END IF;
 		IF v_previous_date == NULL THEN
-			v_previous_date := v_gradient.datestamp
+			v_previous_date := v_gradient.datestamp;
 		END IF;
 	END LOOP;
 	RETURN; 
