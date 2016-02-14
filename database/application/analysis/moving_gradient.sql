@@ -28,15 +28,16 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsGradient(
 	p_interval						interval
 	) RETURNS VOID AS $$
 DECLARE
-	v_previous_open					trading_schema.quote.open_price%TYPE;
-	v_previous_close				trading_schema.quote.close_price%TYPE;
-	v_previous_high					trading_schema.quote.high_price%TYPE;
-	v_previous_low					trading_schema.quote.low_price%TYPE;
-	v_previous_date					trading_schema.quote.datestamp%TYPE;
+	v_previous_open					trading_schema.quote.open_price%TYPE DEFAULT NULL;
+	v_previous_close				trading_schema.quote.close_price%TYPE DEFAULT NULL;
+	v_previous_high					trading_schema.quote.high_price%TYPE DEFAULT NULL;
+	v_previous_low					trading_schema.quote.low_price%TYPE DEFAULT NULL;
+	v_previous_date					trading_schema.quote.datestamp%TYPE DEFAULT NULL;
 	v_gradient						RECORD;
 BEGIN
 	FOR v_gradient IN
 		SELECT
+			q.quote_id,
 			q.datestamp,
 			q.open_price,
 			q.close_price,
@@ -60,6 +61,7 @@ BEGIN
 			INSERT INTO
 				trading_schema.quote_diff
 				(
+					id,
 					diff_open_price,
 					diff_close_price,
 					diff_high_price,
@@ -67,27 +69,19 @@ BEGIN
 				)
 			VALUES
 				(
+					v_gradient.quote_id,
 					trading_schema.pCalcGradient(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
 					trading_schema.pCalcGradient(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
 					trading_schema.pCalcGradient(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
 					trading_schema.pCalcGradient(v_previous_date, v_previous_low,	v_gradient.datestamp, v_gradient.low_price)
 				);
 		END IF;
-		IF v_previous_open == NULL THEN
-			v_previous_open := v_gradient.open_price;
-		END IF;
-		IF v_previous_close == NULL THEN
-			v_previous_close := v_gradient.close_price;
-		END IF;
-		IF v_previous_high == NULL THEN
-			v_previous_high := v_gradient.high_price;
-		END IF;
-		IF v_previous_low == NULL THEN
-			v_previous_low := v_gradient.low_price;
-		END IF;
-		IF v_previous_date == NULL THEN
-			v_previous_date := v_gradient.datestamp;
-		END IF;
+		-- Perform assignment. Initialised to NULL to mean first record to diff against is always NULL
+		v_previous_open := v_gradient.open_price;
+		v_previous_close := v_gradient.close_price;
+		v_previous_high := v_gradient.high_price;
+		v_previous_low := v_gradient.low_price;
+		v_previous_date := v_gradient.datestamp;
 	END LOOP;
 	RETURN; 
 END;
