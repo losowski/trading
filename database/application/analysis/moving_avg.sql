@@ -17,6 +17,8 @@ BEGIN
 		trading_schema.quote q
 		INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)	
 	WHERE
+		s.symbol = p_symbol
+	AND
 		q.datestamp >= p_datestamp - p_interval
 	AND
 		q.datestamp <= p_datestamp
