@@ -23,7 +23,7 @@ $$ LANGUAGE plpgsql;
 
 --- Function to fill in the gradient values for each entry
 CREATE OR REPLACE FUNCTION trading_schema.pInsGradient(
-	p_symbol						trading_schema.symbol.name%TYPE,
+	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE,
 	p_interval						interval
 	) RETURNS VOID AS $$
@@ -92,8 +92,8 @@ $$ LANGUAGE plpgsql;
 
 
 -- Base function to calculate one moving gradient
-CREATE OR REPLACE FUNCTION trading_schema.pCalcAvg(
-	p_symbol						trading_schema.symbol.name%TYPE,
+CREATE OR REPLACE FUNCTION trading_schema.pCalcGradient(
+	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE,
 	p_inverval						interval
 	) RETURNS money AS $$
@@ -103,17 +103,21 @@ BEGIN
 	-- This function needs a select and an internal loop to produce a list of gradients. 
 	-- START UNFINISHED WORK
 	SELECT
-		q.datestamp,
-		q.open_price
+		avg(qd.diff_open_price)
 	INTO
 		v_value
 	FROM
-		trading_schema.quote q
+		trading_schema.diff_quote qd
+		INNER JOIN trading_schema.quote q ON (q.id = qd.id)
 		INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)	
 	WHERE
+		s.symbol = p_symbol
+	AND
 		q.datestamp >= p_datestamp - p_interval
 	AND
 		q.datestamp <= p_datestamp
+	ORDER BY
+		q.datestamp
 	;
 	-- END UNFINISHED WORK
 	RETURN v_value;
@@ -121,8 +125,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Base function to calculate one moving gradient
-CREATE OR REPLACE FUNCTION trading_schema.pInsCalcMovingAvg(
-	p_symbol						trading_schema.symbol.name%TYPE,
+CREATE OR REPLACE FUNCTION trading_schema.pInsCalcMovingGradient(
+	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE
 	) RETURNS void AS $$
 DECLARE
@@ -138,19 +142,19 @@ DECLARE
 	v_189_days						money;
 BEGIN
 	-- Calcualte values
-	SELECT * INTO v_2_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '1 day');
-	SELECT * INTO v_5_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '5 days');
-	SELECT * INTO v_9_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '9 days');
-	SELECT * INTO v_15_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '15 days');
-	SELECT * INTO v_21_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '21 days');
-	SELECT * INTO v_29_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '29 days');
-	SELECT * INTO v_73_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '73 days');
-	SELECT * INTO v_91_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '91 days');
-	SELECT * INTO v_121_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '121 days');
-	SELECT * INTO v_189_days FROM trading_schema.pCalcAvg(p_symbol, p_datestamp, interval '189 days');
+	SELECT * INTO v_2_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '1 day');
+	SELECT * INTO v_5_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '5 days');
+	SELECT * INTO v_9_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '9 days');
+	SELECT * INTO v_15_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '15 days');
+	SELECT * INTO v_21_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '21 days');
+	SELECT * INTO v_29_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '29 days');
+	SELECT * INTO v_73_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '73 days');
+	SELECT * INTO v_91_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '91 days');
+	SELECT * INTO v_121_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '121 days');
+	SELECT * INTO v_189_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '189 days');
 	-- Push data
 	INSERT INTO
-		a_moving_avg
+		a_moving_diff
 	(
 		days2,
 		days5,
@@ -193,11 +197,11 @@ BEGIN
 		FROM
 			trading_schema.symbol s
 			INNER JOIN trading_schema.quote q ON (s.id = q.symbol_id )
-			LEFT OUTER JOIN trading_schema.a_moving_avg a_avg ON (q.id = a_avg.quote_id)
+			LEFT OUTER JOIN trading_schema.a_moving_diff a_diff ON (q.id = a_dif.quote_id)
 		WHERE
 			s.name = p_symbol
 		AND
-			a_avg.quote_id IS NOT NULL
+			a_diff.quote_id IS NOT NULL
 		ORDER BY
 			q.datestamp ASC
 	LOOP
