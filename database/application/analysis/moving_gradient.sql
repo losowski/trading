@@ -1,6 +1,6 @@
 ﻿-- Functions to calculate the moving gradient
 
-CREATE OR REPLACE FUNCTION trading_schema.pCalcGradient(
+CREATE OR REPLACE FUNCTION trading_schema.pCalcGradientIntegration(
 	p_datestamp1					trading_schema.quote.datestamp%TYPE,
 	p_price1						trading_schema.quote.open_price%TYPE,
 	p_datestamp2					trading_schema.quote.datestamp%TYPE,
@@ -70,10 +70,10 @@ BEGIN
 			VALUES
 				(
 					v_gradient.quote_id,
-					trading_schema.pCalcGradient(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
-					trading_schema.pCalcGradient(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
-					trading_schema.pCalcGradient(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
-					trading_schema.pCalcGradient(v_previous_date, v_previous_low,	v_gradient.datestamp, v_gradient.low_price)
+					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
+					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
+					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
+					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_low,	v_gradient.datestamp, v_gradient.low_price)
 				);
 		END IF;
 		-- Perform assignment. Initialised to NULL to mean first record to diff against is always NULL
@@ -185,7 +185,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Ensure we have complete records
-CREATE OR REPLACE FUNCTION trading_schema.pCalcSymbolAvg(
+CREATE OR REPLACE FUNCTION trading_schema.pCalcSymbolDiffAvg(
 	p_symbol						trading_schema.symbol.name%TYPE
 	) RETURNS void AS $$
 DECLARE

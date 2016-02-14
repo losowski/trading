@@ -9,6 +9,9 @@ get_list_of_symbols = """
 	;
 """
 
+#Perform data analysis
+perform_data_analysis = "trading_schema.pCalcAnalysis"
+
 #Perform calculation on symbols
 generate_analysis_table = "trading_schema.pCalcAnalysis"
 
@@ -19,7 +22,8 @@ get_data_analysis = """
 	FROM
 		trading_schema.symbol s
 		INNER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
-		INNER JOIN a_moving_avg ON moving_avg ON (moving_avg.quote_id = q.id)
+		INNER JOIN a_moving_avg amavg ON (amavg.quote_id = q.id)
+		INNER JOIN a_moving_diff amdiff ON (amdiff.id = q.id)
 	WHERE
 		s.name = %(symbol.name)s
 	;

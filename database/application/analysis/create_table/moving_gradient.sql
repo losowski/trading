@@ -17,4 +17,27 @@ WITH (
 ALTER TABLE trading_schema.quote_diff
   OWNER TO trading;
 
--- Create the moving diff table with the required indexes
+
+CREATE TABLE trading_schema.a_moving_diff
+(
+	id bigint NOT NULL,
+	day2 money NOT NULL,
+	days5 money NOT NULL,
+	days9 money NOT NULL,
+	days15 money NOT NULL,
+	days21 money NOT NULL,
+	days29 money NOT NULL,
+	days73 money NOT NULL,
+	days91 money NOT NULL,
+	days121 money NOT NULL,
+	days189 money NOT NULL,
+	CONSTRAINT pk_moving_diff PRIMARY KEY (id ),
+	CONSTRAINT fk_moving_diff FOREIGN KEY (id)
+			REFERENCES trading_schema.quote (id) MATCH SIMPLE
+			ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+	OIDS=FALSE
+);
+ALTER TABLE trading_schema.a_moving_diff
+	OWNER TO trading;
