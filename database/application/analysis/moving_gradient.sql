@@ -42,10 +42,12 @@ BEGIN
 			q.open_price,
 			q.close_price,
 			q.high_price,
-			q.low_price
+			q.low_price,
+			qd.id
 		FROM
 			trading_schema.quote q
 			INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)
+			LEFT OUTER JOIN trading_schema.quote_diff qd ON (qd.id = q.id)
 		WHERE
 			s.name = p_symbol
 		AND
@@ -58,23 +60,25 @@ BEGIN
 		IF v_previous_open != NULL AND v_previous_close != NULL AND v_previous_high != NULL AND v_previous_low != NULL THEN
 		-- For now assume all data is one day apart
 		-- Fault detection will use weekday calculations
-			INSERT INTO
-				trading_schema.quote_diff
-				(
-					id,
-					diff_open_price,
-					diff_close_price,
-					diff_high_price,
-					diff_low_price
-				)
-			VALUES
-				(
-					v_gradient.quote_id,
-					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
-					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
-					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
-					trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_low,	v_gradient.datestamp, v_gradient.low_price)
-				);
+			IF v_gradient.id == NULL THEN
+				INSERT INTO
+					trading_schema.quote_diff
+					(
+						id,
+						diff_open_price,
+						diff_close_price,
+						diff_high_price,
+						diff_low_price
+					)
+				VALUES
+					(
+						v_gradient.quote_id,
+						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
+						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
+						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
+						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_low,	v_gradient.datestamp, v_gradient.low_price)
+					);
+			END IF;
 		END IF;
 		-- Perform assignment. Initialised to NULL to mean first record to diff against is always NULL
 		v_previous_open := v_gradient.open_price;
@@ -89,8 +93,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-
-
 -- Base function to calculate one moving gradient
 CREATE OR REPLACE FUNCTION trading_schema.pCalcGradient(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
@@ -100,8 +102,6 @@ CREATE OR REPLACE FUNCTION trading_schema.pCalcGradient(
 DECLARE
 	v_value							money;
 BEGIN
-	-- This function needs a select and an internal loop to produce a list of gradients. 
-	-- START UNFINISHED WORK
 	SELECT
 		avg(qd.diff_open_price)
 	INTO
@@ -119,10 +119,11 @@ BEGIN
 	ORDER BY
 		q.datestamp
 	;
-	-- END UNFINISHED WORK
 	RETURN v_value;
 END;
 $$ LANGUAGE plpgsql;
+
+
 
 -- Base function to calculate one moving gradient
 CREATE OR REPLACE FUNCTION trading_schema.pInsCalcMovingGradient(
