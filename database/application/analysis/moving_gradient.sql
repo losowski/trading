@@ -186,7 +186,7 @@ $$ LANGUAGE plpgsql;
 
 -- Ensure we have complete records
 CREATE OR REPLACE FUNCTION trading_schema.pCalcSymbolDiffAvg(
-	p_symbol						trading_schema.symbol.name%TYPE
+	p_symbol						trading_schema.symbol.symbol%TYPE
 	) RETURNS void AS $$
 DECLARE
 	v_quote							RECORD;
@@ -197,11 +197,11 @@ BEGIN
 		FROM
 			trading_schema.symbol s
 			INNER JOIN trading_schema.quote q ON (s.id = q.symbol_id )
-			LEFT OUTER JOIN trading_schema.a_moving_diff a_diff ON (q.id = a_dif.quote_id)
+			LEFT OUTER JOIN trading_schema.a_moving_diff a_diff ON (q.id = a_diff.id)
 		WHERE
-			s.name = p_symbol
+			s.symbol = p_symbol
 		AND
-			a_diff.quote_id IS NOT NULL
+			a_diff.id IS NOT NULL
 		ORDER BY
 			q.datestamp ASC
 	LOOP
