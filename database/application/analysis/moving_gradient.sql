@@ -225,8 +225,12 @@ BEGIN
 		ORDER BY
 			q.datestamp ASC
 	LOOP
-		PERFORM trading_schema.pInsCalcMovingGradient(p_symbol, v_quote.datestamp, v_quote.id);
-		COMMIT;
+		BEGIN
+			PERFORM trading_schema.pInsCalcMovingGradient(p_symbol, v_quote.datestamp, v_quote.id);
+		EXCEPTION
+			WHEN no_data_found THEN
+				RAISE INFO 'Symbol did not require update';
+		END;
 	END LOOP;
 	RETURN;
 END;
