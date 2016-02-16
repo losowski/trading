@@ -1,6 +1,6 @@
 ﻿-- Functions to calculate the moving gradient
 
-CREATE OR REPLACE FUNCTION trading_schema.pCalcGradientIntegration(
+CREATE OR REPLACE FUNCTION trading_schema.pCalcGradientDerivation(
 	p_datestamp1					trading_schema.quote.datestamp%TYPE,
 	p_price1						trading_schema.quote.open_price%TYPE,
 	p_datestamp2					trading_schema.quote.datestamp%TYPE,
@@ -25,7 +25,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION trading_schema.pInsGradient(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE,
-	p_interval						interval
+	p_datestamp_end					trading_schema.quote.datestamp%TYPE
 	) RETURNS VOID AS $$
 DECLARE
 	v_previous_open					trading_schema.quote.open_price%TYPE DEFAULT NULL;
@@ -37,25 +37,25 @@ DECLARE
 BEGIN
 	FOR v_gradient IN
 		SELECT
-			q.quote_id,
+			q.id,
 			q.datestamp,
 			q.open_price,
 			q.close_price,
 			q.high_price,
 			q.low_price,
-			qd.id
+			qd.quote_id
 		FROM
 			trading_schema.quote q
 			INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)
-			LEFT OUTER JOIN trading_schema.quote_diff qd ON (qd.id = q.id)
+			LEFT OUTER JOIN trading_schema.quote_diff qd ON (qd.quote_id = q.id)
 		WHERE
-			s.name = p_symbol
+			s.symbol = p_symbol
 		AND
-			q.date >= p_date
+			q.datestamp >= p_datestamp
 		AND
-			(q.date + p_interval) <=  p_date
+			((p_datestamp_end IS NULL) OR (q.datestamp <= p_datestamp_end))
 		ORDER BY
-			q.date ASC
+			q.datestamp ASC
 	LOOP
 		IF v_previous_open != NULL AND v_previous_close != NULL AND v_previous_high != NULL AND v_previous_low != NULL THEN
 		-- For now assume all data is one day apart
@@ -64,7 +64,7 @@ BEGIN
 				INSERT INTO
 					trading_schema.quote_diff
 					(
-						id,
+						quote_id,
 						diff_open_price,
 						diff_close_price,
 						diff_high_price,
@@ -73,10 +73,10 @@ BEGIN
 				VALUES
 					(
 						v_gradient.quote_id,
-						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
-						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
-						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
-						trading_schema.pCalcGradientIntegration(v_previous_date, v_previous_low,	v_gradient.datestamp, v_gradient.low_price)
+						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
+						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
+						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
+						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_low,		v_gradient.datestamp, v_gradient.low_price)
 					);
 			END IF;
 		END IF;
@@ -92,9 +92,40 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+-- Ensure we have complete records
+CREATE OR REPLACE FUNCTION trading_schema.pCalcSymbolDiff(
+	p_symbol						trading_schema.symbol.symbol%TYPE
+	) RETURNS void AS $$
+DECLARE
+	v_quote							RECORD;
+	v_begin_date					trading_schema.quote.datestamp%TYPE;
+	v_end_date						trading_schema.quote.datestamp%TYPE;
+BEGIN
+	SELECT
+		MIN(q.datestamp),
+		date_trunc('day', MAX(q.datestamp))
+	INTO
+		v_begin_date,
+		v_end_date
+	FROM
+		trading_schema.quote q
+		INNER JOIN trading_schema.symbol s ON (q.symbol_id = s.id)
+		LEFT OUTER JOIN trading_schema.quote_diff qd ON (q.id = qd.quote_id)
+	WHERE
+		s.symbol = p_symbol
+	AND
+		qd.quote_id IS NULL
+	;
+	-- Now loop over the results - so we can progress the records
+	PERFORM trading_schema.pInsGradient(p_symbol, v_begin_date, v_end_date);
+	RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 -- Base function to calculate one moving gradient
-CREATE OR REPLACE FUNCTION trading_schema.pCalcGradient(
+CREATE OR REPLACE FUNCTION trading_schema.pCalcGradientAvg(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE,
 	p_inverval						interval
@@ -108,7 +139,7 @@ BEGIN
 		v_value
 	FROM
 		trading_schema.diff_quote qd
-		INNER JOIN trading_schema.quote q ON (q.id = qd.id)
+		INNER JOIN trading_schema.quote q ON (q.id = qd.quote_id)
 		INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)
 	WHERE
 		s.symbol = p_symbol
@@ -145,16 +176,16 @@ DECLARE
 BEGIN
 	IF p_moving_diff = NULL THEN
 		-- Calcualte values
-		SELECT * INTO v_2_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '1 day');
-		SELECT * INTO v_5_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '5 days');
-		SELECT * INTO v_9_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '9 days');
-		SELECT * INTO v_15_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '15 days');
-		SELECT * INTO v_21_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '21 days');
-		SELECT * INTO v_29_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '29 days');
-		SELECT * INTO v_73_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '73 days');
-		SELECT * INTO v_91_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '91 days');
-		SELECT * INTO v_121_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '121 days');
-		SELECT * INTO v_189_days FROM trading_schema.pCalcGradient(p_symbol, p_datestamp, interval '189 days');
+		SELECT * INTO v_2_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '1 day');
+		SELECT * INTO v_5_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '5 days');
+		SELECT * INTO v_9_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '9 days');
+		SELECT * INTO v_15_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '15 days');
+		SELECT * INTO v_21_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '21 days');
+		SELECT * INTO v_29_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '29 days');
+		SELECT * INTO v_73_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '73 days');
+		SELECT * INTO v_91_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '91 days');
+		SELECT * INTO v_121_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '121 days');
+		SELECT * INTO v_189_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '189 days');
 		-- Push data
 		INSERT INTO
 			a_moving_diff
