@@ -2,10 +2,10 @@
 CREATE TABLE trading_schema.quote_diff
 (
   quote_id bigint NOT NULL,
-  diff_close_price money NOT NULL,
-  diff_high_price money NOT NULL,
-  diff_low_price money NOT NULL,
-  diff_open_price money NOT NULL,
+  diff_close_price numeric NOT NULL,
+  diff_high_price numeric NOT NULL,
+  diff_low_price numeric NOT NULL,
+  diff_open_price numeric NOT NULL,
   CONSTRAINT pk_quote_diff PRIMARY KEY (quote_id),
   CONSTRAINT fk1_quote_diff FOREIGN KEY (quote_id)
       REFERENCES trading_schema.quote (id) MATCH SIMPLE
@@ -21,16 +21,16 @@ ALTER TABLE trading_schema.quote_diff
 CREATE TABLE trading_schema.a_moving_diff
 (
 	id bigint NOT NULL,
-	day2 money NOT NULL,
-	days5 money NOT NULL,
-	days9 money NOT NULL,
-	days15 money NOT NULL,
-	days21 money NOT NULL,
-	days29 money NOT NULL,
-	days73 money NOT NULL,
-	days91 money NOT NULL,
-	days121 money NOT NULL,
-	days189 money NOT NULL,
+	days2 numeric NOT NULL,
+	days5 numeric NOT NULL,
+	days9 numeric NOT NULL,
+	days15 numeric NOT NULL,
+	days21 numeric NOT NULL,
+	days29 numeric NOT NULL,
+	days73 numeric NOT NULL,
+	days91 numeric NOT NULL,
+	days121 numeric NOT NULL,
+	days189 numeric NOT NULL,
 	CONSTRAINT pk_moving_diff PRIMARY KEY (id ),
 	CONSTRAINT fk_moving_diff FOREIGN KEY (id)
 			REFERENCES trading_schema.quote (id) MATCH SIMPLE

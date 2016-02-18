@@ -136,7 +136,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION trading_schema.pCalcGradientAvg(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE,
-	p_inverval						interval
+	p_interval						interval
 	) RETURNS money AS $$
 DECLARE
 	v_value							money;
@@ -146,7 +146,7 @@ BEGIN
 	INTO
 		v_value
 	FROM
-		trading_schema.diff_quote qd
+		trading_schema.quote_diff qd
 		INNER JOIN trading_schema.quote q ON (q.id = qd.quote_id)
 		INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)
 	WHERE
@@ -155,8 +155,6 @@ BEGIN
 		q.datestamp >= p_datestamp - p_interval
 	AND
 		q.datestamp <= p_datestamp
-	ORDER BY
-		q.datestamp
 	;
 	RETURN v_value;
 END;
@@ -167,6 +165,7 @@ $$ LANGUAGE plpgsql;
 -- Base function to calculate one moving gradient
 CREATE OR REPLACE FUNCTION trading_schema.pInsCalcMovingGradient(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
+	p_quote_id						trading_schema.quote.id%TYPE,
 	p_datestamp						trading_schema.quote.datestamp%TYPE,
 	p_moving_diff					trading_schema.a_moving_diff.id%TYPE
 	) RETURNS void AS $$
@@ -182,7 +181,7 @@ DECLARE
 	v_121_days						money;
 	v_189_days						money;
 BEGIN
-	IF p_moving_diff = NULL THEN
+	IF p_moving_diff IS NULL THEN
 		-- Calcualte values
 		SELECT * INTO v_2_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '1 day');
 		SELECT * INTO v_5_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '5 days');
@@ -196,8 +195,9 @@ BEGIN
 		SELECT * INTO v_189_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '189 days');
 		-- Push data
 		INSERT INTO
-			a_moving_diff
+			trading_schema.a_moving_diff
 		(
+			id,
 			days2,
 			days5,
 			days9,
@@ -211,6 +211,7 @@ BEGIN
 		)
 		VALUES
 		(
+			p_quote_id,
 			v_2_days,
 			v_5_days,
 			v_9_days,
@@ -252,7 +253,8 @@ BEGIN
 	FOR v_quote IN
 		SELECT
 			q.datestamp,
-			a_diff.id
+			q.id,
+			a_diff.id AS quote_id
 		FROM
 			trading_schema.symbol s
 			INNER JOIN trading_schema.quote q ON (s.id = q.symbol_id )
@@ -265,7 +267,7 @@ BEGIN
 			q.datestamp ASC
 	LOOP
 		BEGIN
-			PERFORM trading_schema.pInsCalcMovingGradient(p_symbol, v_quote.datestamp, v_quote.id);
+			PERFORM trading_schema.pInsCalcMovingGradient(p_symbol, v_quote.id, v_quote.datestamp, v_quote.quote_id);
 		EXCEPTION
 			WHEN no_data_found THEN
 				RAISE INFO 'Symbol did not require update';
