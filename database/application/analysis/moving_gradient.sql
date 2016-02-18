@@ -73,7 +73,9 @@ BEGIN
 						diff_open_price,
 						diff_close_price,
 						diff_high_price,
-						diff_low_price
+						diff_low_price,
+						diff_open_close,
+						diff_high_low
 					)
 				VALUES
 					(
@@ -81,7 +83,9 @@ BEGIN
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
-						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_low,		v_gradient.datestamp, v_gradient.low_price)
+						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_low,		v_gradient.datestamp, v_gradient.low_price),
+						v_gradient.open_price - v_gradient.close_price,
+						v_gradient.high_price - v_gradient.low_price
 					);
 			END IF;
 		END IF;

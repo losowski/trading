@@ -3,9 +3,12 @@ Technical Analysis Functions
 
 ANALYSIS
 ========
+-- Pending: --
+- Add moving averages (open price)
+
+-- Done --
 - Add open-close diff
 - Add high-low diff
-- Add moving averages (open price)
 
 
 
