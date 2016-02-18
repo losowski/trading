@@ -146,15 +146,17 @@ BEGIN
 	INTO
 		v_value
 	FROM
-		trading_schema.quote_diff qd
-		INNER JOIN trading_schema.quote q ON (q.id = qd.quote_id)
-		INNER JOIN trading_schema.symbol s ON (s.id = q.symbol_id)
+		trading_schema.symbol s
+		INNER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
+		LEFT OUTER JOIN trading_schema.quote_diff qd ON (q.id = qd.quote_id)
 	WHERE
 		s.symbol = p_symbol
 	AND
 		q.datestamp >= p_datestamp - p_interval
 	AND
 		q.datestamp <= p_datestamp
+	AND
+		qd.quote_id IS NOT NULL
 	;
 	RETURN v_value;
 END;
@@ -194,36 +196,38 @@ BEGIN
 		SELECT * INTO v_121_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '121 days');
 		SELECT * INTO v_189_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '189 days');
 		-- Push data
-		INSERT INTO
-			trading_schema.a_moving_diff
-		(
-			id,
-			days2,
-			days5,
-			days9,
-			days15,
-			days21,
-			days29,
-			days73,
-			days91,
-			days121,
-			days189
-		)
-		VALUES
-		(
-			p_quote_id,
-			v_2_days,
-			v_5_days,
-			v_9_days,
-			v_15_days,
-			v_21_days,
-			v_29_days,
-			v_73_days,
-			v_91_days,
-			v_121_days,
-			v_189_days
-		)
-		;
+		IF v_2_days IS NOT NULL AND v_5_days IS NOT NULL AND v_9_days IS NOT NULL AND v_15_days IS NOT NULL AND v_21_days IS NOT NULL AND v_29_days IS NOT NULL AND v_73_days IS NOT NULL AND v_91_days IS NOT NULL AND v_121_days IS NOT NULL AND v_189_days IS NOT NULL THEN
+			INSERT INTO
+				trading_schema.a_moving_diff
+			(
+				id,
+				days2,
+				days5,
+				days9,
+				days15,
+				days21,
+				days29,
+				days73,
+				days91,
+				days121,
+				days189
+			)
+			VALUES
+			(
+				p_quote_id,
+				v_2_days,
+				v_5_days,
+				v_9_days,
+				v_15_days,
+				v_21_days,
+				v_29_days,
+				v_73_days,
+				v_91_days,
+				v_121_days,
+				v_189_days
+			)
+			;
+		END IF;
 	END IF;
 END;
 $$ LANGUAGE plpgsql;
