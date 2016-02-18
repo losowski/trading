@@ -19,11 +19,11 @@ class AnalysisApplication:
 		self.database.connect()
 
 	def run(self):
-		self.generate_analysis_tables()
+		self.perform_data_analysis()
 		self.generate_predictions()
 
-	def generate_analysis_tables(self):
-		logging.info("Generating Analysis tables")
+	def perform_data_analysis(self):
+		logging.info("Performing Analysis")
 		analysis_data_query = self.database.get_query()
 		analysis_data_query.execute(analysis_queries.get_list_of_symbols)
 		symbols_list = analysis_data_query.fetchall()
@@ -32,12 +32,13 @@ class AnalysisApplication:
 			data_parameters = collections.OrderedDict()
 			data_parameters['symbol'] = symbol[0]
 			data_list = list(data_parameters.values())
-			analysis_data_query.callproc(analysis_queries.generate_analysis_table, data_list)
+			#Perform the analysis of the data
+			analysis_data_query.callproc(analysis_queries.perform_data_analysis, data_list)
 			self.database.commit()
 		analysis_data_query.close()
 
 	def generate_predictions(self):
-		logging.info("Generating Predictions") 
+		logging.info("Generating Predictions")
 		analysis_data_query = self.database.get_query()
 		analysis_data_query.execute(analysis_queries.get_list_of_symbols)
 		symbols_list = analysis_data_query.fetchall()

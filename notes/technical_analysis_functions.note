@@ -1,6 +1,19 @@
 Technical Analysis Functions
 ============================
 
+ANALYSIS
+========
+-- Pending: --
+- Add moving averages (open price)
+
+-- Done --
+- Add open-close diff
+- Add high-low diff
+
+
+
+TECHNICAL ANALYSIS BOOK FUNCTIONS
+=================================
 Pending/ToDo:
 -------------
 - swing_index
