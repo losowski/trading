@@ -8,13 +8,13 @@ CREATE OR REPLACE FUNCTION trading_schema.pCalcGradientDerivation(
 	) RETURNS money AS $$
 DECLARE
 	v_diff_price					money;
-	v_interval_days					numeric;
-	v_gradient						numeric; --money/days
+	v_interval_days					interval;
+	v_gradient						money; --money/days
 BEGIN
 	-- Calculate the gradient for this instance
 	v_diff_price	= p_price2 - p_price1;
-	v_interval_days = DAYS(p_datestamp2 - p_datestamp1);
-	v_gradient = v_diff_price / v_diff_days;
+	v_interval_days = p_datestamp2 - p_datestamp1;
+	v_gradient = v_diff_price / extract(days from v_interval_days);
 	RETURN v_gradient;
 END;
 $$ LANGUAGE plpgsql;
@@ -60,7 +60,7 @@ BEGIN
 		IF v_previous_open != NULL AND v_previous_close != NULL AND v_previous_high != NULL AND v_previous_low != NULL THEN
 		-- For now assume all data is one day apart
 		-- Fault detection will use weekday calculations
-			IF v_gradient.id == NULL THEN
+			IF v_gradient.quote_id IS NULL THEN
 				INSERT INTO
 					trading_schema.quote_diff
 					(
@@ -72,7 +72,7 @@ BEGIN
 					)
 				VALUES
 					(
-						v_gradient.quote_id,
+						v_gradient.id,
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_open,	v_gradient.datestamp, v_gradient.open_price),
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_close,	v_gradient.datestamp, v_gradient.close_price),
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
