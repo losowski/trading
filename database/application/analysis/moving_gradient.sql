@@ -65,7 +65,7 @@ BEGIN
 		IF v_previous_open IS NOT NULL AND v_previous_close IS NOT NULL AND v_previous_high IS NOT NULL AND v_previous_low IS NOT NULL THEN
 		-- For now assume all data is one day apart
 		-- Fault detection will use weekday calculations
---			IF v_gradient.quote_id IS NULL THEN
+			IF v_gradient.quote_id IS NULL THEN
 				INSERT INTO
 					trading_schema.quote_diff
 					(
@@ -83,7 +83,7 @@ BEGIN
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_high,	v_gradient.datestamp, v_gradient.high_price),
 						trading_schema.pCalcGradientDerivation(v_previous_date, v_previous_low,		v_gradient.datestamp, v_gradient.low_price)
 					);
---			END IF;
+			END IF;
 		END IF;
 		-- Perform assignment. Initialised to NULL to mean first record to diff against is always NULL
 		v_previous_open := v_gradient.open_price;
