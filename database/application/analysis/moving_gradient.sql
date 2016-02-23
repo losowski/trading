@@ -188,7 +188,7 @@ DECLARE
 	v_189_days						money;
 BEGIN
 	IF p_moving_diff IS NULL THEN
-		-- Calcualte values
+		-- Calculate values
 		SELECT * INTO v_2_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '1 day');
 		SELECT * INTO v_5_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '5 days');
 		SELECT * INTO v_9_days FROM trading_schema.pCalcGradientAvg(p_symbol, p_datestamp, interval '9 days');
