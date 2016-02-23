@@ -1,5 +1,5 @@
-Prediction Requirements
-=======================
+Technical Prediction Requirements
+=================================
 
 Input Tables
 ============
@@ -7,7 +7,7 @@ Input Tables
 
 Processing Table
 ================
-- Linked to symbol and date fields of quote
+- Linked to quote_id
 - One table
 - Populated on insert to quote
 - Foreign key constraint on symbol and date

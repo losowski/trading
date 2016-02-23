@@ -1,0 +1,11 @@
+Development
+===========
+
+TODO:
+- Add technical analysis functions
+	- Momentum
+	- FFTW
+- Create a marking peice of software for historical testing of predictions
+- Link this up to an AI
+- Provide an API that uses just SQL to identify the signals
+- Write some example signals
