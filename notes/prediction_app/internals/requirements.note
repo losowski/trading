@@ -2,19 +2,20 @@ Requirements for Analysis Internal Logic
 ========================================
 
 TABLES:
-	1) analysis_type
-		- time
-		- direction
-
-	2) analysis_properties
+	1) analysis_properties
 		- id
 		- name
-		- analysis_type_id
+		- analysis <T|D> (Time|Direction)
 
-	3) analysis_conditions (compared with previous)
+	2) analysis_conditions (compared with previous)
 		- id (pk)
 		- analysis_property_id
 		- field_name
 		- operator <gt|lt|eq|lte|gte>
-		- threshold
-		- assigned_value
+		- threshold_type <A|R> (Absolute|Relative)
+		- interval
+		- assigned_value (numeric)
+
+	3) analysis_assignment_quote
+		- analysis_properties_id
+		- quote_id
