@@ -23,7 +23,7 @@ CREATE TABLE trading_schema.analysis_conditions
 	operator text NOT NULL,
 	threshold_type character(1) NOT NULL,
 	duration interval,
-	assigned_value numeric NOT NULL,
+	value numeric NOT NULL,
 	CONSTRAINT pk_analysis_conditions PRIMARY KEY (id),
 	CONSTRAINT fk_analysis_conditions FOREIGN KEY (analysis_property_id)
 		REFERENCES trading_schema.analysis_properties (id) MATCH SIMPLE
@@ -45,6 +45,7 @@ CREATE TABLE trading_schema.analysis_assignment_quote
 (
 	analysis_properties_id bigint NOT NULL,
 	quote_id bigint NOT NULL,
+	assigned_value numeric NOT NULL,
 	CONSTRAINT pk_analysis_assignment_quote PRIMARY KEY (analysis_properties_id, quote_id),
 	CONSTRAINT fk_analysis_assignment_quote_01 FOREIGN KEY (analysis_properties_id)
 	REFERENCES trading_schema.analysis_properties (id) MATCH SIMPLE

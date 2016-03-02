@@ -6,6 +6,7 @@ TABLES:
 		- id
 		- name
 		- analysis <T|D> (Time|Direction)
+		- assigned_value
 
 	2) analysis_conditions (compared with previous)
 		- id (pk)
@@ -13,9 +14,29 @@ TABLES:
 		- field_name
 		- operator <gt|lt|eq|lte|gte>
 		- threshold_type <A|R> (Absolute|Relative)
-		- interval
-		- assigned_value (numeric)
+		- duration
+		- value (numeric)
 
-	3) analysis_assignment_quote
+	3) analysis_assignment_quote (output for data)
 		- analysis_properties_id
 		- quote_id
+
+SQL:
+	SELECT
+		*
+	FROM
+	(
+		SELECT
+			*
+		FROM
+			quote ....
+		WHERE
+			date <= time
+		AND
+			date >= time - (SELECT MAX(interval) FROM analysis_conditions WHERE id = blah)
+	) AS data
+	WHERE
+		<field_name> <operator> <value>
+	AND
+		<field_name> <operator> (SELECT <field_name> FROM data WHERE date - interval = blah)
+
