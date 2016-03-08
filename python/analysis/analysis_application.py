@@ -1,4 +1,4 @@
-#!/usr/bin/python
+	#!/usr/bin/python
 import datetime
 import collections
 import logging
@@ -52,6 +52,8 @@ class AnalysisApplication:
 
 	def process_trading_flags(self):
 		logging.info("Process the trading flags")
+		logging.debug("Getting analysis_trading_query")
+		analysis_trading_query = self.database.get_query()
 		logging.debug("Get the analysis properties")
 		analysis_properties_query = self.database.get_query()
 		analysis_properties_query.execute(analysis_queries.get_analysis_properties)
@@ -111,9 +113,19 @@ class AnalysisApplication:
 			for symbol in self.symbols_list:
 				logging.info("Running query on %s", symbol)
 				#Perform the query per symbol
-
+				data_parameters = collections.OrderedDict()
+				data_parameters['symbol'] = symbol
+				#Run the query
+				analysis_trading_query.execute(analysis_query, data_parameters)
+				#Get the results
+				analysis_trading_query_results_list = analysis_trading_query.fetchall()
+				for analysis_trading_result in analysis_trading_query_results_list:
+					logging.debug("analysis_trading_result %s", analysis_trading_result)
+				
 			logging.debug("Closing analysis_conditions_query")
 			analysis_property_conditions_query.close()
+		logging.debug("Closing analysis_trading_query")
+		analysis_trading_query.close()
 		logging.debug("Closing analysis_properties_query")
 		analysis_properties_query.close()
 
