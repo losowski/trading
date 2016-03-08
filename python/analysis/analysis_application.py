@@ -40,6 +40,16 @@ class AnalysisApplication:
 			self.database.commit()
 		analysis_data_query.close()
 
+	def __operator_to_symbols(self, operator):
+		symbols = '='
+		if (operator == 'gt'):
+			symbols = '>='
+		elif (operator == 'lt'):
+			symbols = '<='
+		elif (operator == 'eq'):
+			symbols = '='
+		return symbols
+
 	def process_trading_flags(self):
 		logging.info("Process the trading flags")
 		logging.debug("Get the analysis properties")
@@ -57,14 +67,53 @@ class AnalysisApplication:
 			analysis_property_conditions_query = self.database.get_query()
 			analysis_property_conditions_query.execute(analysis_queries.get_analysis_conditions, property_data_parameters)
 			analysis_property_conditions_list = analysis_property_conditions_query.fetchall()
-			for analysis_condition in analysis_property_conditions_list:
+			#Build the Query
+			absolute_parameters = list()
+			relative_parameters = list()
+			for index, analysis_condition in zip(range(len(analysis_property_conditions_list)), analysis_property_conditions_list):
 				logging.debug("Conditions: %s", analysis_condition)
 				field_name, operator, threshold_type, duration, value = analysis_condition
 				logging.debug("%s %s %s %s WHEN datestamp is %s", field_name, operator, threshold_type, value, duration)
 				logging.info("Building the SQL statement that runs on the data")
-				for symbol in self.symbols_list:
-					logging.info("Running query on %s", symbol)
+				#Absolute
+				if (threshold_type == 'A'):
+					data =	{	'field_name'	: field_name,
+								'operator'		: self.__operator_to_symbols(operator),
+								'value'			: value
+							}
+					absolute_fragment = analysis_queries.AnalysisAbsoluteParameterTemplate.safe_substitute(data)
+					logging.debug("Absolute Fragment: %s", absolute_fragment)
+					absolute_parameters.append(absolute_fragment)
+				#Relative
+				elif (threshold_type == 'R'):
+					data =	{	'relative_index'	: 'sq'+ str(index),
+								'field_name'		: field_name,
+								'duration'			: duration,
+								'operator'			: self.__operator_to_symbols(operator),
+								'value'				: value
+							}
+					relative_fragment = analysis_queries.AnalysisRelativeParameterTemplate.safe_substitute(data)
+					logging.debug("Relative Fragment: %s", relative_fragment)
+					relative_parameters.append(relative_fragment)
+				else:
+					logging.error("Threshold type %s is invalid", threshold_type)
+			#Mash this all into one enormous Query
+			absolute = " ".join(absolute_parameters)
+			relative = " ".join(relative_parameters)
+			logging.debug("Analysis absolute: %s", absolute)
+			logging.debug("Analysis relative: %s", relative)
+			data = 	{	"absolute_comparators"	: absolute,
+						"relative_comparators"	: relative
+					}
+			analysis_query = analysis_queries.AnalysisBackboneQueryTemplate.safe_substitute(data)
+			logging.info("Analysis Query: %s", analysis_query)
+			#With query built, apply to the symbols that we have
+			for symbol in self.symbols_list:
+				logging.info("Running query on %s", symbol)
+				#Perform the query per symbol
+
 			logging.debug("Closing analysis_conditions_query")
 			analysis_property_conditions_query.close()
 		logging.debug("Closing analysis_properties_query")
 		analysis_properties_query.close()
+

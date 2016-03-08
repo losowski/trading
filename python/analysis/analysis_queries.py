@@ -2,6 +2,7 @@
 #postgres %(name_of_field)s
 #python ${name_of_field}
 
+import string
 #Get symbols list
 get_list_of_symbols = """
 	SELECT
@@ -59,15 +60,19 @@ get_analysis_conditions = """
 	;
 """
 #Only using Python string replace
-analysis_absolute_parameter_template = """
-AND
-	${field_name} ${operator} ${value}
+analysis_absolute_parameter_fragment = """
+			AND
+				${field_name} ${operator} ${value}
 """
-#INNER JOIN symbol_quote sq1 ON (sq1.q_datestamp <= sa.q_datestamp AND sq1.q_datestamp >= sa.q_datestamp - '7 DAYS'::interval AND sq1.qd_diff_high_low >= sa.qd_diff_high_low + 0.2 )
-analysis_relative_parameter_template = """
+
+AnalysisAbsoluteParameterTemplate = string.Template(analysis_absolute_parameter_fragment)
+
+analysis_relative_parameter_fragment = """
 	INNER JOIN
 		symbol_quote ${relative_index} ON (${relative_index}.q_datestamp <= sa.q_datestamp AND ${relative_index}.q_datestamp >= sa.q_datestamp - ${duration}::interval AND ${relative_index}.${field_name}>= sa.${field_name} + ${value}
 """
+
+AnalysisRelativeParameterTemplate = string.Template(analysis_relative_parameter_fragment)
 
 analysis_backbone_query = """
 	WITH symbol_quote AS (
@@ -169,3 +174,5 @@ ORDER BY
 	q_id
 ;
 """
+
+AnalysisBackboneQueryTemplate = string.Template(analysis_backbone_query)
