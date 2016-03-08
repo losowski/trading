@@ -2,6 +2,8 @@ Development
 ===========
 
 TODO:
+- Add percentages for analysis
+	this_diff/this_value
 - Add technical analysis functions
 	- Momentum
 	- FFTW
