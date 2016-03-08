@@ -1,0 +1,10 @@
+Generic TODO list
+=================
+
+TODO:
+-----
+- Use prepared statements
+	- All the queries that are used are technically reusable as a prepared statement (performance)
+		- Performance increase of maybe 30% (insignificant for now)
+
+DONE:
