@@ -69,7 +69,7 @@ AnalysisAbsoluteParameterTemplate = string.Template(analysis_absolute_parameter_
 
 analysis_relative_parameter_fragment = """
 	INNER JOIN
-		symbol_quote ${relative_index} ON (${relative_index}.q_datestamp <= sa.q_datestamp AND ${relative_index}.q_datestamp >= sa.q_datestamp - ${duration}::interval AND ${relative_index}.${field_name}>= sa.${field_name} + ${value}
+		symbol_quote ${relative_index} ON (${relative_index}.q_datestamp <= sa.q_datestamp AND ${relative_index}.q_datestamp >= sa.q_datestamp - '${duration}'::interval AND ${relative_index}.${field_name} ${operator} sa.${field_name} + ${value})
 """
 
 AnalysisRelativeParameterTemplate = string.Template(analysis_relative_parameter_fragment)
