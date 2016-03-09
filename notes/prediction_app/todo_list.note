@@ -2,12 +2,26 @@ Development
 ===========
 
 TODO:
+-----
 - Add percentages for analysis
 	this_diff/this_value
+- New round of matches makes the previous round historical (with an explicit version)
+- Means of preservng matches for analysis (history- linked to a versioned conditions)
+-Condition versioing
+	- Additional field for updates
+	- Properties inherits max update sequence
+	- History of setup is stored against that value (one version for properties and conditions)
+		- would require some postgresql functions to implement
 - Add technical analysis functions
 	- Momentum
 	- FFTW
+- Create constraints for analysis
+	- Names of variables
+	- Values in fields
 - Create a marking peice of software for historical testing of predictions
 - Link this up to an AI
 - Provide an API that uses just SQL to identify the signals
 - Write some example signals
+
+DONE:
+-----
