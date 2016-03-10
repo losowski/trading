@@ -41,7 +41,7 @@ get_analysis_properties = """
 		analysis_type,
 		assigned_value
 	FROM
-		trading_schema.analysis_properties
+		trading_schema.analysis_property
 	;
 """
 
@@ -53,7 +53,7 @@ get_analysis_conditions = """
 		c.duration,
 		c.value
 	FROM
-		trading_schema.analysis_properties p
+		trading_schema.analysis_property p
 		INNER JOIN trading_schema.analysis_conditions c ON (c.analysis_property_id = p.id)
 	WHERE
 		p.id = %(property_id)s
@@ -178,8 +178,9 @@ ${absolute_comparators}
 	)
 	-- Relative Comparators
 ${relative_comparators}
-SELECT
-	sq0.*
+SELECT DISTINCT
+	sq0.q_id,
+	q_datestamp
 FROM
 	symbol_absolute sq0
 	-- Relative Comparators Joins
@@ -190,3 +191,6 @@ ORDER BY
 """
 
 AnalysisBackboneQueryTemplate = string.Template(analysis_backbone_query)
+
+#Perform data analysis
+analysis_assignment_storage = "trading_schema.pInsAnalysisAssignment"

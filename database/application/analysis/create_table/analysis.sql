@@ -1,4 +1,4 @@
-CREATE TABLE trading_schema.analysis_properties
+CREATE TABLE trading_schema.analysis_property
 (
 	id bigserial NOT NULL,
 	name text NOT NULL,
@@ -43,7 +43,7 @@ ALTER TABLE trading_schema.analysis_conditions
 
 CREATE TABLE trading_schema.analysis_assignment_quote
 (
-	analysis_properties_id bigint NOT NULL,
+	analysis_property_id bigint NOT NULL,
 	quote_id bigint NOT NULL,
 	assigned_value numeric NOT NULL,
 	CONSTRAINT pk_analysis_assignment_quote PRIMARY KEY (analysis_properties_id, quote_id),

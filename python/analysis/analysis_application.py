@@ -147,7 +147,16 @@ class AnalysisApplication:
 				analysis_trading_query_results_list = analysis_trading_query.fetchall()
 				for analysis_trading_result in analysis_trading_query_results_list:
 					logging.debug("analysis_trading_result %s", analysis_trading_result)
-				
+					analysis_input_query = self.database.get_query()
+					data_parameters = collections.OrderedDict()
+					data_parameters['p_quote'] = analysis_trading_result[0]
+					data_parameters['p_analysis_property'] = analysis_property_id
+					data_list = list(data_parameters.values())
+					#Perform the analysis of the data
+					analysis_input_query.callproc(analysis_queries.analysis_assignment_storage, data_list)
+					self.database.commit()
+					analysis_input_query.close()
+
 			logging.debug("Closing analysis_conditions_query")
 			analysis_property_conditions_query.close()
 		logging.debug("Closing analysis_trading_query")
