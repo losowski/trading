@@ -60,22 +60,32 @@ get_analysis_conditions = """
 	;
 """
 #Only using Python string replace
-analysis_absolute_parameter_fragment = """
-			AND
-				${field_name} ${operator} ${value}
+analysis_absolute_parameter_fragment = \
+"""			-- condition ${relative_index} 
+			AND	${field_name} ${operator} ${value}
 """
 
 AnalysisAbsoluteParameterTemplate = string.Template(analysis_absolute_parameter_fragment)
 
-analysis_relative_parameter_fragment = """
-	INNER JOIN
-		symbol_quote ${relative_index_a} ON (${relative_index_a}.q_datestamp <= ${relative_index_b}.q_datestamp AND ${relative_index_a}.q_datestamp >= ${relative_index_b}.q_datestamp - '${duration}'::interval AND ${relative_index_a}.${field_name} ${operator} ${relative_index_b}.${field_name} + ${value})
+analysis_relative_parameter_fragment = \
+""",
+	${relative_index} AS (
+		SELECT
+			${relative_index}.q_id
+		FROM
+			symbol_absolute sq0
+			INNER JOIN symbol_quote ${relative_index} ON (${relative_index}.q_datestamp <= sq0.q_datestamp AND ${relative_index}.q_datestamp >= sq0.q_datestamp - '${duration}'::interval AND ${relative_index}.${field_name} ${operator} sq0.${field_name} + ${value})
+	)"""
+
+analysis_relative_parameter_join_fragment = \
+"""	INNER JOIN ${relative_index} ON (${relative_index}.q_id = sq0.q_id)
 """
 
 AnalysisRelativeParameterTemplate = string.Template(analysis_relative_parameter_fragment)
+AnalysisRelativeParameterJoinTemplate = string.Template(analysis_relative_parameter_join_fragment)
 
 analysis_backbone_query = """
-	WITH symbol_quote AS (
+WITH symbol_quote AS (
 	SELECT
 		q.id					AS	q_id,
 		q.datestamp				AS	q_datestamp,
@@ -164,16 +174,18 @@ analysis_backbone_query = """
 		WHERE
 			${conditions_available}
 			-- Absolute comparators
-			${absolute_comparators}
+${absolute_comparators}
 	)
+	-- Relative Comparators
+${relative_comparators}
 SELECT
 	sq0.*
 FROM
 	symbol_absolute sq0
-	-- Relative Comparators
-	${relative_comparators}
+	-- Relative Comparators Joins
+${relative_join_comparators}
 ORDER BY
-	q_id
+	q_datestamp
 ;
 """
 

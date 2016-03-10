@@ -50,6 +50,9 @@ class AnalysisApplication:
 			symbols = '='
 		return symbols
 
+	def __joining_names(self, index):
+		return "sq{0}".format(index)
+
 	def process_trading_flags(self):
 		logging.info("Process the trading flags")
 		logging.debug("Getting analysis_trading_query")
@@ -70,37 +73,35 @@ class AnalysisApplication:
 			analysis_property_conditions_query.execute(analysis_queries.get_analysis_conditions, property_data_parameters)
 			analysis_property_conditions_list = analysis_property_conditions_query.fetchall()
 			#Build the Query
-			absolute_parameters = list()
-			relative_parameters = list()
-			previous_index = 0
+			absolute_parameters 	= list()
+			relative_parameters		 = list()
+			relative_join_parameters = list()
 			for index, analysis_condition in enumerate(analysis_property_conditions_list, 1):
 				logging.debug("Conditions: %s", analysis_condition)
 				field_name, operator, threshold_type, duration, value = analysis_condition
 				logging.debug("%s %s %s %s WHEN datestamp is %s", field_name, operator, threshold_type, value, duration)
 				logging.info("Building the SQL statement that runs on the data")
+				data =	{
+							'relative_index'	: self.__joining_names(index),
+							'field_name'		: field_name,
+							'duration'			: duration,
+							'operator'			: self.__operator_to_symbols(operator),
+							'value'				: value
+						}
 				#Absolute
 				if (threshold_type == 'A'):
-					data =	{	'field_name'	: field_name,
-								'operator'		: self.__operator_to_symbols(operator),
-								'value'			: value
-							}
 					absolute_fragment = analysis_queries.AnalysisAbsoluteParameterTemplate.safe_substitute(data)
 					logging.debug("Absolute Fragment: %s", absolute_fragment)
 					absolute_parameters.append(absolute_fragment)
 				#Relative
 				elif (threshold_type == 'R'):
-					data =	{
-								'relative_index_a'	: 'sq'+ str(index),
-								'relative_index_b'	: 'sq'+ str(previous_index),
-								'field_name'		: field_name,
-								'duration'			: duration,
-								'operator'			: self.__operator_to_symbols(operator),
-								'value'				: value
-							}
 					relative_fragment = analysis_queries.AnalysisRelativeParameterTemplate.safe_substitute(data)
 					logging.debug("Relative Fragment: %s", relative_fragment)
 					relative_parameters.append(relative_fragment)
-					previous_index = index
+
+					relative_join_fragment = analysis_queries.AnalysisRelativeParameterJoinTemplate.safe_substitute(data)
+					logging.debug("Relative Join Fragment: %s", relative_join_fragment)
+					relative_join_parameters.append(relative_join_fragment)
 				else:
 					logging.error("Threshold type %s is invalid", threshold_type)
 			#Mash this all into one enormous Query
@@ -112,16 +113,23 @@ class AnalysisApplication:
 
 			relative = str()
 			len_relative = len(relative_parameters)
-			if len(absolute_parameters) > 0:
+			if len(relative_parameters) > 0:
 				relative = " ".join(relative_parameters)
 				logging.debug("Analysis relative: %s", relative)
 
+			relative_join = str()
+			len_relative_join = len(relative_join_parameters)
+			if len(relative_join_parameters) > 0:
+				relative_join = " ".join(relative_join_parameters)
+				logging.debug("Analysis relative join: %s", relative_join)
+
 			data = 	{
-						'conditions_available'	: 'FALSE',
-						'absolute_comparators'	: absolute,
-						'relative_comparators'	: relative
+						'conditions_available'		: 'FALSE',
+						'absolute_comparators'		: absolute,
+						'relative_comparators'		: relative,
+						'relative_join_comparators'	: relative_join
 					}
-			if (len_relative > 0) or (len_absolute > 0):
+			if (len_absolute > 0) or ((len_relative > 0) and (len_relative_join > 0)) :
 				logging.debug("We have some conditions: %s", relative)
 				data['conditions_available'] = 'TRUE'
 
