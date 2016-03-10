@@ -69,7 +69,7 @@ AnalysisAbsoluteParameterTemplate = string.Template(analysis_absolute_parameter_
 
 analysis_relative_parameter_fragment = """
 	INNER JOIN
-		symbol_quote ${relative_index} ON (${relative_index}.q_datestamp <= sa.q_datestamp AND ${relative_index}.q_datestamp >= sa.q_datestamp - '${duration}'::interval AND ${relative_index}.${field_name} ${operator} sa.${field_name} + ${value})
+		symbol_quote ${relative_index_a} ON (${relative_index_a}.q_datestamp <= ${relative_index_b}.q_datestamp AND ${relative_index_a}.q_datestamp >= ${relative_index_b}.q_datestamp - '${duration}'::interval AND ${relative_index_a}.${field_name} ${operator} ${relative_index_b}.${field_name} + ${value})
 """
 
 AnalysisRelativeParameterTemplate = string.Template(analysis_relative_parameter_fragment)
@@ -165,9 +165,9 @@ analysis_backbone_query = """
 			${absolute_comparators}
 	)
 SELECT
-	sa.*
+	sq0.*
 FROM
-	symbol_absolute sa
+	symbol_absolute sq0
 	-- Relative Comparators
 	${relative_comparators}
 ORDER BY

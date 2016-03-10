@@ -72,7 +72,8 @@ class AnalysisApplication:
 			#Build the Query
 			absolute_parameters = list()
 			relative_parameters = list()
-			for index, analysis_condition in zip(range(len(analysis_property_conditions_list)), analysis_property_conditions_list):
+			previous_index = 0
+			for index, analysis_condition in enumerate(analysis_property_conditions_list, 1):
 				logging.debug("Conditions: %s", analysis_condition)
 				field_name, operator, threshold_type, duration, value = analysis_condition
 				logging.debug("%s %s %s %s WHEN datestamp is %s", field_name, operator, threshold_type, value, duration)
@@ -88,7 +89,9 @@ class AnalysisApplication:
 					absolute_parameters.append(absolute_fragment)
 				#Relative
 				elif (threshold_type == 'R'):
-					data =	{	'relative_index'	: 'sq'+ str(index),
+					data =	{
+								'relative_index_a'	: 'sq'+ str(index),
+								'relative_index_b'	: 'sq'+ str(previous_index),
 								'field_name'		: field_name,
 								'duration'			: duration,
 								'operator'			: self.__operator_to_symbols(operator),
@@ -97,6 +100,7 @@ class AnalysisApplication:
 					relative_fragment = analysis_queries.AnalysisRelativeParameterTemplate.safe_substitute(data)
 					logging.debug("Relative Fragment: %s", relative_fragment)
 					relative_parameters.append(relative_fragment)
+					previous_index = index
 				else:
 					logging.error("Threshold type %s is invalid", threshold_type)
 			#Mash this all into one enormous Query
