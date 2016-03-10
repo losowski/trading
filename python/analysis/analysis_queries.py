@@ -29,7 +29,7 @@ get_data_analysis = """
 		LEFT OUTER JOIN trading_schema.a_moving_avg amavg ON (amavg.id = q.id)
 		LEFT OUTER JOIN trading_schema.a_moving_diff amdiff ON (amdiff.id = q.id)
 	WHERE
-		s.name = %(symbol.name)s
+		s.name = %(symbol_name)s
 	;
 """
 
@@ -119,6 +119,8 @@ analysis_backbone_query = """
 		LEFT OUTER JOIN trading_schema.a_moving_diff amdiff ON (q.id = amdiff.id)
 	WHERE
 		s.symbol = %(symbol)s
+	AND
+		${conditions_available}
 	),
 	symbol_absolute AS
 	(
@@ -160,7 +162,7 @@ analysis_backbone_query = """
 		FROM
 			symbol_quote
 		WHERE
-			TRUE
+			${conditions_available}
 			-- Absolute comparators
 			${absolute_comparators}
 	)
