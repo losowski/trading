@@ -104,13 +104,27 @@ class AnalysisApplication:
 				else:
 					logging.error("Threshold type %s is invalid", threshold_type)
 			#Mash this all into one enormous Query
-			absolute = " ".join(absolute_parameters)
-			relative = " ".join(relative_parameters)
-			logging.debug("Analysis absolute: %s", absolute)
-			logging.debug("Analysis relative: %s", relative)
-			data = 	{	"absolute_comparators"	: absolute,
-						"relative_comparators"	: relative
+			absolute = str()
+			len_absolute = len(absolute_parameters)
+			if  len_absolute > 0:
+				absolute = " ".join(absolute_parameters)
+				logging.debug("Analysis absolute: %s", absolute)
+
+			relative = str()
+			len_relative = len(relative_parameters)
+			if len(absolute_parameters) > 0:
+				relative = " ".join(relative_parameters)
+				logging.debug("Analysis relative: %s", relative)
+
+			data = 	{
+						'conditions_available'	: 'FALSE',
+						'absolute_comparators'	: absolute,
+						'relative_comparators'	: relative
 					}
+			if (len_relative > 0) or (len_absolute > 0):
+				logging.debug("We have some conditions: %s", relative)
+				data['conditions_available'] = 'TRUE'
+
 			analysis_query = analysis_queries.AnalysisBackboneQueryTemplate.safe_substitute(data)
 			logging.info("Analysis Query: %s", analysis_query)
 			#With query built, apply to the symbols that we have
