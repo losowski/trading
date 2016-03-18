@@ -3,15 +3,6 @@
 #python ${name_of_field}
 
 import string
-#Get symbols list
-get_list_of_symbols = """
-	SELECT
-		symbol
-	FROM
-		trading_schema.symbol
-	;
-"""
-
 #Perform data analysis
 perform_data_analysis = "trading_schema.pCalcAnalysis"
 

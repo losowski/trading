@@ -4,38 +4,26 @@ import collections
 import logging
 
 from database import db_connection
+from utilities import symbols
 import analysis_queries
 
 
-class AnalysisApplication:
-
+class AnalysisApplication(symbols.Symbols):
 	def __init__(self):
-		self.database		= db_connection.DBConnection()
-		self.symbols_list	= list()
+		symbols.Symbols.__init__(self)
 
 	def __del__(self):
-		pass
+		symbols.Symbols.__del__(self)
 
 	def initialise(self):
-		self.database.connect()
-		self.db_cursor = self.database.get_query()
+		symbols.Symbols.initialise(self)
 
 	def shutdown(self):
-		self.db_cursor.close()
+		symbols.Symbols.shutdown(self)
 
 	def run(self):
 		self.perform_data_analysis()
 		self.process_trading_flags()
-
-	def get_symbols_list(self):
-		if len(self.symbols_list) == 0:
-			logging.info("Fetching Symnbols")
-			self.db_cursor.execute(analysis_queries.get_list_of_symbols)
-			symbols_list = self.db_cursor.fetchall()
-			for symbol in symbols_list:
-				logging.debug("reading symbol: %s", symbol[0])
-			self.symbols_list.append(symbol[0])
-		return self.symbols_list
 
 	def perform_data_analysis(self):
 		logging.info("Performing Analysis")
