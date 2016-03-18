@@ -27,7 +27,7 @@ class Symbols (db_cursor.DBCursor):
 
 	def get_symbols_list(self):
 		if self.symbols_list is None:
-			logging.info("Fetching Symnbols")
+			logging.info("Fetching Symbols")
 			self.symbols_list	= list()
 			self.get_db().execute(get_list_of_symbols)
 			symbols_list = self.db_cursor.fetchall()

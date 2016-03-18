@@ -2,6 +2,7 @@
 #Uses psycopg package: python-psycopg2 (python-native libpq driver)
 #sudo apt-get install python-psycopg2
 
+import logging
 import psycopg2
 import xml.etree.ElementTree as xml
 
@@ -23,6 +24,8 @@ class DBConnection:
 
 	def __del__(self):
 		if self.connection != None:
+			logging.info("Closing connection to to: %s@%s on %s:%s", self.username, self.database, self.host, self.port)
+			self.rollback()
 			self.connection.close()
 
 	def __read_xml(self):
@@ -47,6 +50,7 @@ class DBConnection:
 
 	def connect(self):
 		if self.connection is None:
+			logging.info("Connecting to DB")
 			#Read the XML data
 			self.__read_xml()
 			#Connect to the database - throws!
@@ -58,9 +62,11 @@ class DBConnection:
 					}
 			if self.password != None:
 				dsn['password'] = self.password
-
+			logging.info("Connecting to: %s@%s on %s:%s", self.username, self.database, self.host, self.port)
 			#Connect
 			self.connection = psycopg2.connect(**dsn)
+		else:
+			logging.warning("Attempting reconnect to: %s@%s on %s:%s", self.username, self.database, self.host, self.port)
 
 	def get_connection(self):
 		return self.connection
@@ -69,7 +75,9 @@ class DBConnection:
 		return self.connection.cursor()
 
 	def commit(self):
+		logging.info("COMMIT")
 		self.connection.commit()
 
 	def rollback(self):
+		logging.info("ROLLBACK")
 		self.connection.rollback()

@@ -28,10 +28,10 @@ class AnalysisApplication(symbols.Symbols):
 	def perform_data_analysis(self):
 		logging.info("Performing Analysis")
 		for symbol in self.get_symbols_list():
-			logging.debug("Symbol: %s", symbol[0])
+			logging.debug("Symbol: %s", symbol)
 			#Prepare to run the query
 			data_parameters = collections.OrderedDict()
-			data_parameters['symbol'] = symbol[0]
+			data_parameters['symbol'] = symbol
 			data_list = list(data_parameters.values())
 			#Perform the analysis of the data
 			self.db_cursor.callproc(analysis_queries.perform_data_analysis, data_list)
