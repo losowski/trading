@@ -2,6 +2,7 @@
 import logging
 
 from database import db_connection
+from database import db_cursor
 
 #Get symbols list
 get_list_of_symbols = """
@@ -12,25 +13,23 @@ get_list_of_symbols = """
 	;
 """
 
-class Symbols:
+class Symbols (db_cursor.DBCursor):
 	def __init__(self):
-		self.database		= db_connection.DBConnection()
-		self.symbols_list	= list()
+		db_cursor.DBCursor.__init__(self)
+		self.symbols_list	= None #list()
 
 	def __del__(self):
+		db_cursor.DBCursor.__del__(self)
 		pass
 
-	def initialise(self):
-		self.database.connect()
-		self.db_cursor = self.database.get_query()
-
-	def shutdown(self):
-		self.db_cursor.close()
+	#def initialise(self):
+	#def shutdown(self):
 
 	def get_symbols_list(self):
-		if len(self.symbols_list) == 0:
+		if self.symbols_list is None:
 			logging.info("Fetching Symnbols")
-			self.db_cursor.execute(get_list_of_symbols)
+			self.symbols_list	= list()
+			self.get_db().execute(get_list_of_symbols)
 			symbols_list = self.db_cursor.fetchall()
 			for symbol in symbols_list:
 				logging.debug("reading symbol: %s", symbol[0])

@@ -43,23 +43,24 @@ class DBConnection:
 						self.username = connection_info.text
 					elif (connection_info.tag == "password"):
 						self.password = connection_info.text
-	
+
 
 	def connect(self):
-		#Read the XML data
-		self.__read_xml()
-		#Connect to the database - throws!
-		dsn = {
-					'database'	:	self.database,
-					'user'		:	self.username,	
-					'host'		:	self.host,
-					'port'		:	self.port	
-				}
-		if self.password != None:
-			dsn['password'] = self.password
+		if self.connection is None:
+			#Read the XML data
+			self.__read_xml()
+			#Connect to the database - throws!
+			dsn = {
+						'database'	:	self.database,
+						'user'		:	self.username,
+						'host'		:	self.host,
+						'port'		:	self.port
+					}
+			if self.password != None:
+				dsn['password'] = self.password
 
-		#Connect
-		self.connection = psycopg2.connect(**dsn)
+			#Connect
+			self.connection = psycopg2.connect(**dsn)
 
 	def get_connection(self):
 		return self.connection
