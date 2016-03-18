@@ -8,6 +8,7 @@ import logging
 
 from database import db_connection
 
+import main_application
 
 class GUIApplication:
 	def __init__(self):
@@ -20,7 +21,11 @@ class GUIApplication:
 		self.database.connect()
 
 	def run (self):
-		app = wx.App(redirect=True)
-		top = wx.Frame(None, title="Hello World", size=(300,200))
-		top.Show()
+		#Create an App
+		app = wx.App()
+		#Create a Frame from that app (static function)
+		guiMainWindow = main_application.MainApplicationWindow()
+		#Show the windows
+		guiMainWindow.Show()
+		#Main User Interface processing loop
 		app.MainLoop()
