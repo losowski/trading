@@ -145,7 +145,7 @@ class AnalysisApplication:
 			analysis_query = analysis_queries.AnalysisBackboneQueryTemplate.safe_substitute(data)
 			logging.info("Analysis Query: %s", analysis_query)
 			#With query built, apply to the symbols that we have
-			for symbol in self.symbols_list:
+			for symbol in self.get_symbols_list():
 				logging.info("Running query on %s", symbol)
 				#Perform the query per symbol
 				data_parameters = collections.OrderedDict()
