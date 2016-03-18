@@ -13,6 +13,7 @@ def main():
 	analysis = analysis_application.AnalysisApplication()
 	analysis.initialise()
 	analysis.run()
+	analysis.shutdown()
 	print("Exiting...")
 
 # Assign a start point to the executable

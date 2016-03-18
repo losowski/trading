@@ -18,27 +18,36 @@ class AnalysisApplication:
 
 	def initialise(self):
 		self.database.connect()
+		self.db_cursor = self.database.get_query()
+
+	def shutdown(self):
+		self.db_cursor.close()
 
 	def run(self):
 		self.perform_data_analysis()
 		self.process_trading_flags()
 
+	def get_symbols_list(self):
+		if len(self.symbols_list) == 0:
+			logging.info("Fetching Symnbols")
+			self.db_cursor.execute(analysis_queries.get_list_of_symbols)
+			symbols_list = self.db_cursor.fetchall()
+			for symbol in symbols_list:
+				logging.debug("reading symbol: %s", symbol[0])
+			self.symbols_list.append(symbol[0])
+		return self.symbols_list
+
 	def perform_data_analysis(self):
 		logging.info("Performing Analysis")
-		analysis_data_query = self.database.get_query()
-		analysis_data_query.execute(analysis_queries.get_list_of_symbols)
-		symbols_list = analysis_data_query.fetchall()
-		for symbol in symbols_list:
+		for symbol in self.get_symbols_list():
 			logging.debug("Symbol: %s", symbol[0])
-			#Add the symbols to make life easier later on
-			self.symbols_list.append(symbol[0])
+			#Prepare to run the query
 			data_parameters = collections.OrderedDict()
 			data_parameters['symbol'] = symbol[0]
 			data_list = list(data_parameters.values())
 			#Perform the analysis of the data
-			analysis_data_query.callproc(analysis_queries.perform_data_analysis, data_list)
+			self.db_cursor.callproc(analysis_queries.perform_data_analysis, data_list)
 			self.database.commit()
-		analysis_data_query.close()
 
 	def __operator_to_symbols(self, operator):
 		symbols = '='
