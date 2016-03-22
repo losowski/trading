@@ -5,14 +5,17 @@ import logging
 
 from database import db_connection
 from utilities import symbols
+from utilities import utilities
 import analysis_queries
 
 
-class AnalysisApplication(symbols.Symbols):
+class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 	def __init__(self):
 		symbols.Symbols.__init__(self)
+		utilities.Utilities.__init__(self)
 
 	def __del__(self):
+		utilities.Utilities.__del__(self)
 		symbols.Symbols.__del__(self)
 
 	def initialise(self):
@@ -36,16 +39,6 @@ class AnalysisApplication(symbols.Symbols):
 			#Perform the analysis of the data
 			self.db_cursor.callproc(analysis_queries.perform_data_analysis, data_list)
 			self.database.commit()
-
-	def __operator_to_symbols(self, operator):
-		symbols = '='
-		if (operator == 'gt'):
-			symbols = '>='
-		elif (operator == 'lt'):
-			symbols = '<='
-		elif (operator == 'eq'):
-			symbols = '='
-		return symbols
 
 	def __joining_names(self, index):
 		return "sq{0}".format(index)
@@ -82,7 +75,7 @@ class AnalysisApplication(symbols.Symbols):
 							'relative_index'	: self.__joining_names(index),
 							'field_name'		: field_name,
 							'duration'			: duration,
-							'operator'			: self.__operator_to_symbols(operator),
+							'operator'			: self.operator_to_symbols(operator),
 							'value'				: value
 						}
 				#Absolute
