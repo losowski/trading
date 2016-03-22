@@ -48,8 +48,17 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 		self.get_db().execute(analysis_queries.get_analysis_properties)
 		return list(self.db_cursor.fetchall())
 
+	def get_analysis_conditions(self, analysis_property_id):
+		property_data_parameters = collections.OrderedDict()
+		property_data_parameters['property_id'] = analysis_property_id
+		logging.debug("property_data_parameters = %s", property_data_parameters)
+		self.get_db().execute(analysis_queries.get_analysis_conditions, property_data_parameters)
+		return list(self.db_cursor.fetchall())
+
+
 	def process_trading_flags(self):
 		logging.info("Process the trading flags")
+
 		logging.debug("Getting analysis_trading_query")
 		analysis_trading_query = self.database.get_query()
 		for analysis_property in self.get_analysis_properties():
@@ -57,12 +66,7 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 			analysis_property_id, analysis_property_name, analysis_property_type, analysis_property_assigned_value = analysis_property
 			logging.debug("Property: %s : %s - %s", analysis_property_id, analysis_property_name, analysis_property_type)
 			logging.info("Get the analysis conditions for %s : %s", analysis_property_id, analysis_property_name)
-			property_data_parameters = collections.OrderedDict()
-			property_data_parameters['property_id'] = analysis_property_id
-			logging.debug("property_data_parameters = %s", property_data_parameters)
-			analysis_property_conditions_query = self.database.get_query()
-			analysis_property_conditions_query.execute(analysis_queries.get_analysis_conditions, property_data_parameters)
-			analysis_property_conditions_list = analysis_property_conditions_query.fetchall()
+			analysis_property_conditions_list = self. get_analysis_conditions(analysis_property_id)
 			#Build the Query
 			absolute_parameters 	= list()
 			relative_parameters		 = list()
@@ -148,7 +152,5 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 					self.database.commit()
 					analysis_input_query.close()
 
-			logging.debug("Closing analysis_conditions_query")
-			analysis_property_conditions_query.close()
 		logging.debug("Closing analysis_trading_query")
 		analysis_trading_query.close()
