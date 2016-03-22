@@ -43,15 +43,16 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 	def __joining_names(self, index):
 		return "sq{0}".format(index)
 
+	def get_analysis_properties(self):
+		logging.debug("Get the analysis properties")
+		self.get_db().execute(analysis_queries.get_analysis_properties)
+		return list(self.db_cursor.fetchall())
+
 	def process_trading_flags(self):
 		logging.info("Process the trading flags")
 		logging.debug("Getting analysis_trading_query")
 		analysis_trading_query = self.database.get_query()
-		logging.debug("Get the analysis properties")
-		analysis_properties_query = self.database.get_query()
-		analysis_properties_query.execute(analysis_queries.get_analysis_properties)
-		analysis_properties_list = analysis_properties_query.fetchall()
-		for analysis_property in analysis_properties_list:
+		for analysis_property in self.get_analysis_properties():
 			logging.debug("Analysis property %s", analysis_property)
 			analysis_property_id, analysis_property_name, analysis_property_type, analysis_property_assigned_value = analysis_property
 			logging.debug("Property: %s : %s - %s", analysis_property_id, analysis_property_name, analysis_property_type)
@@ -151,6 +152,3 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 			analysis_property_conditions_query.close()
 		logging.debug("Closing analysis_trading_query")
 		analysis_trading_query.close()
-		logging.debug("Closing analysis_properties_query")
-		analysis_properties_query.close()
-
