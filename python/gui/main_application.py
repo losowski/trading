@@ -9,7 +9,7 @@ import logging
 from database import db_connection
 
 class MainApplicationWindow(wx.Frame):
-	def __init__(self):
-		wx.Frame.__init__(self, None, size=(1200,800), name="Stock Analysis User Interface")
+	def __init__(self, parent = None, title="Stock Analysis User Interface"):
+		wx.Frame.__init__(self, parent, title = title, size=(1200,800))
 		self.Show()
 		pass #__init__ functions
