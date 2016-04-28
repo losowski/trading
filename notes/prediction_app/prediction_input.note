@@ -1,0 +1,19 @@
+Prediction Input
+================
+
+Prediction to be written into analysis table
+	- This is to provide a record that the predictions are made, and recorded
+	- No attempt is to be made at this point as to how valid these predictions are
+
+TABLE SPECIFICATIONS
+	- analysis_id (Primary Key)
+	- quote_id
+	- analysis_property_id
+	- end_date
+	- end_value
+	- end_diff
+
+ADMIN TABLE:
+	- analysis_admin
+	- analysis_id
+	- reference_id (hashed unique identifier for this set) - char 64

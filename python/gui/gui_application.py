@@ -22,10 +22,8 @@ class GUIApplication:
 
 	def run (self):
 		#Create an App
-		app = wx.App()
+		app = wx.App(False)
 		#Create a Frame from that app (static function)
-		guiMainWindow = main_application.MainApplicationWindow()
-		#Show the windows
-		guiMainWindow.Show()
+		guiMainApplication = main_application.MainApplicationWindow()
 		#Main User Interface processing loop
 		app.MainLoop()
