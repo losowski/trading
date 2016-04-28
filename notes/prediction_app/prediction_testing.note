@@ -1,0 +1,15 @@
+Prediction Testing
+===================
+	- Using a particular code provided
+		- Fetch all the quotes in the order of date (quote date)
+		- Run through the predictions
+	- Between each prediction get the quotes
+		- Calculate the initial price
+		- Calculate the end price
+		- the difference
+			- Has to be greater than or equal to that quoted
+			- Sign must be the same
+		- Any instance of the price dropping out of the expected direction
+			- This gets logged, for further attention
+
+- All reports produce a recorded log-file with the report written out (using standarda logging interface)
