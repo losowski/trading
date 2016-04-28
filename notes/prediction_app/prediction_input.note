@@ -7,6 +7,7 @@ Prediction to be written into analysis table
 
 TABLE SPECIFICATIONS
 	- analysis_id (Primary Key)
+	- analysis_admin_id (Primary Key)
 	- quote_id
 	- analysis_property_id
 	- end_date
@@ -14,6 +15,13 @@ TABLE SPECIFICATIONS
 	- end_diff
 
 ADMIN TABLE:
-	- analysis_admin
-	- analysis_id
+	- bulk_admin_id (NULLABLE)
+	- analysis_admin (Primary Key)
+	- symbol_id
 	- reference_id (hashed unique identifier for this set) - char 64
+	- date_reference
+
+BULK_ADMIN TABLE:
+	- bulk_admin
+	- reference_id
+	- date_reference
