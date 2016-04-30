@@ -22,3 +22,8 @@ Prediction Requirements
 		Logic for working out these both will be covered in (prediction_test)
 	2.4
 		Logic for defining what constitutes a prediction test (prediction_test_conditions)
+3.
+	Audit table for the prediction conditions.
+	3.1
+		Must be triggered to generate on insert, update or delete
+	

@@ -1,3 +1,4 @@
+
 CREATE TABLE trading_schema.analysis_property
 (
 	id bigserial NOT NULL,
@@ -24,6 +25,7 @@ CREATE TABLE trading_schema.analysis_conditions
 	threshold_type character(1) NOT NULL,
 	duration interval,
 	value numeric NOT NULL,
+	status character(1) NOT NULL DEFAULT 'A'::bpchar,
 	CONSTRAINT pk_analysis_conditions PRIMARY KEY (id),
 	CONSTRAINT fk_analysis_conditions FOREIGN KEY (analysis_property_id)
 		REFERENCES trading_schema.analysis_property (id) MATCH SIMPLE

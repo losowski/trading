@@ -45,7 +45,7 @@ get_analysis_conditions = """
 		c.value
 	FROM
 		trading_schema.analysis_property p
-		INNER JOIN trading_schema.analysis_conditions c ON (c.analysis_property_id = p.id)
+		INNER JOIN trading_schema.analysis_conditions c ON (c.analysis_property_id = p.id AND c.status = 'A')
 	WHERE
 		p.id = %(property_id)s
 	;
