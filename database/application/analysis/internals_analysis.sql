@@ -16,7 +16,7 @@ BEGIN
 	;
 	-- Make new records
 	INSERT INTO
-		trading_schema.analysis_assignment_quote
+		trading_schema.prediction_input
 		(
 			analysis_property_id,
 			quote_id

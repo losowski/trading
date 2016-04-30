@@ -43,7 +43,7 @@ ALTER TABLE trading_schema.analysis_conditions
 -- operator <gt|lt|eq|lte|gte>
 
 
-CREATE TABLE trading_schema.analysis_assignment_quote
+CREATE TABLE trading_schema.prediction_input
 (
 	analysis_property_id bigint NOT NULL,
 	quote_id bigint NOT NULL,
