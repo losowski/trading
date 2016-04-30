@@ -6,22 +6,38 @@ Prediction to be written into analysis table
 	- No attempt is to be made at this point as to how valid these predictions are
 
 TABLE SPECIFICATIONS
-	- analysis_id (Primary Key)
-	- analysis_admin_id (Primary Key)
+prediction_input (formerly: analysis_assignment_quote)
+	- reference_id (Primary Key)
+	- analysis_property_id (This is the expected terms of the prediction)
 	- quote_id
-	- analysis_property_id
+	- prediction_input_admin_id
 	- end_date
 	- end_value
 	- end_diff
 
-ADMIN TABLE:
-	- bulk_admin_id (NULLABLE)
-	- analysis_admin (Primary Key)
+
+prediction_input_admin
+	- id  (Primary Key)
 	- symbol_id
+	- bulk_admin_id (NULLABLE)
+	- analysis_admin_id (Primary Key)
 	- reference_id (hashed unique identifier for this set) - char 64
 	- date_reference
 
-BULK_ADMIN TABLE:
+reference
+	- id
+	- UUID
+
+bulk_admin
 	- bulk_admin
 	- reference_id
 	- date_reference
+
+symbol_admin
+	- symbol_id
+	- bulk_admin_id
+
+user
+	- user_id (Primary Key)
+	- Username
+	- Password (nullable)
