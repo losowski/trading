@@ -7,7 +7,7 @@ Prediction to be written into analysis table
 
 TABLE SPECIFICATIONS
 prediction_input (formerly: analysis_assignment_quote)
-	- reference_id (Primary Key)
+	- id (Primary Key)
 	- analysis_property_id (This is the expected terms of the prediction)
 	- quote_id
 	- prediction_input_admin_id
@@ -20,7 +20,6 @@ prediction_input_admin
 	- id  (Primary Key)
 	- symbol_id
 	- bulk_admin_id (NULLABLE)
-	- analysis_admin_id (Primary Key)
 	- reference_id (hashed unique identifier for this set) - char 64
 	- date_reference
 
