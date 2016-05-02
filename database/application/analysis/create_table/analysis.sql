@@ -42,23 +42,41 @@ ALTER TABLE trading_schema.analysis_conditions
 -- threshold_type<A|R> (Absolute|Relative)
 -- operator <gt|lt|eq|lte|gte>
 
+-- Reference Table (to be used vaguely for versioning)
+CREATE TABLE trading_schema.reference
+(
+	id bigserial NOT NULL,
+	reference uuid NOT NULL,
+	CONSTRAINT pk_reference PRIMARY KEY (id)
+)
+WITH (
+	OIDS=FALSE
+);
+ALTER TABLE trading_schema.reference
+	OWNER TO trading;
+
+-- Prediction Input
 
 CREATE TABLE trading_schema.prediction_input
 (
 	analysis_property_id bigint NOT NULL,
 	quote_id bigint NOT NULL,
-	assigned_value numeric NOT NULL,
+	reference_id bigint,
 	CONSTRAINT pk_analysis_assignment_quote PRIMARY KEY (analysis_property_id, quote_id),
 	CONSTRAINT fk_analysis_assignment_quote_01 FOREIGN KEY (analysis_property_id)
-	REFERENCES trading_schema.analysis_property (id) MATCH SIMPLE
+		REFERENCES trading_schema.analysis_property (id) MATCH SIMPLE
 		ON UPDATE NO ACTION ON DELETE NO ACTION,
 	CONSTRAINT fk_analysis_assignment_quote_02 FOREIGN KEY (quote_id)
 		REFERENCES trading_schema.quote (id) MATCH SIMPLE
-		ON UPDATE NO ACTION ON DELETE NO ACTION
+		ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT fk_reference FOREIGN KEY (reference_id)
+		REFERENCES trading_schema.reference (id) MATCH SIMPLE
+		ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT uc_prediction_input UNIQUE (analysis_property_id, quote_id, reference_id)
 )
 WITH (
 	OIDS=FALSE
 );
 ALTER TABLE trading_schema.analysis_assignment_quote
 	OWNER TO trading;
-
+-- TODO: SET prediction_input.reference_id NOT NULL (once added to application)
