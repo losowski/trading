@@ -1,4 +1,40 @@
 \subsection{Brief}
+Obtains the information from Yahoo Finance. Stores locally for further processing.
 \subsection{Description}
+Quote information retrieved from Yahoo Finance. Will update to latest symbols.
 \subsection{Database Tables}
+\subsubsection{exchange}
+\begin{tabular}{|l||l|}
+	\hline
+	id 			& Identifying primary key \\ \hline
+	name 		& Exchange name. \newline Intended to be human readable \\ \hline
+\end{tabular}
+\subsubsection{symbol}
+\begin{tabular}{|l||l|}
+	\hline
+	id 				& Identifying primary key \\ \hline
+	exchange\_id 	& Exchange foreign key \\ \hline
+	name 			& Long company name. Intended to be human readable \\ \hline
+	symbol 			& Contracted symbol representing company name name. Intended to be machine readable \\ \hline
+
+\end{tabular}
+\subsubsection{quote}
+\begin{tabular}{|l||l|}
+	\hline
+	id 						& Identifying primary key \\ \hline
+	symbol\_id				& Symbol foreign key \\ \hline
+	datestamp				& Quote date stamp \\ \hline
+	volume					& Volume \\ \hline
+	adjusted\_close\_price	& Adjusted close price \\ \hline
+	open\_price				& Opening price \\ \hline
+	close\_price				& Closing price \\ \hline
+	hig\_price				& Daily maximum price \\ \hline
+	low\_price				& Identifying primary key \\ \hline
+\end{tabular}
 \subsection{Technical Description}
+Populates the quote table with the daily quote information.
+\subsection{Future Developments}
+\begin{enumerate}
+	\item Repair the quotes if one is deleted
+	\item Download all symbols and exchanges
+\end{enumerate}
