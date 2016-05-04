@@ -1,0 +1,91 @@
+\subsection{Brief}
+Generates the technical analysis datasets for acquired information. \newline
+Processes this against a set of known trading flags
+\subsection{Description}
+Calculates the differences. \newline
+Performs moving average calculations on these. \newline
+Analyses these against known flag points. \newline
+Evaluates own predictions. \newline
+\subsection{Database Tables}
+\par \textbf{Technical Analysis}
+\subsubsection{a\_moving\_avg}
+\begin{tabular}{|l||l|}
+	\hline
+	id 				& Foreign key to quote \\ \hline
+	days2			& Moving average over 2 days \\ \hline
+	days5			& Moving average over 5 days \\ \hline
+	days9			& Moving average over 9 days \\ \hline
+	days15			& Moving average over 15 days \\ \hline
+	days21			& Moving average over 12 days \\ \hline
+	days29			& Moving average over 29 days \\ \hline
+	days73			& Moving average over 73 days \\ \hline
+	days91			& Moving average over 91 days \\ \hline
+	days121			& Moving average over 121 days \\ \hline
+	days189			& Moving average over 189 days \\ \hline
+	\end{tabular}
+\subsubsection{quote\_diff}
+\begin{tabular}{|l||l|}
+	\hline
+	quote\_id 				& Identifying primary key \\ \hline
+	diff\_open\_price		& Difference in opening price \\ \hline
+	diff\_close\_price		& Difference in closing price \\ \hline
+	diff\_hig\_price		& Difference in daily maximum price \\ \hline
+	diff\_low\_price		& Difference in low price \\ \hline
+	diff\_open\_close		& Difference between opening and closing prices\\ \hline
+	diff\_high\_low			& Difference between high and low prices\\ \hline
+\end{tabular}
+\subsubsection{a\_moving\_diff}
+\begin{tabular}{|l||l|}
+	\hline
+	id 				& Foreign key to quote \\ \hline
+	days2			& Moving average over 2 days \\ \hline
+	days5			& Moving average over 5 days \\ \hline
+	days9			& Moving average over 9 days \\ \hline
+	days15			& Moving average over 15 days \\ \hline
+	days21			& Moving average over 12 days \\ \hline
+	days29			& Moving average over 29 days \\ \hline
+	days73			& Moving average over 73 days \\ \hline
+	days91			& Moving average over 91 days \\ \hline
+	days121			& Moving average over 121 days \\ \hline
+	days189			& Moving average over 189 days \\ \hline
+\end{tabular}
+
+\par \textbf{Analysis Interpretation Definitions}
+\subsubsection{analysis\_property}
+\begin{tabular}{|l||l|}
+	\hline
+	id 				& Identifying primary key \\ \hline
+	exchange\_id 	& Exchange foreign key \\ \hline
+	name 			& Long company name. Intended to be human readable \\ \hline
+	symbol 			& Contracted symbol representing company name name. Intended to be machine readable \\ \hline
+\end{tabular}
+\subsubsection{analysis\_conditions}
+\begin{tabular}{|l||l|}
+	\hline
+	id 				& Identifying primary key \\ \hline
+	exchange\_id 	& Exchange foreign key \\ \hline
+	name 			& Long company name. Intended to be human readable \\ \hline
+	symbol 			& Contracted symbol representing company name name. Intended to be machine readable \\ \hline
+\end{tabular}
+\par \textbf{Analysis Flagging}
+\par textbf{Analysis Evaluation}
+\subsubsection{quote}
+\begin{tabular}{|l||l|}
+	\hline
+	id 						& Identifying primary key \\ \hline
+	symbol\_id				& Symbol foreign key \\ \hline
+	datestamp				& Quote date stamp \\ \hline
+	volume					& Volume \\ \hline
+	adjusted\_close\_price	& Adjusted close price \\ \hline
+	open\_price				& Opening price \\ \hline
+	close\_price				& Closing price \\ \hline
+	hig\_price				& Daily maximum price \\ \hline
+	low\_price				& Identifying primary key \\ \hline
+\end{tabular}
+\subsection{Technical Description}
+Populates the quote table with the daily quote information.
+\subsection{Future Developments}
+\begin{enumerate}
+	\item Repair the quotes if one is deleted
+	\item Download all symbols and exchanges
+\end{enumerate}
