@@ -52,12 +52,13 @@ Evaluates own predictions. \newline
 
 \par \textbf{Analysis Interpretation Definitions}
 \subsubsection{analysis\_property}
-\begin{tabular}{|l||l|}
+\begin{tabular}{ |l||l| }
 	\hline
-	id 				& Identifying primary key \\ \hline
-	exchange\_id 	& Exchange foreign key \\ \hline
-	name 			& Long company name. Intended to be human readable \\ \hline
-	symbol 			& Contracted symbol representing company name name. Intended to be machine readable \\ \hline
+	id 					& Identifying primary key. \\ \hline
+	name 				& Name used to describe what this looks at. Intented to be human readable. \\ \hline
+	analysis\_type 		& (T\textbar D) Time or Direction. \\ \hline
+	analysis\_value 	& The vector quantity of the analysis type. How many days ahead, or how far (positive or negative) the price will move. \\ \hline
+
 \end{tabular}
 \subsubsection{analysis\_conditions}
 \begin{tabular}{|l||l|}
@@ -68,7 +69,7 @@ Evaluates own predictions. \newline
 	symbol 			& Contracted symbol representing company name name. Intended to be machine readable \\ \hline
 \end{tabular}
 \par \textbf{Analysis Flagging}
-\par textbf{Analysis Evaluation}
+\par \textbf{Analysis Evaluation}
 \subsubsection{quote}
 \begin{tabular}{|l||l|}
 	\hline
