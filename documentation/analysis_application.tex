@@ -56,17 +56,21 @@ Evaluates own predictions. \newline
 	\hline
 	id 					& Identifying primary key. \\ \hline
 	name 				& Name used to describe what this looks at. Intented to be human readable. \\ \hline
-	analysis\_type 		& (T\textbar D) Time or Direction. \\ \hline
+	analysis\_type 		& \textbf{(T\textbar D)} \textbf{T}ime or \textbf{D}irection. \\ \hline
 	analysis\_value 	& The vector quantity of the analysis type. How many days ahead, or how far (positive or negative) the price will move. \\ \hline
 
 \end{tabular}
 \subsubsection{analysis\_conditions}
 \begin{tabular}{|l||l|}
 	\hline
-	id 				& Identifying primary key \\ \hline
-	exchange\_id 	& Exchange foreign key \\ \hline
-	name 			& Long company name. Intended to be human readable \\ \hline
-	symbol 			& Contracted symbol representing company name name. Intended to be machine readable \\ \hline
+	id 						& Identifying primary key \\ \hline
+	analysis\_property\_id	& Analysis property foreign key \\ \hline
+	field\_name 			& Analysis table field names. Please look at the \textbf{UserManual} (In section \ref{itm:UserManual}) for full definition. \\ \hline
+	operator 				& \textbf{(gt\textbar lt\textbar eq\textbar lte\textbar gte)} \textbf{G}reater \textbf{T}han, \textbf{L}ess \textbf{T}han, \textbf{EQ}ual to, \textbf{L}ess \textbf{T}han or \textbf{E}qual to and \textbf{G}reater \textbf{T}han or \textbf{E}qual to. \\ \hline
+	threshold\_type 			& \textbf{(A\textbar R)} Absolute or Relative. \\ \hline
+	duration 				& Time based limitation. \\ \hline
+	value 					& Value based limitation. \\ \hline
+	status 					& \textbf{(A\textbar D\textbar S)} Active, Deleted, or Suspended Status. Only active are used. Other states are for user definition.  \\ \hline
 \end{tabular}
 \par \textbf{Analysis Flagging}
 \par \textbf{Analysis Evaluation}
