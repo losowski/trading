@@ -72,20 +72,33 @@ Evaluates own predictions. \newline
 	value 					& Value based limitation. \\ \hline
 	status 					& \textbf{(A\textbar D\textbar S)} \textbf{A}ctive, \textbf{D}eleted, or \textbf{S}uspended Status. Only \textbf{A}ctive is used. Other states are for user definition.  \\ \hline
 \end{tabular}
+
 \par \textbf{Analysis Flagging}
-\subsubsection{quote}
+\subsubsection{prediction\_input}
 \begin{tabular}{|l||l|}
 	\hline
-	id 						& Identifying primary key \\ \hline
-	symbol\_id				& Symbol foreign key \\ \hline
-	datestamp				& Quote date stamp \\ \hline
-	volume					& Volume \\ \hline
-	adjusted\_close\_price	& Adjusted close price \\ \hline
-	open\_price				& Opening price \\ \hline
-	close\_price				& Closing price \\ \hline
-	hig\_price				& Daily maximum price \\ \hline
-	low\_price				& Identifying primary key \\ \hline
+	id							& Identifying primary key. \\ \hline
+	analysis\_property\_id 		& Analysis property that it used to match on. \\ \hline
+	quote\_id					& Quote ID that it matched on. \\ \hline
+	reference\_id				& Reference that this was run against. Global unique identifier. \\ \hline
+	end\_date					& Calculated end date that was predicted. \\ \hline
+	end\_value					& Calculated end value that was predicted. \\ \hline
+	end\_diff					& Calculated end direction that was predicted. \\ \hline
 \end{tabular}
+
+
+
+\subsubsection{reference}
+\begin{tabular}{|l||l|}
+	\hline
+	id						& Identifying Primary Key \\ \hline
+	UUID					& Unique Identifier. \\ \hline
+\end{tabular}
+
+\textbf{NOTE:} In addition there will be other tables implementing versioning and user control, but these are non-essential.
+
+
+
 \par \textbf{Analysis Evaluation}
 \subsubsection{quote}
 \begin{tabular}{|l||l|}
