@@ -70,9 +70,22 @@ Evaluates own predictions. \newline
 	threshold\_type 			& \textbf{(A\textbar R)} Absolute or Relative. \\ \hline
 	duration 				& Time based limitation. \\ \hline
 	value 					& Value based limitation. \\ \hline
-	status 					& \textbf{(A\textbar D\textbar S)} Active, Deleted, or Suspended Status. Only active are used. Other states are for user definition.  \\ \hline
+	status 					& \textbf{(A\textbar D\textbar S)} \textbf{A}ctive, \textbf{D}eleted, or \textbf{S}uspended Status. Only \textbf{A}ctive is used. Other states are for user definition.  \\ \hline
 \end{tabular}
 \par \textbf{Analysis Flagging}
+\subsubsection{quote}
+\begin{tabular}{|l||l|}
+	\hline
+	id 						& Identifying primary key \\ \hline
+	symbol\_id				& Symbol foreign key \\ \hline
+	datestamp				& Quote date stamp \\ \hline
+	volume					& Volume \\ \hline
+	adjusted\_close\_price	& Adjusted close price \\ \hline
+	open\_price				& Opening price \\ \hline
+	close\_price				& Closing price \\ \hline
+	hig\_price				& Daily maximum price \\ \hline
+	low\_price				& Identifying primary key \\ \hline
+\end{tabular}
 \par \textbf{Analysis Evaluation}
 \subsubsection{quote}
 \begin{tabular}{|l||l|}
