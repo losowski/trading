@@ -56,9 +56,9 @@ Evaluates own predictions. \newline
 	\hline
 	id 					& Identifying primary key. \\ \hline
 	name 				& Name used to describe what this looks at. Intented to be human readable. \\ \hline
-	analysis\_type 		& \textbf{(T\textbar D)} \textbf{T}ime or \textbf{D}irection. \\ \hline
-	analysis\_value 	& The vector quantity of the analysis type. How many days ahead, or how far (positive or negative) the price will move. \\ \hline
-
+	analysis\_type 		& \textbf{(T\textbar D)} \textbf{T}ime or \textbf{D}irection only (with no known expected price change). \\ \hline
+	price\_change 		& The price change (positive or negative) the price will move. \\ \hline
+	days		 		& The number of days the change will take for the price to move (always positive). \\ \hline
 \end{tabular}
 \subsubsection{analysis\_conditions}
 \begin{tabular}{|l||l|}
