@@ -29,8 +29,7 @@ get_analysis_properties = """
 	SELECT
 		id,
 		name,
-		analysis_type,
-		assigned_value
+		analysis_type
 	FROM
 		trading_schema.analysis_property
 	;
@@ -184,4 +183,4 @@ ORDER BY
 AnalysisBackboneQueryTemplate = string.Template(analysis_backbone_query)
 
 #Perform data analysis
-analysis_assignment_storage = "trading_schema.pInsAnalysisAssignment"
+analysis_assignment_storage = "trading_schema.pInsPredictionInput"

@@ -13,3 +13,12 @@ Prediction Testing
 			- This gets logged, for further attention
 
 - All reports produce a recorded log-file with the report written out (using standarda logging interface)
+
+APP:
+	bschecker
+		--help	: help
+		-- list	: Gets all the references with the date they were run on
+		UUID	LIKE function on the UUID
+			- Performs checks
+			- outputs a report (CSV formtted)
+		

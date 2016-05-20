@@ -2,6 +2,7 @@
 import datetime
 import collections
 import logging
+import uuid
 
 from database import db_connection
 from utilities import symbols
@@ -20,6 +21,8 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 
 	def initialise(self):
 		symbols.Symbols.initialise(self)
+		self.uuid = uuid.uuid4()
+		self.datestamp = datetime.date.today()
 
 	def shutdown(self):
 		symbols.Symbols.shutdown(self)
@@ -120,7 +123,7 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 		logging.info("Analysis Query: %s", analysis_query)
 		return analysis_query
 
-	def process_analysis_query_symbol(self, analysis_query, symbol):
+	def process_analysis_query_symbol(self, analysis_query, analysis_property_id, symbol):
 		logging.info("Running query on %s", symbol)
 		#Perform the query per symbol
 		data_parameters = collections.OrderedDict()
@@ -129,32 +132,35 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 		self.get_db().execute(analysis_query, data_parameters)
 		#Get the results
 		analysis_trading_query_results_list = self.get_db().fetchall()
+		logging.info("Matches Returned %s", len(analysis_trading_query_results_list))
 		for analysis_trading_result in analysis_trading_query_results_list:
 			logging.debug("analysis_trading_result %s", analysis_trading_result)
 			data_parameters = collections.OrderedDict()
 			data_parameters['p_quote'] = analysis_trading_result[0]
 			data_parameters['p_analysis_property'] = analysis_property_id
+			data_parameters['p_uuid'] = self.uuid
+			data_parameters['p_datestamp'] = self.datestamp
 			data_list = list(data_parameters.values())
 			#Perform the analysis of the data
 			self.get_db().callproc(analysis_queries.analysis_assignment_storage, data_list)
 			self.database.commit()
 
-	def process_analysis_query(self, analysis_query, symbols=None):
+	def process_analysis_query(self, analysis_query, analysis_property_id, symbols=None):
 		if symbols is None:
 			#With query built, apply to the symbols that we have
 			for symbol in self.get_symbols_list():
-				self.process_analysis_query_symbol(analysis_query, symbol)
+				self.process_analysis_query_symbol(analysis_query, analysis_property_id, symbol)
 		else:
-			self.process_analysis_query_symbol(analysis_query, symbols)
+			self.process_analysis_query_symbol(analysis_query, analysis_property_id, symbols)
 
 
 	def process_trading_flags(self):
 		logging.info("Process the trading flags")
 		for analysis_property in self.get_analysis_properties():
 			logging.debug("Analysis property %s", analysis_property)
-			analysis_property_id, analysis_property_name, analysis_property_type, analysis_property_assigned_value = analysis_property
+			analysis_property_id, analysis_property_name, analysis_property_type = analysis_property
 			logging.debug("Property: %s : %s - %s", analysis_property_id, analysis_property_name, analysis_property_type)
 			logging.info("Get the analysis conditions for %s : %s", analysis_property_id, analysis_property_name)
 			analysis_query = self.build_analysis_query(analysis_property_id)
-			self.process_analysis_query(analysis_query, None)
+			self.process_analysis_query(analysis_query, analysis_property_id, None)
 

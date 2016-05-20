@@ -60,8 +60,10 @@ ALTER TABLE trading_schema.analysis_conditions
 CREATE TABLE trading_schema.reference
 (
 	id bigserial NOT NULL,
+	datestamp timestamp without time zone NOT NULL,
 	reference uuid NOT NULL,
-	CONSTRAINT pk_reference PRIMARY KEY (id)
+	CONSTRAINT pk_reference PRIMARY KEY (id),
+	CONSTRAINT uc_reference UNIQUE (reference, datestamp)
 )
 WITH (
 	OIDS=FALSE
@@ -87,7 +89,7 @@ CREATE TABLE trading_schema.prediction_input
 	quote_id bigint NOT NULL,
 	reference_id bigint,
 	end_date date NOT NULL,
-	end_value money NOT NULL,
+	end_value numeric NOT NULL,
 	end_diff numeric NOT NULL,
 	CONSTRAINT pk_prediction_input PRIMARY KEY (id),
 	CONSTRAINT fk_analysis_assignment_quote_01 FOREIGN KEY (analysis_property_id)

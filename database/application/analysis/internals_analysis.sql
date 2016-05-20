@@ -1,9 +1,10 @@
 ﻿-- All functions relating to the internals of the Analysis module
 
-CREATE OR REPLACE FUNCTION trading_schema.pInsAnalysisAssignment(
+CREATE OR REPLACE FUNCTION trading_schema.pInsPredictionInput(
 	p_quote_id					trading_schema.quote.id%TYPE,
 	p_analysis_property_id		trading_schema.analysis_property.id%TYPE,
-	p_uuid						trading_schema.reference.reference%TYPE
+	p_uuid						trading_schema.reference.reference%TYPE,
+	p_datestamp					trading_schema.reference.datestamp%TYPE
 ) RETURNS void AS $$
 DECLARE
 	v_reference_id				trading_schema.reference.id%TYPE;
@@ -32,9 +33,15 @@ BEGIN
 		WHEN no_data_found THEN
 			INSERT INTO
 				trading_schema.reference
-			(reference)
+			(
+				reference,
+				datestamp
+			)
 			VALUES
-			(p_uuid)
+			(
+				p_uuid,
+				p_datestamp
+			)
 			;
 		-- current_user
 		v_reference_id := currval('trading_schema.reference_id_seq');
