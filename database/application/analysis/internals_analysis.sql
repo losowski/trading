@@ -17,6 +17,7 @@ DECLARE
 	v_price_change				trading_schema.analysis_property.price_change%TYPE;
 	v_days						trading_schema.analysis_property.days%TYPE;
 BEGIN
+	-- Obtain the reference ID
 	BEGIN
 		SELECT
 			id
@@ -29,9 +30,15 @@ BEGIN
 		;
 	EXCEPTION
 		WHEN no_data_found THEN
-			RAISE INFO 'No Reference Available';
-			v_reference_id := NULL;
-	END
+			INSERT INTO
+				trading_schema.reference
+			(reference)
+			VALUES
+			(p_uuid)
+			;
+		-- current_user
+		v_reference_id := currval('trading_schema.reference_id_seq');
+	END;
 	--
 	-- Calculate the calculated values
 	--
@@ -103,7 +110,7 @@ BEGIN
 	EXCEPTION
 		WHEN no_data_found THEN
 			RAISE INFO 'Unable to form prediction';
-	END
+	END;
 END;
 $$ LANGUAGE plpgsql;
 
