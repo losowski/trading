@@ -1,9 +1,10 @@
 ﻿-- All functions relating to the internals of the Analysis module
+--	p_uuid						trading_schema.reference.reference%TYPE,
 
 CREATE OR REPLACE FUNCTION trading_schema.pInsPredictionInput(
 	p_quote_id					trading_schema.quote.id%TYPE,
 	p_analysis_property_id		trading_schema.analysis_property.id%TYPE,
-	p_uuid						trading_schema.reference.reference%TYPE,
+	p_uuid						text,
 	p_datestamp					trading_schema.reference.datestamp%TYPE
 ) RETURNS void AS $$
 DECLARE
@@ -27,7 +28,7 @@ BEGIN
 		FROM
 			trading_schema.reference
 		WHERE
-			reference = p_uuid
+			reference = CAST (p_uuid AS uuid)
 		;
 	EXCEPTION
 		WHEN no_data_found THEN
@@ -35,16 +36,16 @@ BEGIN
 				trading_schema.reference
 			(
 				reference,
-				datestamp
+				localtimestamp
 			)
 			VALUES
 			(
-				p_uuid,
+				CAST (p_uuid AS uuid),
 				p_datestamp
 			)
 			;
 		-- current_user
-		v_reference_id := currval('trading_schema.reference_id_seq');
+		v_reference_id := curval('trading_schema.reference_id_seq');
 	END;
 	--
 	-- Calculate the calculated values
@@ -93,6 +94,7 @@ BEGIN
 			RAISE INFO 'Invalid AnalysisProperty.analysis_type';
 		END IF;
 		v_end_diff := v_end_value - v_current_close;
+		v_end_date := localtimestamp + v_days;
 		-- Make new records
 		INSERT INTO
 			trading_schema.prediction_input
@@ -106,8 +108,8 @@ BEGIN
 			)
 			VALUES
 			(
-				p_analysis_property,
-				p_quote,
+				p_analysis_property_id,
+				p_quote_id,
 				v_reference_id,
 				v_end_date,
 				v_end_value,

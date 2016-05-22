@@ -21,7 +21,7 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 
 	def initialise(self):
 		symbols.Symbols.initialise(self)
-		self.uuid = uuid.uuid4()
+		self.uuid = str(uuid.uuid4())
 		self.datestamp = datetime.date.today()
 
 	def shutdown(self):
@@ -133,6 +133,7 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 		#Get the results
 		analysis_trading_query_results_list = self.get_db().fetchall()
 		logging.info("Matches Returned %s", len(analysis_trading_query_results_list))
+		logging.info("UUID %s", self.uuid)
 		for analysis_trading_result in analysis_trading_query_results_list:
 			logging.debug("analysis_trading_result %s", analysis_trading_result)
 			data_parameters = collections.OrderedDict()
