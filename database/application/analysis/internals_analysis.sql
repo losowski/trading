@@ -20,33 +20,31 @@ DECLARE
 	v_days						trading_schema.analysis_property.days%TYPE;
 BEGIN
 	-- Obtain the reference ID
-	BEGIN
-		SELECT
-			id
-		INTO
-			v_reference_id
-		FROM
+	SELECT
+		id
+	INTO
+		v_reference_id
+	FROM
+		trading_schema.reference
+	WHERE
+		reference = CAST (p_uuid AS uuid)
+	;
+	IF NOT FOUND THEN
+		INSERT INTO
 			trading_schema.reference
-		WHERE
-			reference = CAST (p_uuid AS uuid)
+		(
+			reference,
+			datestamp
+		)
+		VALUES
+		(
+			CAST (p_uuid AS uuid),
+			p_datestamp
+		)
 		;
-	EXCEPTION
-		WHEN no_data_found THEN
-			INSERT INTO
-				trading_schema.reference
-			(
-				reference,
-				localtimestamp
-			)
-			VALUES
-			(
-				CAST (p_uuid AS uuid),
-				p_datestamp
-			)
-			;
-		-- current_user
-		v_reference_id := curval('trading_schema.reference_id_seq');
-	END;
+	-- current_user
+	v_reference_id := currval('trading_schema.reference_id_seq');
+	END IF;
 	--
 	-- Calculate the calculated values
 	--
