@@ -14,6 +14,17 @@ Prediction Testing
 
 - All reports produce a recorded log-file with the report written out (using standarda logging interface)
 
+INPUT TABLE:
+	prediction_input
+	quote
+	analysis_property
+
+OUTPUT TABLE:
+	modelled_trade
+		- id
+		- prediction_input_id
+
+
 APP:
 	bschecker
 		--help	: help
