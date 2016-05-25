@@ -125,22 +125,71 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsPredictionTest(
 	p_uuid						text
 ) RETURNS void AS $$
 DECLARE
-	v_reference_id				trading_schema.reference.id%TYPE;
-	v_end_date					trading_schema.prediction_input.end_date%TYPE;
-	v_end_value					trading_schema.prediction_input.end_value%TYPE;
-	v_end_diff					trading_schema.prediction_input.end_diff%TYPE;
+	predictions RECORD;
+	v_change_percentage			trading_schema.prediction_test.change_percentage%TYPE;
+	v_change_diff				trading_schema.prediction_test.change_diff%TYPE;
+	v_minimum					trading_schema.prediction_test.minimum%TYPE;
+	v_maximum					trading_schema.prediction_test.maximum%TYPE;
+	v_average					trading_schema.prediction_test.average%TYPE;
+	v_valid						trading_schema.prediction_test.valid%TYPE;
+	v_start_price				numeric;
+	v_ending_price				numeric;
 BEGIN
-	-- Obtain the reference ID
-	SELECT
-		q.datestamp,
-		pi.end_date,
-		pi.end_value,
-		pi.end_diff
-	FROM
-		trading_schema.prediction_input pi
-		INNER JOIN trading_schema.quote q ON (pi.quote_id = q.id)
-	WHERE
-		reference = CAST (p_uuid AS uuid)
-	;
+
+	FOR predictions IN (
+		SELECT
+			date_trunc('DAY', q.datestamp) AS startdate,
+			date_trunc('DAY', pi.end_date) AS enddate,
+			pi.end_value,
+			pi.end_diff
+		FROM
+			trading_schema.prediction_input pi
+			INNER JOIN trading_schema.quote q ON (pi.quote_id = q.id)
+		WHERE
+			reference = CAST (p_uuid AS uuid)
+		)
+	LOOP
+		-- Get the data and form a decisison
+		-- Grouped data
+		SELECT
+			MIN(q.low_price) AS minimum,
+			MAX(q.high_price) AS maximum,
+			AVG(q.open_price) AS average
+		INTO
+			v_minimum,
+			v_maximum,
+			v_average
+		FROM
+			trading_schema.quote q
+		WHERE
+			q.datestamp >= predictions.startdate
+		AND
+			q.datestamp <= predictions.enddate
+		;
+		-- Single level data start_price
+		SELECT
+			q.open_price
+		INTO
+			v_start_price
+		FROM
+			trading_schema.quote q
+		WHERE
+			q.datestamp = startdate
+		;
+		-- Single level data end_price
+		SELECT
+			q.open_price
+		INTO
+			v_ending_price
+		FROM
+			trading_schema.quote q
+		WHERE
+			q.datestamp = enddate
+		;
+		v_change_percentage := (v_ending_price * 100) / v_start_price;
+		v_change_diff := v_ending_price - v_start_price;
+		-- Check for validity
+		-- Provide rating
+	END LOOP;
 END;
 $$ LANGUAGE plpgsql;
