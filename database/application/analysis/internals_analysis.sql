@@ -121,3 +121,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Prediction Test
+CREATE OR REPLACE FUNCTION trading_schema.pInsPredictionTest(
+	p_uuid						text
+) RETURNS void AS $$
+DECLARE
+	v_reference_id				trading_schema.reference.id%TYPE;
+	v_end_date					trading_schema.prediction_input.end_date%TYPE;
+	v_end_value					trading_schema.prediction_input.end_value%TYPE;
+	v_end_diff					trading_schema.prediction_input.end_diff%TYPE;
+BEGIN
+	-- Obtain the reference ID
+	SELECT
+		q.datestamp,
+		pi.end_date,
+		pi.end_value,
+		pi.end_diff
+	FROM
+		trading_schema.prediction_input pi
+		INNER JOIN trading_schema.quote q ON (pi.quote_id = q.id)
+	WHERE
+		reference = CAST (p_uuid AS uuid)
+	;
+END;
+$$ LANGUAGE plpgsql;
