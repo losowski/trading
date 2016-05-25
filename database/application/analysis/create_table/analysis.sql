@@ -109,3 +109,24 @@ WITH (
 ALTER TABLE trading_schema.analysis_assignment_quote
 	OWNER TO trading;
 -- TODO: SET prediction_input.reference_id NOT NULL (once added to application)
+
+-- Prediction Testing
+CREATE TABLE trading_schema.prediction_test
+(
+	prediction_input_id bigint NOT NULL,
+	change_percentage numeric NOT NULL,
+	change_diff numeric NOT NULL,
+	minimum numeric NOT NULL,
+	maximum numeric NOT NULL,
+	average numeric NOT NULL,
+	valid character(1) NOT NULL DEFAULT '-'::bpchar,
+	CONSTRAINT pk_prediction_test PRIMARY KEY (prediction_input_id),
+	CONSTRAINT fk1_prediction_test FOREIGN KEY (prediction_input_id)
+		REFERENCES trading_schema.prediction_input (id) MATCH SIMPLE
+		ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+	OIDS=FALSE
+);
+ALTER TABLE trading_schema.prediction_test
+	OWNER TO trading;
