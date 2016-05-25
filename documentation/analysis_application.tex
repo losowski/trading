@@ -101,18 +101,16 @@ Evaluates own predictions. \newline
 
 
 \par \textbf{Analysis Evaluation}
-\subsubsection{quote}
+\subsubsection{prediction\_test}
 \begin{tabular}{|l||l|}
 	\hline
-	id 						& Identifying primary key \\ \hline
-	symbol\_id				& Symbol foreign key \\ \hline
-	datestamp				& Quote date stamp \\ \hline
-	volume					& Volume \\ \hline
-	adjusted\_close\_price	& Adjusted close price \\ \hline
-	open\_price				& Opening price \\ \hline
-	close\_price				& Closing price \\ \hline
-	hig\_price				& Daily maximum price \\ \hline
-	low\_price				& Identifying primary key \\ \hline
+	prediction\_input\_id	& prediction\_input primary key. \\ \hline
+	change\_percentage		& (new price/old price)*100. \\ \hline
+	change\_diff			& new price - old price \\ \hline
+	minimum					& Minimum value for all quotes between for prescribed period. \\ \hline
+	maximum					& Maximum value for all quotes between for prescribed period. \\ \hline
+	average					& Average value for all quotes between for prescribed period.\\ \hline
+	valid					& Conclusion of validity of prediction. \\ \hline
 \end{tabular}
 \subsection{Technical Description}
 Populates the quote table with the daily quote information.

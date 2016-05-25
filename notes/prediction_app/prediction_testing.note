@@ -14,10 +14,30 @@ Prediction Testing
 
 - All reports produce a recorded log-file with the report written out (using standarda logging interface)
 
+
+
+
+
 INPUT TABLE:
 	prediction_input
 	quote
 	analysis_property
+FIELDS:
+	prediction_input_id	-			Prediction-input-id
+	change_percentage
+	change_diff
+	minimum
+	maximum
+	average
+	valid
+			(new_price/old_price)*100= stock percentage
+			New_price - old price = stick diff's
+			Min()
+			Max()
+			Avg()
+			Valid
+
+
 
 OUTPUT TABLE:
 	modelled_trade
