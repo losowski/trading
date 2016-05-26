@@ -189,7 +189,29 @@ BEGIN
 		v_change_percentage := (v_ending_price * 100) / v_start_price;
 		v_change_diff := v_ending_price - v_start_price;
 		-- Check for validity
+		v_valid := 'N';
 		-- Provide rating
+		-- Output result
+		INSERT INTO
+			trading_schema.prediction_test
+			(
+				change_percentage,
+				change_diff,
+				minimum,
+				maximum,
+				average,
+				valid
+			)
+			VALUES
+			(
+				v_change_percentage,
+				v_change_diff,
+				v_minimum,
+				v_maximum,
+				v_average,
+				v_valid
+			)
+			;
 	END LOOP;
 END;
 $$ LANGUAGE plpgsql;
