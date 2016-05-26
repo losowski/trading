@@ -4,9 +4,11 @@ Technical Analysis Functions
 ANALYSIS
 ========
 -- Pending: --
-- Add moving averages (open price)
+- Add percentage change for diffs (Change since yesterday)
+- Add moving average of change since yesterday
 
 -- Done --
+- Add moving averages (open price)
 - Add open-close diff
 - Add high-low diff
 
