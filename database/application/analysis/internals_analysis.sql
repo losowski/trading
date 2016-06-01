@@ -141,9 +141,13 @@ BEGIN
 			date_trunc('DAY', q.datestamp) AS startdate,
 			date_trunc('DAY', pi.end_date) AS enddate,
 			pi.end_value,
-			pi.end_diff
+			pi.end_diff AS end_diff,
+			ap.analysis_type,
+			ap.price_change,
+			ap.days
 		FROM
 			trading_schema.prediction_input pi
+			INNER JOIN trading_schema.analysis_property ap ON (pi.analysis_property_id = ap.id)
 			INNER JOIN trading_schema.quote q ON (pi.quote_id = q.id)
 		WHERE
 			reference = CAST (p_uuid AS uuid)
@@ -189,8 +193,20 @@ BEGIN
 		v_change_percentage := (v_ending_price * 100) / v_start_price;
 		v_change_diff := v_ending_price - v_start_price;
 		-- Check for validity
-		v_valid := 'N';
+		v_valid := '-';
 		-- Provide rating
+		IF predictions.analysis_type == 'D' THEN
+			-- Direction Only
+			v_valid := 'N';
+			IF v_change_percentage > 0 AND predictions.end_diff > 0 THEN
+				v_valid := 'A';
+			ELSIF v_change_percentage < 0 AND predictions.end_diff < 0 THEN
+				v_valid := 'A';
+			END IF;
+		ELSIF predictions.analysis_type == 'T' THEN
+			-- ELSE: Time and Direction
+			v_valid := 'T';
+		END IF;
 		-- Output result
 		INSERT INTO
 			trading_schema.prediction_test
