@@ -198,9 +198,11 @@ BEGIN
 		IF predictions.analysis_type == 'D' THEN
 			-- Direction Only
 			v_valid := 'N';
-			IF v_change_percentage > 0 AND predictions.end_diff > 0 THEN
+			-- Up
+			IF v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0 THEN
 				v_valid := 'A';
-			ELSIF v_change_percentage < 0 AND predictions.end_diff < 0 THEN
+			-- Down
+			ELSIF v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0 THEN
 				v_valid := 'A';
 			END IF;
 		ELSIF predictions.analysis_type == 'T' THEN
