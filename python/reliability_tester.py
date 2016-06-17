@@ -3,6 +3,7 @@
 Test the reliability of the analysis predictions
 '''
 import logging
+import argparse
 from analysis import reliability_application
 
 def main():
@@ -10,6 +11,8 @@ def main():
 	print (name)
 	logging.basicConfig(format='%(levelname)s:%(message)s', filename='reliability.log',level=logging.DEBUG)
 	logging.debug("%s Started", name)
+	parser = argparse.ArgumentParser(description=name)
+	args = parser.parse_args()
 	reliability = reliability_application.ReliabilityApplication()
 	reliability.initialise()
 	reliability.run()
