@@ -3,18 +3,18 @@
 Test the reliability of the analysis predictions
 '''
 import logging
-from analysis import reliabilty_application
+from analysis import reliability_application
 
 def main():
-	name = "Stock reliabilty reliability"
+	name = "Stock Analysis Reliability Tester"
 	print (name)
 	logging.basicConfig(format='%(levelname)s:%(message)s', filename='reliability.log',level=logging.DEBUG)
 	logging.debug("%s Started", name)
-	reliabilty = reliabilty_application.reliabiltyApplication()
-	reliabilty.initialise()
-	reliabilty.run()
+	reliability = reliability_application.ReliabilityApplication()
+	reliability.initialise()
+	reliability.run()
 	reliability.get_uuid()
-	reliabilty.shutdown()
+	reliability.shutdown()
 	print("Exiting...")
 
 # Assign a start point to the executable

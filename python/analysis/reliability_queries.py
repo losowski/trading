@@ -3,6 +3,7 @@
 #python ${name_of_field}
 
 import string
+
 reliability_get_uuid = """
 	SELECT DISTINCT
 		r.reference,
