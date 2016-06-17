@@ -13,6 +13,7 @@ def main():
 	reliabilty = reliabilty_application.reliabiltyApplication()
 	reliabilty.initialise()
 	reliabilty.run()
+	reliability.get_uuid()
 	reliabilty.shutdown()
 	print("Exiting...")
 
