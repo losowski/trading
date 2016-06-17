@@ -127,6 +127,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsPredictionTest(
 DECLARE
 	predictions RECORD;
 	v_change_percentage			trading_schema.prediction_test.change_percentage%TYPE;
+	v_grading_percentage		trading_schema.prediction_test.change_percentage%TYPE;
 	v_change_diff				trading_schema.prediction_test.change_diff%TYPE;
 	v_minimum					trading_schema.prediction_test.minimum%TYPE;
 	v_maximum					trading_schema.prediction_test.maximum%TYPE;
@@ -207,7 +208,25 @@ BEGIN
 			END IF;
 		ELSIF predictions.analysis_type == 'T' THEN
 			-- ELSE: Time and Direction
-			v_valid := 'T';
+			v_valid := 'N';
+			IF (v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0) OR
+				(v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0) THEN
+				-- grdaing percentage is indifferent to direction
+				v_grading_percentage := ((v_ending_price - v_start_price) * 100) / (predictions.end_vale - v_start_price);
+				IF v_grading_percentage > 0 THEN
+					IF v_grading_percentage > 200 THEN
+						v_valid := 'E';
+					ELSIF v_grading_percentage > 100 THEN
+						v_valid := 'G';
+					ELSIF v_grading_percentage > 90 THEN
+						v_valid := 'A';
+					ELSIF v_grading_percentage > 50 THEN
+						v_valid := 'B';
+					ELSIF v_grading_percentage > 25 THEN
+						v_valid := 'U';
+					END IF;
+				END IF;
+			END IF;
 		END IF;
 		-- Output result
 		INSERT INTO
