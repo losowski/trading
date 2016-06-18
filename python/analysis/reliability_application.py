@@ -32,7 +32,7 @@ class ReliabilityApplication(db_cursor.DBCursor):
 			print ("UUID: {0} - {1}".format(ref, date))
 
 	def run_uuid(self, uuid):
-		logging.info("running UUID %s", self.uuid)
+		logging.info("running UUID %s", uuid)
 		data_parameters = collections.OrderedDict()
 		data_parameters['p_uuid'] = uuid
 		data_list = list(data_parameters.values())
