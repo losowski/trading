@@ -139,6 +139,7 @@ BEGIN
 
 	FOR predictions IN (
 		SELECT
+			pi.id AS prediction_input_id,
 			date_trunc('DAY', q.datestamp) AS startdate,
 			date_trunc('DAY', pi.end_date) AS enddate,
 			pi.end_value,
@@ -147,11 +148,15 @@ BEGIN
 			ap.price_change,
 			ap.days
 		FROM
-			trading_schema.prediction_input pi
+			trading_schema.reference r
+			INNER JOIN trading_schema.prediction_input pi ON (r.id = pi.reference_id)
 			INNER JOIN trading_schema.analysis_property ap ON (pi.analysis_property_id = ap.id)
 			INNER JOIN trading_schema.quote q ON (pi.quote_id = q.id)
+			LEFT OUTER JOIN trading_schema.prediction_test pt ON (pi.id = pt.prediction_input_id)
 		WHERE
-			reference = CAST (p_uuid AS uuid)
+			r.reference = CAST (p_uuid AS uuid)
+		AND
+			pt.prediction_input_id IS NULL
 		)
 	LOOP
 		-- Get the data and form a decisison
@@ -179,7 +184,7 @@ BEGIN
 		FROM
 			trading_schema.quote q
 		WHERE
-			q.datestamp = startdate
+			q.datestamp = predictions.startdate
 		;
 		-- Single level data end_price
 		SELECT
@@ -189,14 +194,14 @@ BEGIN
 		FROM
 			trading_schema.quote q
 		WHERE
-			q.datestamp = enddate
+			q.datestamp = predictions.enddate
 		;
 		v_change_percentage := (v_ending_price * 100) / v_start_price;
 		v_change_diff := v_ending_price - v_start_price;
 		-- Check for validity
 		v_valid := '-';
 		-- Provide rating
-		IF predictions.analysis_type == 'D' THEN
+		IF predictions.analysis_type = 'D' THEN
 			-- Direction Only
 			v_valid := 'N';
 			-- Up
@@ -206,7 +211,7 @@ BEGIN
 			ELSIF v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0 THEN
 				v_valid := 'A';
 			END IF;
-		ELSIF predictions.analysis_type == 'T' THEN
+		ELSIF predictions.analysis_type = 'T' THEN
 			-- ELSE: Time and Direction
 			v_valid := 'N';
 			IF (v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0) OR
@@ -232,6 +237,7 @@ BEGIN
 		INSERT INTO
 			trading_schema.prediction_test
 			(
+				prediction_input_id,
 				change_percentage,
 				change_diff,
 				minimum,
@@ -241,6 +247,7 @@ BEGIN
 			)
 			VALUES
 			(
+				predictions.prediction_input_id,
 				v_change_percentage,
 				v_change_diff,
 				v_minimum,
