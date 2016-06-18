@@ -11,12 +11,15 @@ def main():
 	print (name)
 	logging.basicConfig(format='%(levelname)s:%(message)s', filename='reliability.log',level=logging.DEBUG)
 	logging.debug("%s Started", name)
-	parser = argparse.ArgumentParser(description=name)
+	parser = argparse.ArgumentParser(prog = 'Reliability', description=name)
+	parser.add_argument('--list', '-l', action='store_true')#, const=store_const, default='-h')
+	#parser.add_argument('uuid', dest='uuid', metavar='UUID', nargs='+',  help='Unique identifier of stock to query')
 	args = parser.parse_args()
 	reliability = reliability_application.ReliabilityApplication()
 	reliability.initialise()
 	reliability.run()
-	reliability.get_uuid()
+	if args.list == True:
+		reliability.get_uuid()
 	reliability.shutdown()
 	print("Exiting...")
 
