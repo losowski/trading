@@ -13,7 +13,7 @@ WITH predsymbol AS (
 		INNER JOIN trading_schema.quote q ON (pi.quote_id = q.id)
 		INNER JOIN trading_schema.symbol s ON (q.symbol_id = s.id)
 	WHERE
-		pi.id = 17
+		pi.id = 21
 ),
 prediction AS (
 	SELECT

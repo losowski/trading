@@ -205,8 +205,11 @@ BEGIN
 		AND
 			q.datestamp = predictions.enddate
 		;
-		v_change_percentage := (v_ending_price * 100) / v_start_price;
+
 		v_change_diff := v_ending_price - v_start_price;
+		v_change_percentage := (v_ending_price * 100) / v_start_price;
+		-- grdaing percentage is indifferent to direction
+		v_grading_percentage := ((v_ending_price - v_start_price) * 100) / (predictions.end_value - v_start_price);
 		-- Check for validity
 		v_valid := '-';
 		-- Provide rating
@@ -225,8 +228,7 @@ BEGIN
 			v_valid := 'N';
 			IF (v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0) OR
 				(v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0) THEN
-				-- grdaing percentage is indifferent to direction
-				v_grading_percentage := ((v_ending_price - v_start_price) * 100) / (predictions.end_vale - v_start_price);
+
 				IF v_grading_percentage > 0 THEN
 					IF v_grading_percentage > 200 THEN
 						v_valid := 'E';
@@ -257,7 +259,7 @@ BEGIN
 			VALUES
 			(
 				predictions.prediction_input_id,
-				v_change_percentage,
+				v_grading_percentage,
 				v_change_diff,
 				v_minimum,
 				v_maximum,
