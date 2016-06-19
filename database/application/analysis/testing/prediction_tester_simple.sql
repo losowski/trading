@@ -1,4 +1,6 @@
-﻿WITH predsymbol AS (
+﻿-- Query for investigating the prediction input and output.
+-- Produces the raw symbol info that the predictor would see, and the outcome
+WITH predsymbol AS (
 	SELECT
 		pi.id AS prediction_input_id,
 		pi.quote_id,
@@ -17,6 +19,8 @@ prediction AS (
 	SELECT
 		ps.symbol_id,
 		ps.datestamp,
+		ps.prediction_startdate,
+		ps.prediction_enddate,
 		(ps.datestamp - MAX(ac.duration)) AS snapshot_date
 	FROM
 		predsymbol ps
@@ -25,11 +29,16 @@ prediction AS (
 		INNER JOIN trading_schema.analysis_conditions ac ON (ap.id = ac.analysis_property_id)
 	GROUP BY
 		ps.symbol_id,
-		ps.datestamp
+		ps.datestamp,
+		ps.prediction_enddate,
+		ps.prediction_startdate
 ),
 quotes AS
 (
 	SELECT
+		pi.snapshot_date AS data_start,
+		pi.prediction_startdate AS data_end,
+		pi.prediction_enddate,
 		q.id					AS	q_id,
 		q.datestamp				AS	q_datestamp,
 		q.volume				AS	q_volume,
@@ -66,7 +75,7 @@ quotes AS
 		amdiff.days189 			AS	amdiff_days189
 	FROM
 		prediction pi
-		INNER JOIN trading_schema.quote q ON (pi.symbol_id = q.symbol_id AND q.datestamp >= pi.snapshot_date AND q.datestamp <= pi.datestamp)
+		INNER JOIN trading_schema.quote q ON (pi.symbol_id = q.symbol_id AND q.datestamp >= pi.snapshot_date AND q.datestamp <= pi.prediction_enddate)
 		LEFT OUTER  JOIN trading_schema.quote_diff qd ON (qd.quote_id = q.id)
 		LEFT OUTER JOIN trading_schema.a_moving_avg amavg ON (q.id = amavg.id)
 		LEFT OUTER JOIN trading_schema.a_moving_diff amdiff ON (q.id = amdiff.id)

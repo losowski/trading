@@ -121,6 +121,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Prediction Test
+-- This does not test the logic to predict with - only the resulting prediction
 CREATE OR REPLACE FUNCTION trading_schema.pInsPredictionTest(
 	p_uuid						text
 ) RETURNS void AS $$
@@ -140,6 +141,7 @@ BEGIN
 	FOR predictions IN (
 		SELECT
 			pi.id AS prediction_input_id,
+			s.id AS symbol_id,
 			date_trunc('DAY', q.datestamp) AS startdate,
 			date_trunc('DAY', pi.end_date) AS enddate,
 			pi.end_value,
@@ -152,6 +154,7 @@ BEGIN
 			INNER JOIN trading_schema.prediction_input pi ON (r.id = pi.reference_id)
 			INNER JOIN trading_schema.analysis_property ap ON (pi.analysis_property_id = ap.id)
 			INNER JOIN trading_schema.quote q ON (pi.quote_id = q.id)
+			INNER JOIN trading_schema.symbol s ON (q.symbol_id = s.id)
 			LEFT OUTER JOIN trading_schema.prediction_test pt ON (pi.id = pt.prediction_input_id)
 		WHERE
 			r.reference = CAST (p_uuid AS uuid)
@@ -172,6 +175,8 @@ BEGIN
 		FROM
 			trading_schema.quote q
 		WHERE
+			q.symbol_id = predictions.symbol_id
+		AND
 			q.datestamp >= predictions.startdate
 		AND
 			q.datestamp <= predictions.enddate
@@ -184,6 +189,8 @@ BEGIN
 		FROM
 			trading_schema.quote q
 		WHERE
+			q.symbol_id = predictions.symbol_id
+		AND
 			q.datestamp = predictions.startdate
 		;
 		-- Single level data end_price
@@ -194,6 +201,8 @@ BEGIN
 		FROM
 			trading_schema.quote q
 		WHERE
+			q.symbol_id = predictions.symbol_id
+		AND
 			q.datestamp = predictions.enddate
 		;
 		v_change_percentage := (v_ending_price * 100) / v_start_price;
