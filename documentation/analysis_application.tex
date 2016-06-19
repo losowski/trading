@@ -1,11 +1,28 @@
 \subsection{Brief}
-Generates the technical analysis datasets for acquired information. \newline
-Processes this against a set of known trading flags
+\begin{enumerate}
+	\item Generates the technical analysis datasets for acquired information.
+	\item Processes this against a set of known trading flags
+\end{enumerate}
 \subsection{Description}
-Calculates the differences. \newline
-Performs moving average calculations on these. \newline
-Analyses these against known flag points. \newline
-Evaluates own predictions. \newline
+\subsubsection{Predictions}
+\begin{enumerate}
+	\item Calculates the differences.
+	\item Performs moving average calculations on these.
+	\item Analyses these against known flag points.
+\end{enumerate}
+\paragraph{flag\_points}
+These are always worked out: \newline
+\begin{tabular}{|l||l|}
+	\hline
+	Absolute 				& An absolute value (a date that matches these values) \\ \hline
+	Relative 				& Relative to the absolute date. If it occurs at any point in the range of dates. Values are relative to the Absolute Date \\ \hline
+\end{tabular}
+\subsubsection{Reliability Testing}
+\begin{enumerate}
+	\item Evaluates own predictions.
+	\item Tests the prediction against what actually happened
+	\item Comes back with a score and a percentage rating for how well we did
+\end{enumerate}
 \subsection{Database Tables}
 \par \textbf{Technical Analysis}
 \subsubsection{a\_moving\_avg}
