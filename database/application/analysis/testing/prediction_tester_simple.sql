@@ -76,5 +76,5 @@ SELECT
 FROM
 	quotes
 ORDER BY
-	datestamp
+	q_datestamp
 ;
