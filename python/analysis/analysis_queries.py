@@ -40,8 +40,9 @@ get_analysis_conditions = """
 		c.field_name,
 		c.operator,
 		c.threshold_type,
-		c.duration,
-		c.value
+		c.value,
+		c.days_interval,
+		c.days_operator
 	FROM
 		trading_schema.analysis_property p
 		INNER JOIN trading_schema.analysis_conditions c ON (c.analysis_property_id = p.id AND c.status = 'A')
@@ -64,7 +65,7 @@ analysis_relative_parameter_fragment = \
 			${relative_index}.q_id
 		FROM
 			symbol_absolute sq0
-			INNER JOIN symbol_quote ${relative_index} ON (${relative_index}.q_datestamp <= sq0.q_datestamp AND ${relative_index}.q_datestamp >= sq0.q_datestamp - '${duration}'::interval AND ${relative_index}.${field_name} ${operator} sq0.${field_name} + ${value})
+			INNER JOIN symbol_quote ${relative_index} ON (${relative_index}.q_datestamp <= sq0.q_datestamp AND ${relative_index}.q_datestamp >= sq0.q_datestamp - '${days_interval}'::interval AND ${relative_index}.${field_name} ${operator} sq0.${field_name} + ${value})
 	)"""
 
 analysis_relative_parameter_join_fragment = \

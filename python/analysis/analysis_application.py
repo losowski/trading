@@ -66,13 +66,13 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 		relative_join_parameters = list()
 		for index, analysis_condition in enumerate(analysis_property_conditions_list, 1):
 			logging.debug("Conditions: %s", analysis_condition)
-			field_name, operator, threshold_type, duration, value = analysis_condition
-			logging.debug("%s %s %s %s WHEN datestamp is %s", field_name, operator, threshold_type, value, duration)
+			field_name, operator, threshold_type, value, days_interval, days_operator = analysis_condition
+			logging.debug("%s %s %s %s WHEN datestamp is %s %s", field_name, operator, threshold_type, value, days_operator, days_interval)
 			logging.info("Building the SQL statement that runs on the data")
 			data =	{
 						'relative_index'	: self.__joining_names(index),
 						'field_name'		: field_name,
-						'duration'			: duration,
+						'days_interval'		: days_interval,
 						'operator'			: self.operator_to_symbols(operator),
 						'value'				: value
 					}

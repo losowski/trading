@@ -34,11 +34,12 @@ CREATE TABLE trading_schema.analysis_conditions
 (
 	id bigserial NOT NULL,
 	analysis_property_id bigint NOT NULL,
+	threshold_type character(1) NOT NULL,
 	field_name text NOT NULL,
 	operator text NOT NULL,
-	threshold_type character(1) NOT NULL,
-	duration interval,
 	value numeric NOT NULL,
+	days_interval interval,
+	days_operator text,
 	status character(1) NOT NULL DEFAULT 'A'::bpchar,
 	CONSTRAINT pk_analysis_conditions PRIMARY KEY (id),
 	CONSTRAINT fk_analysis_conditions FOREIGN KEY (analysis_property_id)
