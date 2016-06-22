@@ -22,7 +22,7 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 	def initialise(self):
 		symbols.Symbols.initialise(self)
 		self.uuid = str(uuid.uuid4())
-		self.datestamp = datetime.date.today()
+		self.datestamp = datetime.datetime.now()
 
 	def shutdown(self):
 		symbols.Symbols.shutdown(self)
