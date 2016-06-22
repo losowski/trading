@@ -72,9 +72,10 @@ class AnalysisApplication(symbols.Symbols, utilities.Utilities):
 			data =	{
 						'relative_index'	: self.__joining_names(index),
 						'field_name'		: field_name,
-						'days_interval'		: days_interval,
 						'operator'			: self.operator_to_symbols(operator),
-						'value'				: value
+						'value'				: value,
+						'days_operator'		: self.operator_to_symbols(days_operator),
+						'days_interval'		: days_interval,
 					}
 			#Absolute
 			if (threshold_type == 'A'):
