@@ -41,7 +41,7 @@ WITH symbol_quote AS (
 		LEFT OUTER JOIN trading_schema.a_moving_avg amavg ON (q.id = amavg.id)
 		LEFT OUTER JOIN trading_schema.a_moving_diff amdiff ON (q.id = amdiff.id)
 	WHERE
-		s.symbol = %(symbol)s
+		s.symbol = 'GOOG'
 	AND
 		TRUE
 	),
@@ -87,27 +87,20 @@ WITH symbol_quote AS (
 		WHERE
 			TRUE
 			-- Absolute comparators
-			-- condition sq3 
+			-- condition sq1 
 			AND	qd_diff_open_close >= 2
- 			-- condition sq4 
+ 			-- condition sq2 
 			AND	qd_diff_high_low >= 1
 
 	)
 	-- Relative Comparators
 ,
-	sq1 AS (
+	sq3 AS (
 		SELECT
-			sq1.q_id
+			sq3.q_id
 		FROM
 			symbol_absolute sq0
-			INNER JOIN symbol_quote sq1 ON (sq1.q_datestamp <= sq0.q_datestamp AND sq1.q_datestamp >= sq0.q_datestamp - '7 days, 0:00:00'::interval AND sq1.q_open_price <= sq0.q_open_price + 3)
-	) ,
-	sq2 AS (
-		SELECT
-			sq2.q_id
-		FROM
-			symbol_absolute sq0
-			INNER JOIN symbol_quote sq2 ON (sq2.q_datestamp <= sq0.q_datestamp AND sq2.q_datestamp >= sq0.q_datestamp - '16 days, 0:00:00'::interval AND sq2.q_volume >= sq0.q_volume + 6468100)
+			INNER JOIN symbol_quote sq3 ON (sq0.q_datestamp + '7 days, 0:00:00'::interval >= sq3.q_datestamp  AND sq3.q_open_price >= 3)
 	)
 SELECT DISTINCT
 	sq0.q_id,
@@ -115,8 +108,7 @@ SELECT DISTINCT
 FROM
 	symbol_absolute sq0
 	-- Relative Comparators Joins
-	INNER JOIN sq1 ON (sq1.q_id = sq0.q_id)
- 	INNER JOIN sq2 ON (sq2.q_id = sq0.q_id)
+	INNER JOIN sq3 ON (sq3.q_id = sq0.q_id)
 
 ORDER BY
 	q_datestamp
