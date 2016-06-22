@@ -11,6 +11,8 @@ reliability_get_uuid = """
 	FROM
 		trading_schema.reference r
 		INNER JOIN trading_schema.prediction_input pi ON (pi.reference_id = r.id)
+	ORDER BY
+		r.datestamp
 	;
 """
 #Evaluate and store
