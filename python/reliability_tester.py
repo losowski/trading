@@ -13,7 +13,7 @@ def main():
 	logging.debug("%s Started", name)
 	parser = argparse.ArgumentParser(prog = 'Reliability', description=name)
 	parser.add_argument('--list', '-l', action='store_true')
-	parser.add_argument('--uuid', dest='uuid', metavar='UUID', nargs='+',  help='Unique identifier of stock to query')
+	parser.add_argument('--uuid', '-uuid', dest='uuid', metavar='UUID', nargs='+',  help='Unique identifier of stock to query')
 	args = parser.parse_args()
 	reliability = reliability_application.ReliabilityApplication()
 	reliability.initialise()
