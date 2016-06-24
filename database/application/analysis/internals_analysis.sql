@@ -214,8 +214,8 @@ BEGIN
 		v_valid := '-';
 		-- Provide rating - Uniform strategy
 		v_valid := 'N';
-		IF (v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0) OR
-			(v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0) THEN
+		IF (v_change_percentage > 0 AND v_start_price <= v_minimum AND predictions.end_diff > 0) OR
+			(v_change_percentage < 0 AND v_start_price >= v_maximum AND predictions.end_diff < 0) THEN
 
 			IF v_change_percentage > 0 THEN
 				IF v_change_percentage > 200 THEN
