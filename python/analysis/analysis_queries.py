@@ -65,7 +65,7 @@ analysis_relative_parameter_fragment = \
 			${relative_index}.q_id
 		FROM
 			symbol_absolute sq0
-			INNER JOIN symbol_quote ${relative_index} ON (sq0.q_datestamp + '${days_interval}'::interval ${days_operator} ${relative_index}.q_datestamp  AND ${relative_index}.${field_name} ${operator} ${value})
+			INNER JOIN symbol_quote ${relative_index} ON (sq0.q_datestamp - '${days_interval}'::interval ${days_operator} ${relative_index}.q_datestamp  AND ${relative_index}.${field_name} ${operator} ${value})
 	)"""
 
 analysis_relative_parameter_join_fragment = \
