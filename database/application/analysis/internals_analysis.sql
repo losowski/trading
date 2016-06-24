@@ -65,7 +65,7 @@ BEGIN
 		SELECT
 			analysis_type,
 			price_change,
-			days
+			COALESCE(days, interval '1 MONTH')
 		INTO
 			v_analysis_type,
 			v_price_change,
@@ -79,14 +79,13 @@ BEGIN
 		IF v_analysis_type = 'T' THEN
 			-- Both time and direction predicted
 			v_end_value = v_current_close + v_price_change;
-			v_days = interval '1 MONTH';
 		ELSIF v_analysis_type = 'D' THEN
-			IF v_price_change = v_price_change THEN
+			IF v_price_change => 0 THEN
 				-- positive
-				v_end_value = v_current_close + 1;
+				v_end_value = v_current_close + 2.5;
 			ELSE
 				-- negative
-				v_end_value = v_current_close - 1;
+				v_end_value = v_current_close - 2.5;
 			END IF;
 		ELSE
 			RAISE INFO 'Invalid AnalysisProperty.analysis_type';
@@ -129,7 +128,6 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsPredictionTest(
 DECLARE
 	predictions RECORD;
 	v_change_percentage			trading_schema.prediction_test.change_percentage%TYPE;
-	v_grading_percentage		trading_schema.prediction_test.change_percentage%TYPE;
 	v_change_diff				trading_schema.prediction_test.change_diff%TYPE;
 	v_minimum					trading_schema.prediction_test.minimum%TYPE;
 	v_maximum					trading_schema.prediction_test.maximum%TYPE;
@@ -212,39 +210,24 @@ BEGIN
 
 		v_change_diff := v_ending_price - v_start_price;
 		v_change_percentage := (v_ending_price * 100) / v_start_price;
-		-- grdaing percentage is indifferent to direction
-		v_grading_percentage := ((v_ending_price - v_start_price) * 100) / (predictions.end_value - v_start_price);
 		-- Check for validity
 		v_valid := '-';
-		-- Provide rating
-		IF predictions.analysis_type = 'D' THEN
-			-- Direction Only
-			v_valid := 'N';
-			-- Up
-			IF v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0 THEN
-				v_valid := 'A';
-			-- Down
-			ELSIF v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0 THEN
-				v_valid := 'A';
-			END IF;
-		ELSIF predictions.analysis_type = 'T' THEN
-			-- ELSE: Time and Direction
-			v_valid := 'N';
-			IF (v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0) OR
-				(v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0) THEN
+		-- Provide rating - Uniform strategy
+		v_valid := 'N';
+		IF (v_change_percentage > 0 AND v_start_price > v_minimum AND predictions.end_diff > 0) OR
+			(v_change_percentage < 0 AND v_start_price < v_maximum AND predictions.end_diff < 0) THEN
 
-				IF v_grading_percentage > 0 THEN
-					IF v_grading_percentage > 200 THEN
-						v_valid := 'E';
-					ELSIF v_grading_percentage > 100 THEN
-						v_valid := 'G';
-					ELSIF v_grading_percentage > 90 THEN
-						v_valid := 'A';
-					ELSIF v_grading_percentage > 50 THEN
-						v_valid := 'B';
-					ELSIF v_grading_percentage > 25 THEN
-						v_valid := 'U';
-					END IF;
+			IF v_change_percentage > 0 THEN
+				IF v_change_percentage > 200 THEN
+					v_valid := 'E';
+				ELSIF v_change_percentage > 100 THEN
+					v_valid := 'G';
+				ELSIF v_change_percentage > 90 THEN
+					v_valid := 'A';
+				ELSIF v_change_percentage > 50 THEN
+					v_valid := 'B';
+				ELSIF v_change_percentage > 25 THEN
+					v_valid := 'U';
 				END IF;
 			END IF;
 		END IF;
@@ -263,7 +246,7 @@ BEGIN
 			VALUES
 			(
 				predictions.prediction_input_id,
-				v_grading_percentage,
+				v_change_percentage,
 				v_change_diff,
 				v_minimum,
 				v_maximum,
