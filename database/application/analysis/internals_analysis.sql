@@ -206,6 +206,9 @@ BEGIN
 		AND
 			q.datestamp = predictions.enddate
 		;
+		IF NOT FOUND THEN
+			CONTINUE;
+		END IF;
 
 		v_change_diff := v_ending_price - v_start_price;
 		v_change_percentage := (v_ending_price * 100) / v_start_price;
