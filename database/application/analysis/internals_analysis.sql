@@ -77,10 +77,11 @@ BEGIN
 		;
 		-- Fancy maths with these arbitrary values
 		IF v_analysis_type = 'T' THEN
-			-- Both time and direction prdicted
+			-- Both time and direction predicted
 			v_end_value = v_current_close + v_price_change;
+			v_days = interval '1 MONTH';
 		ELSIF v_analysis_type = 'D' THEN
-			IF @v_price_change = v_price_change THEN
+			IF v_price_change = v_price_change THEN
 				-- positive
 				v_end_value = v_current_close + 1;
 			ELSE
@@ -91,7 +92,7 @@ BEGIN
 			RAISE INFO 'Invalid AnalysisProperty.analysis_type';
 		END IF;
 		v_end_diff := v_end_value - v_current_close;
-		v_end_date = v_current_date + v_days;
+		v_end_date := v_current_date + v_days;
 		-- Make new records
 		INSERT INTO
 			trading_schema.prediction_input
