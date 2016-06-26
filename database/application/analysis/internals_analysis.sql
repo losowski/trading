@@ -80,7 +80,7 @@ BEGIN
 			-- Both time and direction predicted
 			v_end_value = v_current_close + v_price_change;
 		ELSIF v_analysis_type = 'D' THEN
-			IF v_price_change => 0 THEN
+			IF v_price_change >= 0 THEN
 				-- positive
 				v_end_value = v_current_close + 2.5;
 			ELSE
