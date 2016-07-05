@@ -1,0 +1,3 @@
+[submodule "python/python/database"]
+	path = python/python/database
+	url = ssh://localhost/home/eugene/git/database_repo
