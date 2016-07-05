@@ -15,12 +15,26 @@ class MainApplicationWindow(wx.Frame):
 		self.sizer = wx.GridBagSizer(2,4)
 		self.symbols = Symbols()
 		self.symbols.initialise()
+
+		# Status bar at the bottom
+		self.CreateStatusBar()
+		#Memn
+		menubar = wx.MenuBar()
+		file_menu = wx.Menu()
+		file_menu.Append(22, '&Quit', 'Exit Stock GUI')
+		menubar.Append(file_menu, '&File')
+		self.SetMenuBar(menubar)
+		wx.EVT_MENU(self, 22, self.OnClose)
+		#Sizer
+		sizer = wx.BoxSizer(wx.VERTICAL)
 		#Add elements
 		self.symbols = wx.ComboBox(self, size=wx.Size(40, 50), choices = self.symbols.get_symbols_list())
-		self.CreateStatusBar() # Status bar at the bottom
-		#Show
+		#Show Everything (last action)
 		self.Show()
 		pass #__init__ functions
 
 	def __del__(self):
 		self.symbols.shutdown()
+
+	def OnClose(self, event):
+		self.Close()
