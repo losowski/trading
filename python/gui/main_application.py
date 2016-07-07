@@ -15,7 +15,7 @@ class MainApplicationWindow(wx.Frame):
 		
 		self.symbols = Symbols()
 		self.symbols.initialise()
-		panel = wx.Panel(self, -1)
+		
 
 		# Status bar at the bottom
 		self.CreateStatusBar()
@@ -26,20 +26,23 @@ class MainApplicationWindow(wx.Frame):
 		menubar.Append(file_menu, '&File')
 		self.SetMenuBar(menubar)
 		wx.EVT_MENU(self, 22, self.OnClose)
+
+		#Panels
+		menu_panel = wx.Panel(self, -1)
 		#Sizer
-		sizer = wx.GridSizer(8,1)
-		box_sizer = wx.BoxSizer(wx.VERTICAL)
+		#sizer = wx.GridSizer(8,1)
+		v_menu_box_sizer = wx.BoxSizer(wx.VERTICAL)
+		h_menu_box_sizer = wx.BoxSizer(wx.HORIZONTAL)
 		#Create element
-		symbols = wx.ComboBox(self, 2, pos = (30,60), size= (100,20), choices = self.symbols.get_symbols_list(), style=wx.CB_READONLY)
+		symbol_label = wx.StaticText(menu_panel, -1, "Symbols", size=(140,20),style=wx.ALIGN_RIGHT)
+		symbols = wx.ComboBox(menu_panel, -1, size=(140,20),choices = self.symbols.get_symbols_list(), style=wx.CB_READONLY)
 		#Add element
-		sizer.Add(symbols)
-		#BULLSHIT
-		#grid_sizer =  wx.GridSizer(4, 4, 3, 3)
-		#Add elements
-		#
-		#wx.ComboBox(self, -1, pos=(50, 170), size=(150, -1), choices=authors, style=wx.CB_READONLY)
-		#wx.Button(self, 1, 'Close', (80, 220))		
-		#grid_sizer.Add(self.symbols, 1, wx.EXPAND)
+		v_menu_box_sizer.Add(symbol_label)
+		v_menu_box_sizer.Add(symbols)
+
+		h_menu_box_sizer.Add(v_menu_box_sizer, 1, wx.EXPAND)
+		#Add panels
+		menu_panel.SetSizer(h_menu_box_sizer)
 		#Show Everything (last action)
 		self.Show()
 		pass #__init__ functions
