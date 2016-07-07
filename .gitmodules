@@ -1,3 +1,6 @@
 [submodule "python/database"]
 	path = python/database
 	url = ssh://localhost/home/eugene/git/database_repo
+[submodule "python/feeds/ystockquote"]
+	path = python/feeds/ystockquote
+	url = git://github.com/cgoldberg/ystockquote.git
