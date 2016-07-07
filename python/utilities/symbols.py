@@ -33,5 +33,5 @@ class Symbols (db_cursor.DBCursor):
 			symbols_list = self.db_cursor.fetchall()
 			for symbol in symbols_list:
 				logging.debug("reading symbol: %s", symbol[0])
-			self.symbols_list.append(symbol[0])
+				self.symbols_list.append(symbol[0])
 		return self.symbols_list
