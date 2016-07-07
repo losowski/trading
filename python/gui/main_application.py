@@ -12,9 +12,10 @@ from database import db_connection
 class MainApplicationWindow(wx.Frame):
 	def __init__(self, parent = None, title="Stock Analysis User Interface"):
 		wx.Frame.__init__(self, parent, title = title, size=(1200,800))
-		self.sizer = wx.GridBagSizer(2,4)
+		
 		self.symbols = Symbols()
 		self.symbols.initialise()
+		panel = wx.Panel(self, -1)
 
 		# Status bar at the bottom
 		self.CreateStatusBar()
@@ -26,9 +27,19 @@ class MainApplicationWindow(wx.Frame):
 		self.SetMenuBar(menubar)
 		wx.EVT_MENU(self, 22, self.OnClose)
 		#Sizer
-		sizer = wx.BoxSizer(wx.VERTICAL)
+		sizer = wx.GridSizer(8,1)
+		box_sizer = wx.BoxSizer(wx.VERTICAL)
+		#Create element
+		symbols = wx.ComboBox(self, 2, pos = (30,60), size= (100,20), choices = self.symbols.get_symbols_list(), style=wx.CB_READONLY)
+		#Add element
+		sizer.Add(symbols)
+		#BULLSHIT
+		#grid_sizer =  wx.GridSizer(4, 4, 3, 3)
 		#Add elements
-		self.symbols = wx.ComboBox(self, size=wx.Size(40, 50), choices = self.symbols.get_symbols_list())
+		#
+		#wx.ComboBox(self, -1, pos=(50, 170), size=(150, -1), choices=authors, style=wx.CB_READONLY)
+		#wx.Button(self, 1, 'Close', (80, 220))		
+		#grid_sizer.Add(self.symbols, 1, wx.EXPAND)
 		#Show Everything (last action)
 		self.Show()
 		pass #__init__ functions
