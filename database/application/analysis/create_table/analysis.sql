@@ -52,6 +52,21 @@ WITH (
 ALTER TABLE trading_schema.analysis_conditions
 	OWNER TO trading;
 
+-- ALTER TABLE trading_schema.analysis_conditions DROP CONSTRAINT "ck_analysis_conditions_threshold_type";
+
+ALTER TABLE trading_schema.analysis_conditions
+  ADD CONSTRAINT "ck_analysis_conditions_threshold_type" CHECK (status = ANY (ARRAY['A'::bpchar, 'R'::bpchar]));
+
+-- ALTER TABLE trading_schema.analysis_conditions DROP CONSTRAINT "ck_analysis_conditions_status";
+
+ALTER TABLE trading_schema.analysis_conditions
+  ADD CONSTRAINT "ck_analysis_conditions_status" CHECK (status = ANY (ARRAY['A'::bpchar, 'D'::bpchar, 'S'::bpchar]));
+
+-- ALTER TABLE trading_schema.analysis_conditions DROP CONSTRAINT "ck_analysis_conditions_operator";
+
+ALTER TABLE trading_schema.analysis_conditions
+  ADD CONSTRAINT "ck_analysis_conditions_operator" CHECK (operator = ANY (ARRAY['lt'::text, 'lte'::text, 'eq'::text, 'gt'::text, 'lte'::text]));
+
 -- NOTE:
 -- trading_schema.analysis_conditions requires a check constraint
 -- threshold_type<A|R> (Absolute|Relative)
