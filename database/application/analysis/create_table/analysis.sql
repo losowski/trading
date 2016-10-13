@@ -24,6 +24,12 @@ WITH (
 ALTER TABLE trading_schema.analysis_property
 	OWNER TO trading;
 
+-- ALTER TABLE trading_schema.analysis_property DROP CONSTRAINT ck_analysis_property_analysis_type;
+ALTER TABLE trading_schema.analysis_property ADD CONSTRAINT ck_analysis_property_analysis_type CHECK (analysis_type = ANY (ARRAY['D'::bpchar, 'T'::bpchar]));
+
+-- ALTER TABLE trading_schema.analysis_property DROP CONSTRAINT ck_analysis_property_analysis_type;
+ALTER TABLE trading_schema.analysis_property ADD CONSTRAINT ck_analysis_property CHECK (days >=  INTERVAL '0 DAY');
+
 -- NOTE:
 -- trading_schema.analysis_property requires a check constraint
 -- analysis_type <T|D> (Time|Direction)
