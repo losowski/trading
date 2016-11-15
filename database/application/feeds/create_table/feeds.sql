@@ -126,3 +126,71 @@ CREATE INDEX idx_symbol_id
   ON trading_schema.quote
   USING btree
   (symbol_id NULLS FIRST);
+
+
+
+-- Table: trading_schema.key_statistics
+CREATE SEQUENCE trading_schema.key_statistics_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+ALTER TABLE trading_schema.key_statistics_id_seq
+  OWNER TO trading;
+
+
+
+CREATE TABLE trading_schema.key_statistics
+(
+  id bigint NOT NULL DEFAULT nextval('trading_schema.key_statistics_id_seq'::regclass),
+  symbol_id bigint,
+  datestamp timestamp without time zone NOT NULL,
+  enterprise_value numeric NOT NULL,
+  price_earnings numeric NOT NULL,
+  price_earnings_growth numeric NOT NULL,
+  price_sales numeric NOT NULL,
+  price_book numeric NOT NULL,
+  enterprise_value_revenue numeric NOT NULL,
+  enterprise_value_ebitda numeric NOT NULL,
+  profit_margin numeric NOT NULL,
+  operating_margin numeric NOT NULL,
+  return_on_assets numeric NOT NULL,
+  return_on_equity numeric NOT NULL,
+  revenue numeric NOT NULL,
+  revenue_per_share numeric NOT NULL,
+  quarterly_revenue_growth numeric NOT NULL,
+  gross_profit numeric NOT NULL,
+  earnings_before_tax_ebitda numeric NOT NULL,
+  diluted_eps numeric NOT NULL,
+  total_cash numeric NOT NULL,
+  total_cash_per_share numeric NOT NULL,
+  total_debt numeric NOT NULL,
+  total_debt_vs_equity numeric NOT NULL,
+  current_ratio numeric NOT NULL,
+  book_value_per_share numeric NOT NULL,
+  operating_cash_flow numeric NOT NULL,
+  quarterly_earnings_growth numeric NOT NULL,
+  CONSTRAINT pk_key_statistics_id PRIMARY KEY (id),
+  CONSTRAINT fk_key_statistics_symbol_id FOREIGN KEY (symbol_id)
+      REFERENCES trading_schema.symbol (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT uc_key_statistics_1 UNIQUE (symbol_id, datestamp)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE trading_schema.key_statistics
+  OWNER TO trading;
+
+CREATE INDEX idx_key_statistics_datestamp
+  ON trading_schema.key_statistics
+  USING btree
+  (datestamp);
+
+CREATE INDEX idx_key_statistics_symbol_id
+  ON trading_schema.key_statistics
+  USING btree
+  (symbol_id NULLS FIRST);
+
+-- TODO: Add the same again for stock statistics

@@ -3,13 +3,16 @@
 Import the Stock Data
 '''
 #import
+import logging
 from feeds import feeds_application
 
 def main():
 	print ("Quote Importer")
+	logging.basicConfig(format='%(levelname)s:%(message)s', filename='quote.log',level=logging.DEBUG)
 	feeds = feeds_application.FeedsApplication()
 	feeds.initialise()
-	feeds.update()
+	feeds.run()
+	feeds.shutdown()
 	print("Exiting...")
 
 
