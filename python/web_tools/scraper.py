@@ -1,11 +1,14 @@
 #!/usr/bin/python
-#Uses psycopg package: python-webkit (python- javascript handler)
-#sudo apt-get install python-pwebkit
+# Uses the dryscrape library
+# git repo: 	https://github.com/niklasb/dryscrape.git
+# apt-get install qt5-default libqt5webkit5-dev build-essential python-lxml python-pip xvfb
+# pip install dryscrape
+
 
 import logging
 import urllib2
-#import python-webkit
 import xml.etree.ElementTree as xml
+import dryscrape
 
 class WebScraper:
 	def __init__(self, url="https://uk.finance.yahoo.com/q/ks?s=GOOG"):
@@ -13,23 +16,20 @@ class WebScraper:
 		self.urlnetwork = None
 		self.tree = None
 		self.root = None
-		pass
 
 	def __del__(self):
 		pass
 
 	def initialise(self):
 		logging.info("URL:%s", self.url)
-		self.urlnetwork = urllib2.urlopen(self.url)
-		#logging.debug("WEB:%s", self.urlnetwork.read())
-		pass
+		session = dryscrape.Session()
+		session.visit(self.url)
 
 	def run(self):
-		string = self.urlnetwork.read()
+		string = session.body()
 		#logging.debug("HTML: %s", string)
 		self.tree = xml.fromstring(string)
 		self.root = self.tree.getroot()
-		pass
 
 	def shutdown(self):
 		pass
