@@ -9,7 +9,7 @@ from analysis import reliability_application
 def main():
 	name = "Stock Analysis Reliability Tester"
 	print (name)
-	logging.basicConfig(format='%(levelname)s:%(message)s', filename='reliability.log',level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', filename='reliability.log',level=logging.DEBUG)
 	logging.debug("%s Started", name)
 	parser = argparse.ArgumentParser(prog = 'Reliability', description=name)
 	parser.add_argument('--list', '-l', action='store_true')

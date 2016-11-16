@@ -8,7 +8,7 @@ from analysis import analysis_application
 def main():
 	name = "Stock Analysis and Predictions"
 	print (name)
-	logging.basicConfig(format='%(levelname)s:%(message)s', filename='analysis.log',level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', filename='analysis.log',level=logging.DEBUG)
 	logging.debug("%s Started", name)
 	analysis = analysis_application.AnalysisApplication()
 	analysis.initialise()

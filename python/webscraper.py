@@ -8,7 +8,7 @@ from web_tools import scraper
 def main():
 	name = "WebScraper"
 	print (name)
-	logging.basicConfig(format='%(levelname)s:%(message)s', filename='scraper.log',level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', filename='scraper.log',level=logging.DEBUG)
 	logging.debug("%s Started", name)
 	scrape = scraper.WebScraper()
 	scrape.initialise()
