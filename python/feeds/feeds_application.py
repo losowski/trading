@@ -26,7 +26,7 @@ class FeedsApplication:
 
 	def run(self):
 		self.update_quotes()
-		#self.update_key_statistics() # Temporarily disabled
+		self.update_key_statistics() # Temporarily disabled
 
 	def shutdown (self):
 		pass
@@ -106,10 +106,10 @@ class FeedsApplication:
 		query = self.database.get_query()
 		query.execute(feeds_queries.get_symbols_for_key_statistics_update)
 		update_symbols = query.fetchall()
-		logging.info("Got %s symbols for update",  len(update_symbols))
+		logging.info("Got %s symbols for key statistics update",  len(update_symbols))
 		#get a list of symbols to update, pre-filter appropriate to update
-		for symbol, last_entry, update in update_symbols:
-			logging.info("SYM: %s : %s UPDATE: %s", symbol, last_entry, update)
+		for symbol, last_entry in update_symbols:
+			logging.info("KEY STATS SYM: %s : %s UPDATE: %s", symbol, last_entry)
 			stats = yahoo_statistics.YahooStatistics(symbol)
 			stats.initialise()
 			stats.run()

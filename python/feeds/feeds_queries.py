@@ -25,18 +25,26 @@ get_symbols_for_quote_update="""
 insert_quote_data = "trading_schema.pInsQuote"
 
 get_symbols_for_key_statistics_update="""
+	WITH symbol_upd AS (
+		SELECT
+			s.symbol,
+			date_trunc('day', MAX(ks.datestamp)) as last_update
+		FROM
+			trading_schema.symbol s
+			LEFT OUTER JOIN trading_schema.key_statistics ks ON (s.id = ks.symbol_id)
+		GROUP BY
+			s.symbol	
+	)
 	SELECT
-        s.symbol,
-		date_trunc('day', MAX(ks.datestamp)) as last_update,
-		justify_days(age(MAX(ks.datestamp))) > '1 days' as update
-    FROM
-        trading_schema.symbol s
-        LEFT OUTER JOIN trading_schema.key_statistics ks ON (s.id = ks.symbol_id)
-    GROUP BY
-        s.symbol
-    ORDER BY
-        s.symbol
-    ;
+		su.symbol,
+		su.last_update
+	FROM
+		symbol_upd su
+	WHERE
+		su.last_update > localtimestamp - INTERVAL '1 WEEK'
+	OR
+		su.last_update IS NULL
+	;
 """
 # SELECT <function_name>(args);
 #'2013-01-03': {'Adj Close': '723.67',
