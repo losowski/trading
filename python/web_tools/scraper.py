@@ -9,6 +9,7 @@ import logging
 import urllib2
 import xml.etree.ElementTree as xml
 import dryscrape
+import sys
 
 class WebScraper:
 	def __init__(self, url="https://uk.finance.yahoo.com/q/ks?s=GOOG"):
@@ -22,13 +23,21 @@ class WebScraper:
 
 	def initialise(self):
 		logging.info("URL:%s", self.url)
+		#session = dryscrape.Session(base_url = self.url)
+		if 'linux' in sys.platform:
+			# start xvfb in case no X is running. Make sure xvfb is installed, otherwise this won't work!
+			dryscrape.start_xvfb()
 		session = dryscrape.Session()
 		session.visit(self.url)
+		session.set_attribute('auto_load_images', False) #Don't load any images
+		self.string = session.body()
+		#print self.string
 
 	def run(self):
-		string = session.body()
-		#logging.debug("HTML: %s", string)
-		self.tree = xml.fromstring(string)
+		#logging.debug("HTML: %s", self.string)
+		#result = self.buf.read_line().decode("utf-8")
+		#self.tree = xml.fromstring(self.string.decode("utf-8"))
+		self.tree = xml.fromstring(self.string)
 		self.root = self.tree.getroot()
 
 	def shutdown(self):
