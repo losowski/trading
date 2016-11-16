@@ -102,14 +102,13 @@ class FeedsApplication:
 		#Get a list of symbols to update, and query if we should update
 		#Key statistics, we only care about this once a week, and not historically (of little value)
 		#If we should update, get the information using a scraper 
-
 		query = self.database.get_query()
 		query.execute(feeds_queries.get_symbols_for_key_statistics_update)
 		update_symbols = query.fetchall()
 		logging.info("Got %s symbols for key statistics update",  len(update_symbols))
 		#get a list of symbols to update, pre-filter appropriate to update
 		for symbol, last_entry in update_symbols:
-			logging.info("KEY STATS SYM: %s : %s UPDATE: %s", symbol, last_entry)
+			logging.info("KEY STATS SYM: %s UPDATE: %s", symbol, last_entry)
 			stats = yahoo_statistics.YahooStatistics(symbol)
 			stats.initialise()
 			stats.run()
