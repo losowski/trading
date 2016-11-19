@@ -28,8 +28,8 @@ class WebScraper:
 
 	def run(self):
 		self.session = dryscrape.Session()
-		self.session.visit(self.url)
 		self.session.set_attribute('auto_load_images', False) #Don't load any images
+		self.session.visit(self.url)
 
 	def shutdown(self):
 		pass
