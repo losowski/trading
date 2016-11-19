@@ -4,7 +4,8 @@ import urllib
 
 from web_tools import scraper
 
-
+#NOTE: If you are logged in, this will always hang and fail.
+# LOGOUT to make this work properly
 class YahooStatistics (scraper.WebScraper):
 	def __init__(self, symbol):
 		params = urllib.urlencode({'s': symbol})
