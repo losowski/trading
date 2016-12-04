@@ -11,7 +11,7 @@ import dryscrape
 import sys
 
 class WebScraper:
-	def __init__(self, url="https://uk.finance.yahoo.com/q/ks?s=GOOG"):
+	def __init__(self, url="http://uk.finance.yahoo.com/q/ks?s=GOOG"):
 		self.url = url
 		self.urlnetwork = None
 
@@ -36,6 +36,10 @@ class WebScraper:
 
 	def register_xpath(self, var_name, xpath):
 		logging.debug("Variable name: %s, XPATH: %s", var_name, xpath)
+		value = self.session.at_xpath(xpath).text
+		logging.debug("Variable: %s, value: %s", var_name, value)
 		value = self.session.at_xpath(xpath)
 		logging.debug("Variable: %s, value: %s", var_name, value)
+		#value = self.session.at_xpath(xpath).tag
+		#logging.debug("Variable: %s, value: %s", var_name, value)
 		setattr(self, var_name, value)

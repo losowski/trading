@@ -13,7 +13,7 @@ def main():
 	scrape = scraper.WebScraper()
 	scrape.initialise()
 	scrape.run()
-	scrape.register('enterprise_value', '//*[@id="yfncsumtab"]/tbody/tr[2]/td[1]/table[2]/tbody/tr/td/table/tbody/tr[2]/td[2]')
+	scrape.register_xpath('enterprise_value', '//*[@id="yfncsumtab"]/tbody/tr[2]/td[1]/table[2]/tbody/tr/td/table/tbody/tr[2]/td[2]')
 	logging.info ("Attribute: %s", scrape.enterprise_value)
 	scrape.shutdown()
 	print("Exiting...")
