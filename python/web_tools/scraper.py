@@ -9,6 +9,7 @@ import logging
 import urllib2
 import dryscrape
 import sys
+from lxml import etree
 
 class WebScraper:
 	def __init__(self, url="http://uk.finance.yahoo.com/q/ks?s=GOOG"):
@@ -34,12 +35,22 @@ class WebScraper:
 	def shutdown(self):
 		pass
 
-	def register_xpath(self, var_name, xpath):
+	def register_xpath(self, var_name, xpath, text = True):
 		logging.debug("Variable name: %s, XPATH: %s", var_name, xpath)
-		value = self.session.at_xpath(xpath).text
-		logging.debug("Variable: %s, value: %s", var_name, value)
-		value = self.session.at_xpath(xpath)
-		logging.debug("Variable: %s, value: %s", var_name, value)
-		#value = self.session.at_xpath(xpath).tag
-		#logging.debug("Variable: %s, value: %s", var_name, value)
+		value = None
+		xvalue = self.session.document().xpath(xpath)
+		if isinstance(xvalue, list):
+			#Debug diagnosis
+			for val in xvalue:
+				if etree.iselement(val):
+					if text == True:
+						logging.info("val.text = %s", val.text)
+						value = val.text
+					else:
+						logging.info("val,tag = %s", val.tag)
+						value = val.tag
+				else:
+					logging.error("No idea wtf this is: %s", val)
+		logging.debug("Variable body: %s, value: %s", var_name, value)
 		setattr(self, var_name, value)
+
