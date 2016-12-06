@@ -11,7 +11,7 @@ import dryscrape
 import sys
 from lxml import etree
 
-class WebScraper:
+class HTMLScraper:
 	def __init__(self, url="http://uk.finance.yahoo.com/q/ks?s=GOOG"):
 		self.url = url
 		self.urlnetwork = None
