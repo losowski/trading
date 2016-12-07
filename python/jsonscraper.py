@@ -6,6 +6,17 @@ import logging
 import json
 from web_tools import json_scraper
 
+def xpand_json(data):
+	if isinstance(data, list):
+		for d in data:
+			logging.info("LIST: %s\n", d)
+			xpand_json(d)
+	elif isinstance (data, dict):
+		for dk,  dv in data.iteritems():
+			logging.info("DICT DK: %s -> DV: %s", dk, dv)
+			xpand_json(dv)
+
+
 def main():
 	name = "WebScraper"
 	print (name)
@@ -15,7 +26,7 @@ def main():
 	scrape.initialise()
 	scrape.run()
 	json_data= scrape.fetch_json()
-	result = json_data["quoteSummary"]["result"]
+	result = json_data["quoteSummary"]
 
 	financial_data = (
 		"returnOnEquity",
@@ -82,17 +93,7 @@ def main():
 
 	# calendarEvents, V: {u'dividendDate': {}, u'exDividendDate': {}, u'maxAge': 1, u'earnings': {u'earningsAverage': {u'raw': 0.21, u'fmt': u'0.21'}, u'revenueAverage': {u'raw': 1383790000, u'fmt': u'1.38B', u'longFmt': u'1,383,790,000'}, u'earningsLow': {u'raw': 0.11, u'fmt': u'0.11'}, u'earningsHigh': {u'raw': 0.26, u'fmt': u'0.26'}, u'revenueLow': {u'raw': 1353000000, u'fmt': u'1.35B', u'longFmt': u'1,353,000,000'}, u'earningsDate': [{u'raw': 1485820800, u'fmt': u'2017-01-31'}, {u'raw': 1486339200, u'fmt': u'2017-02-06'}], u'revenueHigh': {u'raw': 1406410000, u'fmt': u'1.41B', u'longFmt': u'1,406,410,000'}}}
 
-	#logging.info("quote_summary = %s", result)
-	for r in result:
-		#logging.critical("FRRREr = %s", r)
-		for k,v in r.iteritems():
-			logging.debug("K: %s, V: %s", k,v)
-			for fin, mon in v.iteritems():
-				if fin in default_key_statistics:
-					logging.debug("FIN: %s, VALUE: %s", fin, mon)
-					dr = json.loads(mon)
-					for t,v in mon.iteritems():
-						logging.debug(    "F_TYPE:%s value:%s", t,v)
+	xpand_json(result)
 	scrape.shutdown()
 	print("Exiting...")
 
