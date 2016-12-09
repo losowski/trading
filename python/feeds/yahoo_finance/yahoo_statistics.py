@@ -6,82 +6,49 @@ from web_tools import json_scraper
 # LOGOUT to make this work properly
 class YahooStatistics (json_scraper.JSONScraper):
 
-	defaultKeyStatistics = {
-				"enterprise_value"				:("enterpriseValue", "raw"),				#enterprise_value
-				"price_earnings"				:("trailingEps", "raw"),					#price_earnings
-				"price_earnings_growth"			:("pegRatio", "raw"),						#price_earnings_growth
-				"priceToSalesTrailing12Months"	:("priceToSalesTrailing12Months", "raw"),	#price_sales
-				"price_book"					:("priceToBook", "raw"),					#price_book
-				"enterprise_value_revenue"		:("enterpriseToRevenue", "raw"),			#enterprise_value_revenue
-				"enterprise_value_ebitda"		:("enterpriseToEbitda", "raw"),				#enterprise_value_ebitda
-				#profit_margin
-				#operating_margin
-				#return_on_assets
-				#return_on_equity
-				#revenue
-				#revenue_per_share
-				#quarterly_revenue_growth
-				#gross_profit
-				#earnings_before_tax_ebitda
-				#diluted_eps
-				#total_cash
-				#total_cash_per_share
-				#total_debt
-				#total_debt_vs_equity
-				#current_ratio
-				#book_value_per_share
-				#operating_cash_flow
-				#quarterly_earnings_growth
-			}
 
-	financialData = {
-				#enterprise_value
-				#price_earnings
-				#price_earnings_growth
-				#price_sales
-				#price_book
-				#enterprise_value_revenue
-				#enterprise_value_ebitda
-				"profit_margin"					:("profitMargins", "raw"),					#profit_margin
-				"operatingMargins"				:("operatingMargins", "raw"),				#operating_margin
-				"returnOnAssets"				:("returnOnAssets", "raw"),				#return_on_assets
-				"returnOnEquity"				:("returnOnEquity", "raw"),				#return_on_equity
-				"totalRevenue"					:("totalRevenue", "raw"),				#revenue
-				"revenuePerShare"		:("revenuePerShare", "raw"),#revenue_per_share
-				#quarterly_revenue_growth
-				#"grossMargins"		:("grossMargins", "raw"),
-				"gross_profit"		:("grossProfits", "raw"),#gross_profit
-				"ebitda"		:("ebitda", "raw"),#earnings_before_tax_ebitda
-				#diluted_eps
-				"totalCash"		:("totalCash", "raw"),#total_cash
-				"totalCashPerShare"		:("totalCashPerShare", "raw"),#total_cash_per_share
-				"totalDebt"		:("totalDebt", "raw"),#total_debt
-				"debtToEquity"		:("debtToEquity", "raw"),#total_debt_vs_equity
-				"currentRatio"		:("currentRatio", "raw"),#current_ratio
-				#book_value_per_share
-				"operatingCashflow"		:("operatingCashflow", "raw"),#operating_cash_flow
-				#quarterly_earnings_growth
-		}
-
-"!!FinancialData!!"		:("!!FinancialData!!", "raw"),
-
-
-"maxAge"		:("maxAge", "raw"),
-"targetLowPrice"		:("targetLowPrice", "raw"),
-"currentPrice"		:("currentPrice", "raw"),
-"numberOfAnalystOpinions"		:("numberOfAnalystOpinions", "raw"),
-"freeCashflow"		:("freeCashflow", "raw"),
-"ebitdaMargins"		:("ebitdaMargins", "raw"),
-"targetMedianPrice"		:("targetMedianPrice", "raw"),
-"targetHighPrice"		:("targetHighPrice", "raw"),
-"recommendationKey"		:("recommendationKey", "raw"),
-"targetMeanPrice"		:("targetMeanPrice", "raw"),
-"recommendationMean"		:("recommendationMean", "raw"),
-"earningsGrowth"		:("earningsGrowth", "raw"),
-"revenueGrowth"		:("revenueGrowth", "raw"),
-"quickRatio"		:("quickRatio", "raw"),
-""		:("", "raw"),
-
+	ValuationMeasures = {
+				# Valuation Measures (defaultKeyStatistics)
+				#								#Scraped only from HTML						#								-	Market Cap (intraday)
+				"enterprise_value"				:("enterpriseValue", "raw"),				#enterprise_value				-	Enterprise Value
+				#								#Scraped only from HTML						#								-	Trailing P/E
+				"price_earnings_ratio"			:("forwardPE", "raw"),						#price_earnings_ratio			-	Forward P/E
+				"price_earnings_growth"			:("pegRatio", "raw"),						#price_earnings_growth			-	PEG Ratio (5 yr expected)
+				"price_sales"					:("priceToSalesTrailing12Months", "raw"),	#price_sales					-	Price/Sales
+				"price_book"					:("priceToBook", "raw"),					#price_book						-	Price/Book
+				"enterprise_value_revenue"		:("enterpriseToRevenue", "raw"),			#enterprise_value_revenue		-	Enterprise Value/Revenue
+				"enterprise_value_ebitda"		:("enterpriseToEbitda", "raw"),				#enterprise_value_ebitda		-	Enterprise Value/EBITDA
+				# Financial Highlights (defaultKeyStatistics)
+				"last_fiscal_year"				:("lastFiscalYearEnd", "raw"),				#last_fiscal_year				-	Fiscal Year Ends
+				"most_recent_quater"			:("mostRecentQuarter", "raw"),				#most_recent_quater				-	Most Recent Quarter
+				# Profitability (financialData)
+				"profit_margin"					:("profitMargins", "raw"),					#profit_margin					-	Profit Margin
+				"operating_margin"				:("operatingMargins", "raw"),				#operating_margin				-	Operating Margin (ttm)
+				# Management Effectiveness (financialData)
+				"return_on_assets"				:("returnOnAssets", "raw"),					#return_on_assets				-	Return on Assets (ttm)
+				"return_on_equity"				:("returnOnEquity", "raw"),					#return_on_equity				-	Return on Equity (ttm)
+				# Income Statement (financialData)
+				"total_revenue"					:("totalRevenue", "raw"),					#total_revenue					-	#evenue (ttm)
+				"revenue_per_share"				:("revenuePerShare", "raw"),				#revenue_per_share				-	Revenue Per Share (ttm)
+				"quarterly_growth_revenue_yoy"	:("revenueGrowth", "raw"),					#quarterly_growth_revenue_yoy	-	Quarterly Revenue Growth (yoy)
+				"gross_profits"					:("grossProfits", "raw"),					#gross_profit					-	Gross Profit (ttm)
+				"earnings_before_itda"			:("ebitda", "raw"),							#earnings_before_itda			-	EBITDA
+				# Income Statement (defaultKeyStatistics)
+				"net_income_avi_to_common"		:("netIncomeToCommon", "raw"),				#net_income_avi_to_common		-	Net Income Avi to Common (ttm)
+				"diluted_eps"					:("trailingEps", "raw"),					#diluted_eps					-	Diluted EPS (ttm)
+				"earnings_quarterly_growth"		:("earningsQuarterlyGrowth", "raw"),		#earnings_quarterly_growth		-	Quarterly Earnings Growth (yoy)
+				# Balance Sheet (financialData)
+				"total_cash"					:("totalCash", "raw"),						#total_cash						-	Total Cash (mrq)
+				"total_cash_per_share"			:("totalCashPerShare", "raw"),				#total_cash_per_share			-	Total Cash Per Share (mrq)
+				"total_debt"					:("totalDebt", "raw"),						#total_debt						-	Total Debt (mrq)
+				"debt_to_equity"				:("debtToEquity", "raw"),					#debt_to_equity					-	Total Debt/Equity (mrq)
+				"current_debt_ratio"			:("currentRatio", "raw"),					#current_debt_ratio				-	Current Ratio (mrq)
+				# Balance Sheet (defaultKeyStatistics)
+				"book_value_per_share"			:("bookValue", "raw"),						#book_value_per_share			-	Book Value Per Share (mrq)
+				# Cash Flow Statement  (financialData)
+				"operating_cash_flow"			:("operatingCashflow", "raw"),				#operating_cash_flow			-	Operating Cash Flow (ttm)
+				"free_cash_flow"				:("freeCashflow", "raw"),					#free_cash_flow					-	Levered Free Cash Flow (ttm)
+	}
 
 		}
 	def __init__(self, symbol):
