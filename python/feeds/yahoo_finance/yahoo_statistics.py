@@ -5,7 +5,12 @@ from web_tools import json_scraper
 #NOTE: If you are logged in, this will always hang and fail.
 # LOGOUT to make this work properly
 class YahooStatistics (json_scraper.JSONScraper):
-
+	#Dividend data - web only
+	#http://tools.morningstar.co.uk/uk/stockreport/default.aspx?tab=10&vw=div&SecurityToken=0P000000CU%5D3%5D0%5DE0WWE%24%24ALL&Id=0P000000CU&ClientFund=0&CurrencyId=GBP
+	#NOTE:
+	#	Dividend ratio is the sum of the quarterly dividends / (earnings per share) (diluted_eps)
+	# Earnings per share (revenue_per_share) = total_revenue/shares_outstanding
+	# diluted_eps = net_income_avi_to_common/shares_outstanding
 
 	ValuationMeasures = {
 				# Valuation Measures (defaultKeyStatistics)
@@ -48,9 +53,30 @@ class YahooStatistics (json_scraper.JSONScraper):
 				# Cash Flow Statement  (financialData)
 				"operating_cash_flow"			:("operatingCashflow", "raw"),				#operating_cash_flow			-	Operating Cash Flow (ttm)
 				"free_cash_flow"				:("freeCashflow", "raw"),					#free_cash_flow					-	Levered Free Cash Flow (ttm)
-	}
+				# Share Statistics (defaultKeyStatistics)
+				#								#Scraped only from HTML						#								-	Avg Vol (3 month)
+				#								#Scraped only from HTML						#								-	Avg Vol (10 day)
+				"shares_outstanding"			:("sharesOutstanding", "raw"),				#shares_outstanding				-	Shares Outstanding
+				"float_shares"					:("floatShares", "raw"),					#float_shares					-	Float
+				"held_investors_insiders"		:("heldPercentInsiders", "raw"),			#held_investors_insiders		-	% Held by Insiders
+				"held_percent_institutions"		:("heldPercentInstitutions", "raw"),		#held_percent_institutions		-	% Held by Institutions
+				"shares_short"					:("sharesShort", "raw"),					#shares_short					-	Shares Short
+				"short_ratio"					:("shortRatio", "raw"),						#short_ratio					-	Short Ratio
+				"short_percent_of_float"		:("shortPercentOfFloat", "raw"),			#short_percent_of_float			-	Short % of Float
+				"shares_short_prior_month"		:("sharesShortPriorMonth", "raw"),			#shares_short_prior_month		-	Shares Short (prior month)
+				# Dividends & Splits (defaultKeyStatistics)
+				#								#Scraped only from HTML						#								-	Forward Annual Dividend Rate
+				#								#Scraped only from HTML						#								-	Forward Annual Dividend Yield
+				#								#Scraped only from HTML						#								-	Trailing Annual Dividend Rate
+				#								#Scraped only from HTML						#								-	Trailing Annual Dividend Yield
+				#								#Scraped only from HTML						#								-	5 Year Average Dividend Yield
+				#								#Scraped only from HTML						#								-	Payout Ratio
+				"dividend_date"					:("dividendDate", "raw"),						#dividend_date					-	Dividend Date
+				"ex_dividend_date"				:("exDividendDate", "raw"),						#ex_dividend_date				-	Ex-Dividend Date
+				"last_split_factor"				:("lastSplitFactor", "raw"),					#last_split_factor				-	Last Split Factor (new per old)
+				"last_split_date"				:("lastSplitDate", "raw"),						#last_split_date				-	Last Split Date
+			}
 
-		}
 	def __init__(self, symbol):
 		url = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/YHOO?formatted=true&crumb=GfcEejc1sYm&lang=en-GB&region=GB&modules=defaultKeyStatistics%2CfinancialData%2CcalendarEvents&corsDomain=uk.finance.yahoo.com".format(symbol)
 		json_scraper.JSONScraper.__init__(self, url)
