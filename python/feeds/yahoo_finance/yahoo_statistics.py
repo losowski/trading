@@ -79,47 +79,68 @@ class YahooStatistics (json_scraper.JSONScraper):
 
 	#JSON-KEY : (database_key, json_field)
 	json_mappings = {
-		"enterpriseValue": ("enterprise_value", "raw"),
-		"forwardPE": ("price_earnings_ratio", "raw"),
-		"pegRatio": ("price_earnings_growth", "raw"),
-		"priceToSalesTrailing12Months": ("price_sales", "raw"),
-		"priceToBook": ("price_book", "raw"),
-		"enterpriseToRevenue": ("enterprise_value_revenue", "raw"),
-		"enterpriseToEbitda": ("enterprise_value_ebitda", "raw"),
-		"lastFiscalYearEnd": ("last_fiscal_year", "raw"),
-		"mostRecentQuarter": ("most_recent_quater", "raw"),
-		"profitMargins": ("profit_margin", "raw"),
-		"operatingMargins": ("operating_margin", "raw"),
-		"returnOnAssets": ("return_on_assets", "raw"),
-		"returnOnEquity": ("return_on_equity", "raw"),
-		"totalRevenue": ("total_revenue", "raw"),
-		"revenuePerShare": ("revenue_per_share", "raw"),
-		"revenueGrowth": ("quarterly_growth_revenue_yoy", "raw"),
-		"grossProfits": ("gross_profits", "raw"),
-		"ebitda": ("earnings_before_itda", "raw"),
-		"netIncomeToCommon": ("net_income_avi_to_common", "raw"),
-		"trailingEps": ("diluted_eps", "raw"),
-		"earningsQuarterlyGrowth": ("earnings_quarterly_growth", "raw"),
-		"totalCash": ("total_cash", "raw"),
-		"totalCashPerShare": ("total_cash_per_share", "raw"),
-		"totalDebt": ("total_debt", "raw"),
-		"debtToEquity": ("debt_to_equity", "raw"),
-		"currentRatio": ("current_debt_ratio", "raw"),
-		"bookValue": ("book_value_per_share", "raw"),
-		"operatingCashflow": ("operating_cash_flow", "raw"),
-		"freeCashflow": ("free_cash_flow", "raw"),
-		"sharesOutstanding": ("shares_outstanding", "raw"),
-		"floatShares": ("float_shares", "raw"),
-		"heldPercentInsiders": ("held_investors_insiders", "raw"),
-		"heldPercentInstitutions": ("held_percent_institutions", "raw"),
-		"sharesShort": ("shares_short", "raw"),
-		"shortRatio": ("short_ratio", "raw"),
-		"shortPercentOfFloat": ("short_percent_of_float", "raw"),
-		"sharesShortPriorMonth": ("shares_short_prior_month", "raw"),
-		"dividendDate": ("dividend_date", "raw"),
-		"exDividendDate": ("ex_dividend_date", "raw"),
-		"lastSplitFactor": ("last_split_factor", "raw"),
-		"lastSplitDate": ("last_split_date", "raw")
+		# Valuation Measures (defaultKeyStatistics)
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Market Cap (intraday)
+		"enterpriseValue" :("enterprise_value", "raw"),						#Enterprise Value
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Trailing P/E
+		"forwardPE" :("price_earnings_ratio", "raw"),						#Forward P/E
+		"pegRatio" :("price_earnings_growth", "raw"),						#PEG Ratio (5 yr expected)
+		"priceToSalesTrailing12Months" :("price_sales", "raw"),						#Price/Sales
+		"priceToBook" :("price_book", "raw"),						#Price/Book
+		"enterpriseToRevenue" :("enterprise_value_revenue", "raw"),						#Enterprise Value/Revenue
+		"enterpriseToEbitda" :("enterprise_value_ebitda", "raw"),						#Enterprise Value/EBITDA
+		# Financial Highlights (defaultKeyStatistics)
+		"lastFiscalYearEnd" :("last_fiscal_year", "raw"),						#Fiscal Year Ends
+		"mostRecentQuarter" :("most_recent_quater", "raw"),						#Most Recent Quarter
+		# Profitability (financialData)
+		"profitMargins" :("profit_margin", "raw"),						#Profit Margin
+		"operatingMargins" :("operating_margin", "raw"),						#Operating Margin (ttm)
+		# Management Effectiveness (financialData)
+		"returnOnAssets" :("return_on_assets", "raw"),						#Return on Assets (ttm)
+		"returnOnEquity" :("return_on_equity", "raw"),						#Return on Equity (ttm)
+		# Income Statement (financialData)
+		"totalRevenue" :("total_revenue", "raw"),						#evenue (ttm)
+		"revenuePerShare" :("revenue_per_share", "raw"),						#Revenue Per Share (ttm)
+		"revenueGrowth" :("quarterly_growth_revenue_yoy", "raw"),						#Quarterly Revenue Growth (yoy)
+		"grossProfits" :("gross_profit", "raw"),						#Gross Profit (ttm)
+		"ebitda" :("earnings_before_itda", "raw"),						#EBITDA
+		# Income Statement (defaultKeyStatistics)
+		"netIncomeToCommon" :("net_income_avi_to_common", "raw"),						#Net Income Avi to Common (ttm)
+		"trailingEps" :("diluted_eps", "raw"),						#Diluted EPS (ttm)
+		"earningsQuarterlyGrowth" :("earnings_quarterly_growth", "raw"),						#Quarterly Earnings Growth (yoy)
+		# Balance Sheet (financialData)
+		"totalCash" :("total_cash", "raw"),						#Total Cash (mrq)
+		"totalCashPerShare" :("total_cash_per_share", "raw"),						#Total Cash Per Share (mrq)
+		"totalDebt" :("total_debt", "raw"),						#Total Debt (mrq)
+		"debtToEquity" :("debt_to_equity", "raw"),						#Total Debt/Equity (mrq)
+		"currentRatio" :("current_debt_ratio", "raw"),						#Current Ratio (mrq)
+		# Balance Sheet (defaultKeyStatistics)
+		"bookValue" :("book_value_per_share", "raw"),						#Book Value Per Share (mrq)
+		# Cash Flow Statement  (financialData)
+		"operatingCashflow" :("operating_cash_flow", "raw"),						#Operating Cash Flow (ttm)
+		"freeCashflow" :("free_cash_flow", "raw"),						#Levered Free Cash Flow (ttm)
+		# Share Statistics (defaultKeyStatistics)
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Avg Vol (3 month)
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Avg Vol (10 day)
+		"sharesOutstanding" :("shares_outstanding", "raw"),						#Shares Outstanding
+		"floatShares" :("float_shares", "raw"),						#Float
+		"heldPercentInsiders" :("held_investors_insiders", "raw"),						#% Held by Insiders
+		"heldPercentInstitutions" :("held_percent_institutions", "raw"),						#% Held by Institutions
+		"sharesShort" :("shares_short", "raw"),						#Shares Short
+		"shortRatio" :("short_ratio", "raw"),						#Short Ratio
+		"shortPercentOfFloat" :("short_percent_of_float", "raw"),						#Short % of Float
+		"sharesShortPriorMonth" :("shares_short_prior_month", "raw"),						#Shares Short (prior month)
+		# Dividends & Splits (defaultKeyStatistics)
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Forward Annual Dividend Rate
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Forward Annual Dividend Yield
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Trailing Annual Dividend Rate
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Trailing Annual Dividend Yield
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#5 Year Average Dividend Yield
+		#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Payout Ratio
+		"dividendDate" :("dividend_date", "raw"),						#Dividend Date
+		"exDividendDate" :("ex_dividend_date", "raw"),						#ExDividend Date
+		"lastSplitFactor" :("last_split_factor", "raw"),						#Last Split Factor (new per old)
+		"lastSplitDate" :("last_split_date", "raw"),						#Last Split Date
 	}
 
 
