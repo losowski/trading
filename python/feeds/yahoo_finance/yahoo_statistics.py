@@ -77,6 +77,53 @@ class YahooStatistics (json_scraper.JSONScraper):
 				"last_split_date"				:("lastSplitDate", "raw"),						#last_split_date				-	Last Split Date
 			}
 
+	#JSON-KEY : (database_key, json_field)
+	json_mappings = {
+		"enterpriseValue": ("enterprise_value", "raw"),
+		"forwardPE": ("price_earnings_ratio", "raw"),
+		"pegRatio": ("price_earnings_growth", "raw"),
+		"priceToSalesTrailing12Months": ("price_sales", "raw"),
+		"priceToBook": ("price_book", "raw"),
+		"enterpriseToRevenue": ("enterprise_value_revenue", "raw"),
+		"enterpriseToEbitda": ("enterprise_value_ebitda", "raw"),
+		"lastFiscalYearEnd": ("last_fiscal_year", "raw"),
+		"mostRecentQuarter": ("most_recent_quater", "raw"),
+		"profitMargins": ("profit_margin", "raw"),
+		"operatingMargins": ("operating_margin", "raw"),
+		"returnOnAssets": ("return_on_assets", "raw"),
+		"returnOnEquity": ("return_on_equity", "raw"),
+		"totalRevenue": ("total_revenue", "raw"),
+		"revenuePerShare": ("revenue_per_share", "raw"),
+		"revenueGrowth": ("quarterly_growth_revenue_yoy", "raw"),
+		"grossProfits": ("gross_profits", "raw"),
+		"ebitda": ("earnings_before_itda", "raw"),
+		"netIncomeToCommon": ("net_income_avi_to_common", "raw"),
+		"trailingEps": ("diluted_eps", "raw"),
+		"earningsQuarterlyGrowth": ("earnings_quarterly_growth", "raw"),
+		"totalCash": ("total_cash", "raw"),
+		"totalCashPerShare": ("total_cash_per_share", "raw"),
+		"totalDebt": ("total_debt", "raw"),
+		"debtToEquity": ("debt_to_equity", "raw"),
+		"currentRatio": ("current_debt_ratio", "raw"),
+		"bookValue": ("book_value_per_share", "raw"),
+		"operatingCashflow": ("operating_cash_flow", "raw"),
+		"freeCashflow": ("free_cash_flow", "raw"),
+		"sharesOutstanding": ("shares_outstanding", "raw"),
+		"floatShares": ("float_shares", "raw"),
+		"heldPercentInsiders": ("held_investors_insiders", "raw"),
+		"heldPercentInstitutions": ("held_percent_institutions", "raw"),
+		"sharesShort": ("shares_short", "raw"),
+		"shortRatio": ("short_ratio", "raw"),
+		"shortPercentOfFloat": ("short_percent_of_float", "raw"),
+		"sharesShortPriorMonth": ("shares_short_prior_month", "raw"),
+		"dividendDate": ("dividend_date", "raw"),
+		"exDividendDate": ("ex_dividend_date", "raw"),
+		"lastSplitFactor": ("last_split_factor", "raw"),
+		"lastSplitDate": ("last_split_date", "raw")
+	}
+
+
+
 	def __init__(self, symbol):
 		url = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/YHOO?formatted=true&crumb=GfcEejc1sYm&lang=en-GB&region=GB&modules=defaultKeyStatistics%2CfinancialData%2CcalendarEvents&corsDomain=uk.finance.yahoo.com".format(symbol)
 		json_scraper.JSONScraper.__init__(self, url)
