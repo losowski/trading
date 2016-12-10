@@ -83,9 +83,9 @@ class YahooStatistics (json_scraper.JSONScraper):
 		url = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/{0}?formatted=true&crumb=GfcEejc1sYm&lang=en-GB&region=GB&modules=defaultKeyStatistics%2CfinancialData%2CcalendarEvents&corsDomain=uk.finance.yahoo.com".format(symbol)
 		json_mappings = {
 			# Valuation Measures (defaultKeyStatistics)
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Market Cap (intraday)
+			#Scraped only from HTML											#Market Cap (intraday)
 			"enterpriseValue" :("enterprise_value", "raw"),						#Enterprise Value
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Trailing P/E
+			#Scraped only from HTML											#Trailing P/E
 			"forwardPE" :("price_earnings_ratio", "raw"),						#Forward P/E
 			"pegRatio" :("price_earnings_growth", "raw"),						#PEG Ratio (5 yr expected)
 			"priceToSalesTrailing12Months" :("price_sales", "raw"),						#Price/Sales
@@ -123,8 +123,8 @@ class YahooStatistics (json_scraper.JSONScraper):
 			"operatingCashflow" :("operating_cash_flow", "raw"),						#Operating Cash Flow (ttm)
 			"freeCashflow" :("free_cash_flow", "raw"),						#Levered Free Cash Flow (ttm)
 			# Share Statistics (defaultKeyStatistics)
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Avg Vol (3 month)
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Avg Vol (10 day)
+			#Scraped only from HTML											#Avg Vol (3 month)
+			#Scraped only from HTML											#Avg Vol (10 day)
 			"sharesOutstanding" :("shares_outstanding", "raw"),						#Shares Outstanding
 			"floatShares" :("float_shares", "raw"),						#Float
 			"heldPercentInsiders" :("held_investors_insiders", "raw"),						#% Held by Insiders
@@ -134,12 +134,12 @@ class YahooStatistics (json_scraper.JSONScraper):
 			"shortPercentOfFloat" :("short_percent_of_float", "raw"),						#Short % of Float
 			"sharesShortPriorMonth" :("shares_short_prior_month", "raw"),						#Shares Short (prior month)
 			# Dividends & Splits (defaultKeyStatistics)
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Forward Annual Dividend Rate
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Forward Annual Dividend Yield
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Trailing Annual Dividend Rate
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Trailing Annual Dividend Yield
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#5 Year Average Dividend Yield
-			#Scraped only from HTML" :(#Scraped only from HTML", "raw"),						#Payout Ratio
+			#Scraped only from HTML											#Forward Annual Dividend Rate
+			#Scraped only from HTML											#Forward Annual Dividend Yield
+			#Scraped only from HTML											#Trailing Annual Dividend Rate
+			#Scraped only from HTML											#Trailing Annual Dividend Yield
+			#Scraped only from HTML											#5 Year Average Dividend Yield
+			#Scraped only from HTML											#Payout Ratio
 			"dividendDate" :("dividend_date", "raw"),						#Dividend Date
 			"exDividendDate" :("ex_dividend_date", "raw"),						#ExDividend Date
 			"lastSplitFactor" :("last_split_factor", "raw"),						#Last Split Factor (new per old)
