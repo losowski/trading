@@ -26,7 +26,7 @@ class FeedsApplication:
 
 	def run(self):
 		self.update_quotes()
-		#self.update_key_statistics() # Temporarily disabled
+		self.update_key_statistics() # Temporarily disabled
 
 	def shutdown (self):
 		pass
@@ -118,31 +118,47 @@ class FeedsApplication:
 			data_parameters = collections.OrderedDict()
 			data_parameters['symbol']			= symbol
 			data_parameters['date']				= datetime.date.today()
-			#data_parameters['enterprise_value'] = stats.enterprise_value
-			#data_parameters['price_earnings'] = stats.price_earnings
-			#data_parameters['price_earnings_growth'] = stats.price_earnings_growth
-			#data_parameters['price_sales'] = stats.price_sales
-			#data_parameters['price_book'] = stats.price_book
-			#data_parameters['enterprise_value_revenue'] = stats.enterprise_value_revenue
-			#data_parameters['enterprise_value_ebitda'] = stats.enterprise_value_ebitda
-			#data_parameters['profit_margin'] = stats.profit_margin
-			#data_parameters['operating_margin'] = stats.operating_margin
-			#data_parameters['return_on_assets'] = stats.return_on_assets
-			#data_parameters['return_on_equity'] = stats.return_on_equity
-			#data_parameters['revenue'] = stats.revenue
-			#data_parameters['revenue_per_share'] = stats.revenue_per_share
-			#data_parameters['quarterly_revenue_growth'] = stats.quarterly_revenue_growth
-			#data_parameters['gross_profit'] = stats.gross_profit
-			#data_parameters['earnings_before_tax_ebitda'] = stats.earnings_before_tax_ebitda
-			#data_parameters['diluted_eps'] = stats.diluted_eps
-			#data_parameters['total_cash'] = stats.total_cash
-			#data_parameters['total_cash_per_share'] = stats.total_cash_per_share
-			#data_parameters['total_debt'] = stats.total_debt
-			#data_parameters['total_debt_vs_equity'] = stats.total_debt_vs_equity
-			#data_parameters['current_ratio'] = stats.current_ratio
-			#data_parameters['book_value_per_share'] = stats.book_value_per_share
-			#data_parameters['operating_cash_flow'] = stats.operating_cash_flow
-			#data_parameters['quarterly_earnings_growth'] = stats.quarterly_earnings_growth
+			data_parameters['enterprise_value'] = stats.enterprise_value
+			data_parameters['price_earnings_ratio'] = stats.price_earnings_ratio
+			data_parameters['price_earnings_growth'] = stats.price_earnings_growth
+			data_parameters['price_sales'] = stats.price_sales
+			data_parameters['price_book'] = stats.price_book
+			data_parameters['enterprise_value_revenue'] = stats.enterprise_value_revenue
+			data_parameters['enterprise_value_ebitda'] = stats.enterprise_value_ebitda
+			data_parameters['last_fiscal_year'] = stats.last_fiscal_year
+			data_parameters['most_recent_quater'] = stats.most_recent_quater
+			data_parameters['profit_margin'] = stats.profit_margin
+			data_parameters['operating_margin'] = stats.operating_margin
+			data_parameters['return_on_assets'] = stats.return_on_assets
+			data_parameters['return_on_equity'] = stats.return_on_equity
+			data_parameters['total_revenue'] = stats.total_revenue
+			data_parameters['revenue_per_share'] = stats.revenue_per_share
+			data_parameters['quarterly_growth_revenue_yoy'] = stats.quarterly_growth_revenue_yoy
+			data_parameters['gross_profit'] = stats.gross_profit
+			data_parameters['earnings_before_itda'] = stats.earnings_before_itda
+			data_parameters['net_income_avi_to_common'] = stats.net_income_avi_to_common
+			data_parameters['diluted_eps'] = stats.diluted_eps
+			data_parameters['earnings_quarterly_growth'] = stats.earnings_quarterly_growth
+			data_parameters['total_cash'] = stats.total_cash
+			data_parameters['total_cash_per_share'] = stats.total_cash_per_share
+			data_parameters['total_debt'] = stats.total_debt
+			data_parameters['debt_to_equity'] = stats.debt_to_equity
+			data_parameters['current_debt_ratio'] = stats.current_debt_ratio
+			data_parameters['book_value_per_share'] = stats.book_value_per_share
+			data_parameters['operating_cash_flow'] = stats.operating_cash_flow
+			data_parameters['free_cash_flow'] = stats.free_cash_flow
+			data_parameters['shares_outstanding'] = stats.shares_outstanding
+			data_parameters['float_shares'] = stats.float_shares
+			data_parameters['held_investors_insiders'] = stats.held_investors_insiders
+			data_parameters['held_percent_institutions'] = stats.held_percent_institutions
+			data_parameters['shares_short'] = stats.shares_short
+			data_parameters['short_ratio'] = stats.short_ratio
+			data_parameters['short_percent_of_float'] = stats.short_percent_of_float
+			data_parameters['shares_short_prior_month'] = stats.shares_short_prior_month
+			data_parameters['dividend_date'] = stats.dividend_date
+			data_parameters['ex_dividend_date'] = stats.ex_dividend_date
+			data_parameters['last_split_factor'] = stats.last_split_factor
+			data_parameters['last_split_date'] = stats.last_split_date
 			data_list = list(data_parameters.values())
 			#execute the stored procedure
 			update_query.callproc(feeds_queries.insert_key_statistics_data, data_list)
