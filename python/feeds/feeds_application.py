@@ -26,7 +26,7 @@ class FeedsApplication:
 
 	def run(self):
 		self.update_quotes()
-		self.update_key_statistics() # Temporarily disabled
+		#self.update_key_statistics() # Temporarily disabled
 
 	def shutdown (self):
 		pass
@@ -145,7 +145,7 @@ class FeedsApplication:
 			#data_parameters['quarterly_earnings_growth'] = stats.quarterly_earnings_growth
 			data_list = list(data_parameters.values())
 			#execute the stored procedure
-			update_query.callproc(feeds_queries.insert_symbol_data, data_list)
+			update_query.callproc(feeds_queries.insert_key_statistics_data, data_list)
 			#commit the data
 			self.database.commit()
 			update_query.close()
