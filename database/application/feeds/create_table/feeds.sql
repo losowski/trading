@@ -183,10 +183,10 @@ CREATE TABLE trading_schema.key_statistics
   short_ratio numeric NOT NULL,
   short_percent_of_float numeric NOT NULL,
   shares_short_prior_month numeric NOT NULL,
-  dividend_date timestamp without time zone NOT NULL,
-  ex_dividend_date timestamp without time zone NOT NULL,
-  last_split_factor numeric NOT NULL,
-  last_split_date timestamp without time zone NOT NULL,
+  dividend_date timestamp without time zone,
+  ex_dividend_date timestamp without time zone,
+  last_split_factor numeric,
+  last_split_date timestamp without time zone,
   CONSTRAINT pk_key_statistics_id PRIMARY KEY (id),
   CONSTRAINT fk_key_statistics_symbol_id FOREIGN KEY (symbol_id)
       REFERENCES trading_schema.symbol (id) MATCH SIMPLE

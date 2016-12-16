@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION trading_schema.pInsKeyStatistics(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_date							trading_schema.quote.datestamp%TYPE,
-		p_enterprise_value		trading_schema.key_statistics.enterprise_value%TYPE,
+	p_enterprise_value		trading_schema.key_statistics.enterprise_value%TYPE,
 	p_price_earnings_ratio		trading_schema.key_statistics.price_earnings_ratio%TYPE,
 	p_price_earnings_growth		trading_schema.key_statistics.price_earnings_growth%TYPE,
 	p_price_sales		trading_schema.key_statistics.price_sales%TYPE,

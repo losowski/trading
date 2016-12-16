@@ -117,7 +117,7 @@ class FeedsApplication:
 			update_query = self.database.get_query()
 			data_parameters = collections.OrderedDict()
 			data_parameters['symbol']			= symbol
-			data_parameters['date']				= datetime.date.today()
+			data_parameters['date']				= datetime.date.today().isoformat()
 			data_parameters['enterprise_value'] = stats.enterprise_value
 			data_parameters['price_earnings_ratio'] = stats.price_earnings_ratio
 			data_parameters['price_earnings_growth'] = stats.price_earnings_growth
@@ -159,6 +159,9 @@ class FeedsApplication:
 			data_parameters['ex_dividend_date'] = stats.ex_dividend_date
 			data_parameters['last_split_factor'] = stats.last_split_factor
 			data_parameters['last_split_date'] = stats.last_split_date
+			logging.info("stats.ex_dividend_date: %s", stats.ex_dividend_date)
+			logging.info("stats.dividend_date: %s", stats.dividend_date)
+			logging.info("stats.last_split_date: %s", stats.last_split_date)
 			data_list = list(data_parameters.values())
 			#execute the stored procedure
 			update_query.callproc(feeds_queries.insert_key_statistics_data, data_list)

@@ -3,6 +3,7 @@
 import logging
 import urllib2
 import json
+#import datetime
 
 class JSONScraper:
 	def __init__(self, url , json_mappings):
@@ -41,10 +42,11 @@ class JSONScraper:
 			for dk,  dv in data.iteritems():
 				logging.debug("DICT DK: %s -> DV: %s", dk, dv)
 				if dk in self.json_mappings:
-					attr, key = self.json_mappings[dk]
+					attr, key,  datatype = self.json_mappings[dk]
 					value = None
 					if key in dv:
 						value = dv[key]
+					#TODO: Add a handler for the specific datatype
 					#Set the attribute
 					setattr(self, attr, value)
 
