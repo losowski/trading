@@ -17,14 +17,14 @@ class YahooStatistics (json_scraper.JSONScraper):
 				#								#Scraped only from HTML								#								-	Market Cap (intraday)
 				"enterprise_value"				:("enterpriseValue", "raw", "num"),					#enterprise_value				-	Enterprise Value
 				#								#Scraped only from HTML								#								-	Trailing P/E
-				"price_earnings_ratio"			:("forwardPE", "raw", "num"),								#price_earnings_ratio			-	Forward P/E
-				"price_earnings_growth"			:("pegRatio", "raw", "num"),								#price_earnings_growth			-	PEG Ratio (5 yr expected)
+				"price_earnings_ratio"			:("forwardPE", "raw", "num"),						#price_earnings_ratio			-	Forward P/E
+				"price_earnings_growth"			:("pegRatio", "raw", "num"),						#price_earnings_growth			-	PEG Ratio (5 yr expected)
 				"price_sales"					:("priceToSalesTrailing12Months", "raw", "num"),	#price_sales					-	Price/Sales
-				"price_book"					:("priceToBook", "raw", "num"),								#price_book						-	Price/Book
+				"price_book"					:("priceToBook", "raw", "num"),						#price_book						-	Price/Book
 				"enterprise_value_revenue"		:("enterpriseToRevenue", "raw", "num"),				#enterprise_value_revenue		-	Enterprise Value/Revenue
 				"enterprise_value_ebitda"		:("enterpriseToEbitda", "raw", "num"),				#enterprise_value_ebitda		-	Enterprise Value/EBITDA
 				# Financial Highlights (defaultKeyStatistics)
-				"last_fiscal_year"				:("lastFiscalYearEnd", "raw", "num"),				#last_fiscal_year				-	Fiscal Year Ends
+				"last_fiscal_year"				:("lastFiscalYearEnd", "fmt", "num"),				#last_fiscal_year				-	Fiscal Year Ends
 				"most_recent_quater"			:("mostRecentQuarter", "raw", "num"),				#most_recent_quater				-	Most Recent Quarter
 				# Profitability (financialData)
 				"profit_margin"					:("profitMargins", "raw", "num"),					#profit_margin					-	Profit Margin
@@ -93,7 +93,7 @@ class YahooStatistics (json_scraper.JSONScraper):
 			"enterpriseToRevenue"				:("enterprise_value_revenue", "raw", "num"),				#Enterprise Value/Revenue
 			"enterpriseToEbitda"				:("enterprise_value_ebitda", "raw", "num"),					#Enterprise Value/EBITDA
 			# Financial Highlights (defaultKeyStatistics)
-			"lastFiscalYearEnd"					:("last_fiscal_year", "raw", "num"),						#Fiscal Year Ends
+			"lastFiscalYearEnd"					:("last_fiscal_year", "fmt", "date"),						#Fiscal Year Ends
 			"mostRecentQuarter"					:("most_recent_quater", "raw", "num"),						#Most Recent Quarter
 			# Profitability (financialData)
 			"profitMargins"						:("profit_margin", "raw", "num"),							#Profit Margin
@@ -140,10 +140,10 @@ class YahooStatistics (json_scraper.JSONScraper):
 			#Scraped only from HTML																			#Trailing Annual Dividend Yield
 			#Scraped only from HTML																			#5 Year Average Dividend Yield
 			#Scraped only from HTML																			#Payout Ratio
-			"dividendDate"						:("dividend_date", "raw", "num"),							#Dividend Date
-			"exDividendDate"					:("ex_dividend_date", "raw", "num"),						#ExDividend Date
+			"dividendDate"						:("dividend_date", "fmt", "date"),							#Dividend Date
+			"exDividendDate"					:("ex_dividend_date", "fmt", "date"),						#ExDividend Date
 			"lastSplitFactor"					:("last_split_factor", "raw", "num"),						#Last Split Factor (new per old)
-			"lastSplitDate"						:("last_split_date", "raw", "num"),							#Last Split Date
+			"lastSplitDate"						:("last_split_date", "fmt", "date"),						#Last Split Date
 		}
 
 		json_scraper.JSONScraper.__init__(self, url, json_mappings)

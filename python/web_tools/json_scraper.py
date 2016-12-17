@@ -47,6 +47,7 @@ class JSONScraper:
 					if key in dv:
 						value = dv[key]
 					#TODO: Add a handler for the specific datatype
+					logging.info("Storing: %s  = %s", attr, value)
 					#Set the attribute
 					setattr(self, attr, value)
 
