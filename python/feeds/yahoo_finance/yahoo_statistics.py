@@ -94,7 +94,7 @@ class YahooStatistics (json_scraper.JSONScraper):
 			"enterpriseToEbitda"				:("enterprise_value_ebitda", "raw", "num"),					#Enterprise Value/EBITDA
 			# Financial Highlights (defaultKeyStatistics)
 			"lastFiscalYearEnd"					:("last_fiscal_year", "fmt", "date"),						#Fiscal Year Ends
-			"mostRecentQuarter"					:("most_recent_quater", "raw", "num"),						#Most Recent Quarter
+			"mostRecentQuarter"					:("most_recent_quater", "fmt", "date"),						#Most Recent Quarter
 			# Profitability (financialData)
 			"profitMargins"						:("profit_margin", "raw", "num"),							#Profit Margin
 			"operatingMargins"					:("operating_margin", "raw", "num"),						#Operating Margin (ttm)

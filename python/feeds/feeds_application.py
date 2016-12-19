@@ -25,7 +25,7 @@ class FeedsApplication:
 		self.database.connect()
 
 	def run(self):
-		self.update_quotes()
+		#self.update_quotes()
 		self.update_key_statistics() # Temporarily disabled
 
 	def shutdown (self):
