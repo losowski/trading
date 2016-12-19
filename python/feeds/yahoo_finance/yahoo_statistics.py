@@ -19,7 +19,7 @@ class YahooStatistics (json_scraper.JSONScraper):
 				#								#Scraped only from HTML								#								-	Trailing P/E
 				"price_earnings_ratio"			:("forwardPE", "raw", "num"),						#price_earnings_ratio			-	Forward P/E
 				"price_earnings_growth"			:("pegRatio", "raw", "num"),						#price_earnings_growth			-	PEG Ratio (5 yr expected)
-				"price_sales"					:("priceToSalesTrailing12Months", "raw", "num"),	#price_sales					-	Price/Sales
+				"price_sales_12m_trailing"		:("priceToSalesTrailing12Months", "raw", "num"),	#price_sales_12m_trailing		-	Price/Sales
 				"price_book"					:("priceToBook", "raw", "num"),						#price_book						-	Price/Book
 				"enterprise_value_revenue"		:("enterpriseToRevenue", "raw", "num"),				#enterprise_value_revenue		-	Enterprise Value/Revenue
 				"enterprise_value_ebitda"		:("enterpriseToEbitda", "raw", "num"),				#enterprise_value_ebitda		-	Enterprise Value/EBITDA
@@ -88,7 +88,7 @@ class YahooStatistics (json_scraper.JSONScraper):
 			#Scraped only from HTML																			#Trailing P/E
 			"forwardPE"							:("price_earnings_ratio", "raw", "num"),					#Forward P/E
 			"pegRatio"							:("price_earnings_growth", "raw", "num"),					#PEG Ratio (5 yr expected)
-			"priceToSalesTrailing12Months"		:("price_sales", "raw", "num"),								#Price/Sales
+			"priceToSalesTrailing12Months"		:("price_sales_12m_trailing", "raw", "num"),				#Price/Sales
 			"priceToBook"						:("price_book", "raw", "num"),								#Price/Book
 			"enterpriseToRevenue"				:("enterprise_value_revenue", "raw", "num"),				#Enterprise Value/Revenue
 			"enterpriseToEbitda"				:("enterprise_value_ebitda", "raw", "num"),					#Enterprise Value/EBITDA

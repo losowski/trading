@@ -121,7 +121,7 @@ class FeedsApplication:
 			data_parameters['enterprise_value'] = stats.enterprise_value
 			data_parameters['price_earnings_ratio'] = stats.price_earnings_ratio
 			data_parameters['price_earnings_growth'] = stats.price_earnings_growth
-			data_parameters['price_sales'] = stats.price_sales
+			data_parameters['price_sales_12m_trailing'] = stats.price_sales_12m_trailing
 			data_parameters['price_book'] = stats.price_book
 			data_parameters['enterprise_value_revenue'] = stats.enterprise_value_revenue
 			data_parameters['enterprise_value_ebitda'] = stats.enterprise_value_ebitda

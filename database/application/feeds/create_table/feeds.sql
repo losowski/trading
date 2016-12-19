@@ -149,7 +149,7 @@ CREATE TABLE trading_schema.key_statistics
   enterprise_value numeric NOT NULL,
   price_earnings_ratio numeric NOT NULL,
   price_earnings_growth numeric NOT NULL,
-  price_sales numeric NOT NULL,
+  price_sales_12m_trailing numeric,
   price_book numeric NOT NULL,
   enterprise_value_revenue numeric NOT NULL,
   enterprise_value_ebitda numeric NOT NULL,
