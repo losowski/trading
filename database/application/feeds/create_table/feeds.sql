@@ -162,7 +162,7 @@ CREATE TABLE trading_schema.key_statistics
   total_revenue numeric NOT NULL,
   revenue_per_share numeric NOT NULL,
   quarterly_growth_revenue_yoy numeric NOT NULL,
-  gross_profit numeric NOT NULL,
+  gross_profit numeric,
   earnings_before_itda numeric NOT NULL,
   net_income_avi_to_common numeric NOT NULL,
   diluted_eps numeric NOT NULL,
