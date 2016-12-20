@@ -6,5 +6,7 @@ TODO:
 - Use prepared statements
 	- All the queries that are used are technically reusable as a prepared statement (performance)
 		- Performance increase of maybe 30% (insignificant for now)
+- Add all the calculations for using the company stats
+	- Must be all the useful statements from the podcast
 
 DONE:
