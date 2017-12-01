@@ -14,6 +14,8 @@ cat trading_grant.sql >> create_tradedb.sql
 # Triple backslash to work with debian (ignores arguments)
 echo "-- SCRIPT BEGIN: set up connection and schema" >> create_tradedb.sql
 echo "\\\connect tradingdb" >> create_tradedb.sql
+echo "--\n-- Create the schema\n--" >> create_tradedb.sql
+echo "CREATE SCHEMA IF NOT EXISTS trading_schema AUTHORIZATION trading;\n" >> create_tradedb.sql
 echo "set schema 'trading_schema';" >> create_tradedb.sql
 echo "-- SCRIPT END" >> create_tradedb.sql
 
