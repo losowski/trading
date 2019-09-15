@@ -1,6 +1,7 @@
 #!/usr/bin/python
 '''
 Import the Stock Data
+	pip install ystockquote
 '''
 #import
 import logging
