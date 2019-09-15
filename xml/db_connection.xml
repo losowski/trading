@@ -8,6 +8,6 @@
 		<host>localhost</host>
 		<database>tradingdb</database>
 		<username>trading</username>
-		<password />
+		<password>trade</password>
 	</connection>
 </database>
