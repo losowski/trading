@@ -3,6 +3,9 @@ README
 
 Dependencies
 ============
++ pip
+	ystockquote
+
 +	postgresql database
 +	Python:
 		psycopg
