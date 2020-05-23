@@ -42,6 +42,7 @@ CREATE INDEX idx_symbol_id
   USING btree
   (symbol_id NULLS FIRST);
 
+
 -- Stored Procedures --
 -- InsQuote(%(symbol), %(date), %(open_price), %(high_price), %(low_price), %(close_price), %(adj_close_price), %(volume))
 CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
@@ -59,7 +60,7 @@ DECLARE
 BEGIN
 	INSERT INTO
 	trading_schema.quote
-		(   
+		(
 			symbol_id,
 			datestamp,
 			open_price,
@@ -68,9 +69,9 @@ BEGIN
 			close_price,
 			adjusted_close_price,
 			volume
-		)   
+		)
 	VALUES
-		(   
+		(
 			(SELECT id FROM trading_schema.symbol WHERE symbol=p_symbol),
 			p_date,
 			p_open_price,
@@ -79,10 +80,10 @@ BEGIN
 			p_close_price,
 			p_adj_close_price,
 			p_volume
-		);  
-	
+		);
+
 	SELECT
-		*   
+		*
 	INTO
 		inserted_id
 	FROM

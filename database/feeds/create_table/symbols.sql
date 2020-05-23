@@ -67,7 +67,7 @@ BEGIN
 			p_symbol,
 		  	p_name
 	  	);
-  	
+
   	SELECT
   		*
   	INTO
