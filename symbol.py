@@ -10,6 +10,18 @@ import logging
 from python.database import db_connection
 
 insertSymbol = "trading_schema.pInsSymbol"
+insertExchange = "trading_schema.pInsExchange"
+
+def addSymbol (db, exchange):
+	logger.info("Exchange: %s", exchange)
+	query = db.get_query()
+	data_parameters = collections.OrderedDict()
+	data_parameters['exchange']			= exchange
+	data_list = list(data_parameters.values())
+	#execute the stored procedure
+	query.callproc(insertExchange)
+	query.execute()
+	update_symbols = query.fetchall()
 
 def addSymbol (db, exchange, symbol, name):
 	logger = logging.getLogger('addSymbol')
@@ -46,9 +58,13 @@ def main():
 	db = db_connection.DBConnection()
 	db.connect()
 	# Change DB
-	addSymbol(db, args.exchange, args.symbol, args.name)
+	if (None != args.symbol):
+		addSymbol(db, args.exchange, args.symbol, args.name)
+	else:
+		addSymbol(db, args.exchange)
 	#Commit
 	logger.info("Commiting transaction")
+	db.commit()
 
 # Assign a start point to the executable
 if __name__ == "__main__":
