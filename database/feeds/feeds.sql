@@ -114,30 +114,30 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsSymbol(
 	p_symbol	trading_schema.symbol.symbol%TYPE
 	) RETURNS integer AS $$
 DECLARE
-    inserted_id integer := 0;
+	inserted_id integer := 0;
 BEGIN
-  	INSERT INTO
-  	trading_schema.symbol
-	  	(
+	INSERT INTO
+	trading_schema.symbol
+		(
 			exchange_id,
-		  	symbol,
+			symbol,
 			name
-	  	)
-  	VALUES
-	  	(
-		  	(SELECT id FROM trading_schema.exchange WHERE name=p_exchange),
+		)
+	VALUES
+		(
+			(SELECT id FROM trading_schema.exchange WHERE name=p_exchange),
 			p_symbol,
-		  	p_name
-	  	);
+			p_name
+		);
 
-  	SELECT
-  		*
-  	INTO
-  		inserted_id
-  	FROM
+	SELECT
+		*
+	INTO
+		inserted_id
+	FROM
 		LASTVAL();
 
-    RETURN inserted_id;
+	RETURN inserted_id;
 END;
 $$ LANGUAGE plpgsql;
 -- Table: trading_schema.quote
