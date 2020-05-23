@@ -49,7 +49,7 @@ class FeedsApplication:
 			#Inquire how much data we have: None = get all, else get last date
 			if last_entry == None and update == None:
 				logging.info("New Symbol: %s", symbol)
-				date_interval = datetime.date.today() - datetime.timedelta(365*10) # Go back maximum number of years
+				date_interval = datetime.date.today() - datetime.timedelta(366*20) # Go back maximum number of years
 				logging.info("Date Interval %s", date_interval)
 				last_entry = datetime.datetime( date_interval.year, date_interval.month, date_interval.day )
 				last_record = last_entry
