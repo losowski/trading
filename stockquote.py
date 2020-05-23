@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 '''
 Import the Stock Data
 '''
 #import
 import logging
-from feeds import feeds_application
+from python.feeds import feeds_application
 
 def main():
 	print ("Quote Importer")
