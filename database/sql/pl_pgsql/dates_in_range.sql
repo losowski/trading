@@ -1,4 +1,4 @@
-﻿-- Get dates from quote in the desired range
+-- Get dates from quote in the desired range
 
 CREATE OR REPLACE FUNCTION get_dates_in_period(symbol_name TEXT, start_date date, end_date date) 
 RETURNS SETOF timestamp without time zone AS $$
