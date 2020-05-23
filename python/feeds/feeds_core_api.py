@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from yahoo_finance import yahoo_finance_base
+from python.feeds.yahoo_finance import yahoo_finance_base
 
 class FeedsCoreAPI:
 	def __init__(self):

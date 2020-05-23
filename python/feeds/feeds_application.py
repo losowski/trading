@@ -3,10 +3,10 @@ import datetime
 import collections
 import logging
 
-from database import db_connection
-from feeds import feeds_core_api
-from feeds import feeds_queries
-from feeds.yahoo_finance import yahoo_statistics
+from python.database import db_connection
+from python.feeds import feeds_core_api
+from python.feeds import feeds_queries
+#from python.feeds.yahoo_finance import yahoo_statistics
 
 
 class FeedsApplication:

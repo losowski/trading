@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-Import the Stock Data
+Import the Stock Data from Yahoo Finance
 '''
 #import
 import logging

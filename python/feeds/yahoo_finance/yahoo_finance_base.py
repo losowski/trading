@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import ystockquote
+import python.feeds.ystockquote
 '''
 git clone git://github.com/cgoldberg/ystockquote.git
 cd ystockquote
