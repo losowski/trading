@@ -12,7 +12,8 @@ from python.database import db_connection
 insertSymbol = "trading_schema.pInsSymbol"
 insertExchange = "trading_schema.pInsExchange"
 
-def addSymbol (db, exchange):
+def addExchange (db, exchange):
+	logger = logging.getLogger('addExchange')
 	logger.info("Exchange: %s", exchange)
 	query = db.get_query()
 	data_parameters = collections.OrderedDict()
@@ -61,7 +62,7 @@ def main():
 	if (None != args.symbol):
 		addSymbol(db, args.exchange, args.symbol, args.name)
 	else:
-		addSymbol(db, args.exchange)
+		addExchange(db, args.exchange)
 	#Commit
 	logger.info("Commiting transaction")
 	db.commit()
