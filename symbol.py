@@ -1,16 +1,21 @@
 #!/usr/bin/python3
 '''
-Import the Stock Data from Yahoo Finance
+Add specific symbols to the database
 '''
 #import
-import logging
 import argparse
-from python.feeds import database
+import collections
+import logging
+
 from python.database import db_connection
 
 insertSymbol = "trading_schema.pInsSymbol"
 
 def addSymbol (db, exchange, symbol, name):
+	logger = logging.getLogger('addSymbol')
+	logger.info("Exchange: %s", exchange)
+	logger.info("Symbol: %s", symbol)
+	logger.info("Name: %s", name)
 	query = db.get_query()
 	data_parameters = collections.OrderedDict()
 	data_parameters['exchange']			= exchange
@@ -23,6 +28,10 @@ def addSymbol (db, exchange, symbol, name):
 	update_symbols = query.fetchall()
 
 def main():
+	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', filename='quote.log',level=logging.DEBUG)
+	logger = logging.getLogger('main')
+	blurb = "Symbol Adder"
+	logger.warning(blurb)
 	## ARGPARSE
 	parser = argparse.ArgumentParser(description = blurb)
 	#Model building
@@ -36,19 +45,10 @@ def main():
 	#Connect to DB
 	db = db_connection.DBConnection()
 	db.connect()
-	#Perform Query
-	query = db.get_query()
-	query.execute(feeds_queries.get_symbols_for_quote_update)
-	update_symbols = query.fetchall()
-
-	print ("Quote Importer")
-	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', filename='quote.log',level=logging.DEBUG)
-	feeds = feeds_application.FeedsApplication()
-	feeds.initialise()
-	feeds.run()
-	feeds.shutdown()
-	print("Exiting...")
-
+	# Change DB
+	addSymbol(db, args.exchange, args.symbol, args.name)
+	#Commit
+	logger.info("Commiting transaction")
 
 # Assign a start point to the executable
 if __name__ == "__main__":
