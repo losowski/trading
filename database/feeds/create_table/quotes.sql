@@ -1,3 +1,48 @@
+-- Table: trading_schema.quote
+CREATE SEQUENCE trading_schema.quote_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 8938
+  CACHE 1;
+ALTER TABLE trading_schema.quote_id_seq
+  OWNER TO trading;
+
+
+CREATE TABLE trading_schema.quote
+(
+  id bigserial NOT NULL,
+  symbol_id bigint,
+  datestamp timestamp without time zone NOT NULL,
+  volume bigint NOT NULL,
+  adjusted_close_price numeric NOT NULL,
+  open_price numeric NOT NULL,
+  close_price numeric NOT NULL,
+  high_price numeric NOT NULL,
+  low_price numeric NOT NULL,
+  CONSTRAINT pk_quote_id PRIMARY KEY (id),
+  CONSTRAINT fk_quote_symbol_id FOREIGN KEY (symbol_id)
+      REFERENCES trading_schema.symbol (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT uc_quote_1 UNIQUE (symbol_id, datestamp)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE trading_schema.quote
+  OWNER TO trading;
+
+CREATE INDEX idx_quote_datestamp
+  ON trading_schema.quote
+  USING btree
+  (datestamp);
+
+CREATE INDEX idx_symbol_id
+  ON trading_schema.quote
+  USING btree
+  (symbol_id NULLS FIRST);
+
+-- Stored Procedures --
 -- InsQuote(%(symbol), %(date), %(open_price), %(high_price), %(low_price), %(close_price), %(adj_close_price), %(volume))
 CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
 	p_symbol				trading_schema.symbol.symbol%TYPE,

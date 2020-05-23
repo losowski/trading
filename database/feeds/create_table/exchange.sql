@@ -1,4 +1,39 @@
-﻿-- INSERT
+-- Table: trading_schema.exchange
+CREATE SEQUENCE trading_schema.exchange_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 25
+  CACHE 1;
+ALTER TABLE trading_schema.exchange_id_seq
+  OWNER TO trading;
+CREATE TABLE trading_schema.exchange
+(
+  id bigserial NOT NULL,
+  name text NOT NULL,
+  CONSTRAINT pk_exchange PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE trading_schema.exchange
+  OWNER TO trading;
+
+-- Index: trading_schema.idx_exchange_id
+CREATE INDEX idx_exchange_id
+  ON trading_schema.exchange
+  USING btree
+  (id);
+
+-- Index: trading_schema.idx_exchange_name
+CREATE UNIQUE INDEX idx_exchange_name
+  ON trading_schema.exchange
+  USING btree
+  (name COLLATE pg_catalog."default");
+
+
+-- Stored Procedures --
+-- INSERT
 CREATE OR REPLACE FUNCTION trading_schema.pInsExchange(
 	p_exchange	trading_schema.exchange.name%TYPE
 	) RETURNS integer AS $$
