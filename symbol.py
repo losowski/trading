@@ -9,8 +9,9 @@ import logging
 
 from python.database import db_connection
 
+insertExchange = "trading_schema.pinsexchange"
 insertSymbol = "trading_schema.pInsSymbol"
-insertExchange = "trading_schema.pInsExchange"
+
 
 def addExchange (db, exchange):
 	logger = logging.getLogger('addExchange')
