@@ -42,7 +42,7 @@ def addSymbol (db, exchange, symbol, name):
 	update_symbols = query.fetchall()
 
 def main():
-	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', filename='quote.log',level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', level=logging.DEBUG)
 	logger = logging.getLogger('main')
 	blurb = "Symbol Adder"
 	logger.warning(blurb)

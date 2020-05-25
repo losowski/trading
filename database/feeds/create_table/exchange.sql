@@ -63,4 +63,4 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Ownership
-ALTER FUNCTION trading_schema.pinsexchange OWNER TO trading;
+ALTER FUNCTION trading_schema.pInsExchange OWNER TO trading;
