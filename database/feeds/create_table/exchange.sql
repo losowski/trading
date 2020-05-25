@@ -3,7 +3,7 @@ CREATE SEQUENCE trading_schema.exchange_id_seq
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
-  START 25
+  START 1
   CACHE 1;
 ALTER TABLE trading_schema.exchange_id_seq
   OWNER TO trading;
@@ -16,6 +16,7 @@ CREATE TABLE trading_schema.exchange
 WITH (
   OIDS=FALSE
 );
+-- Ownership
 ALTER TABLE trading_schema.exchange
   OWNER TO trading;
 
@@ -43,7 +44,7 @@ BEGIN
 	INSERT INTO
 	trading_schema.exchange
 		(
-			exchange
+			name
 		)
 	VALUES
 		(
@@ -60,3 +61,6 @@ BEGIN
 	RETURN inserted_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Ownership
+ALTER FUNCTION trading_schema.pinsexchange OWNER TO trading;
