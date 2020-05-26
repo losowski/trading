@@ -78,3 +78,6 @@ BEGIN
 	RETURN inserted_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Ownership
+ALTER FUNCTION trading_schema.pInsSymbol OWNER TO trading;

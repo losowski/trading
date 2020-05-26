@@ -27,13 +27,13 @@ def addExchange (db, exchange):
 def addSymbol (db, exchange, symbol, name):
 	logger = logging.getLogger('addSymbol')
 	logger.info("Exchange: %s", exchange)
-	logger.info("Symbol: %s", symbol)
 	logger.info("Name: %s", name)
+	logger.info("Symbol: %s", symbol)
 	query = db.get_query()
 	data_parameters = collections.OrderedDict()
 	data_parameters['exchange']			= exchange
-	data_parameters['symbol']			= symbol
 	data_parameters['name']				= name
+	data_parameters['symbol']			= symbol
 	data_list = list(data_parameters.values())
 	#execute the stored procedure
 	query.callproc(insertSymbol, data_list)
