@@ -21,7 +21,7 @@ def addExchange (db, exchange):
 	data_parameters['exchange']			= exchange
 	data_list = list(data_parameters.values())
 	#execute the stored procedure
-	query.callproc(insertExchange)
+	query.callproc(insertExchange, data_list)
 	query.execute()
 	update_symbols = query.fetchall()
 
@@ -37,7 +37,7 @@ def addSymbol (db, exchange, symbol, name):
 	data_parameters['name']				= name
 	data_list = list(data_parameters.values())
 	#execute the stored procedure
-	query.callproc(insertSymbol)
+	query.callproc(insertSymbol, data_list)
 	query.execute()
 	update_symbols = query.fetchall()
 
