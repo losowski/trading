@@ -3,7 +3,7 @@ CREATE SEQUENCE trading_schema.quote_id_seq
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
-  START 8938
+  START 1
   CACHE 1;
 ALTER TABLE trading_schema.quote_id_seq
   OWNER TO trading;
@@ -11,7 +11,7 @@ ALTER TABLE trading_schema.quote_id_seq
 
 CREATE TABLE trading_schema.quote
 (
-  id bigserial NOT NULL,
+  id bigserial NOT NULL DEFAULT nextval('trading_schema.quote_id_seq'::regclass),
   symbol_id bigint,
   datestamp timestamp without time zone NOT NULL,
   volume bigint NOT NULL,

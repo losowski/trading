@@ -9,7 +9,7 @@ ALTER TABLE trading_schema.exchange_id_seq
   OWNER TO trading;
 CREATE TABLE trading_schema.exchange
 (
-  id bigserial NOT NULL,
+  id bigserial NOT NULL DEFAULT nextval('trading_schema.exchange_id_seq'::regclass),
   name text NOT NULL,
   CONSTRAINT pk_exchange PRIMARY KEY (id)
 )

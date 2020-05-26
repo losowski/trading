@@ -3,14 +3,14 @@ CREATE SEQUENCE trading_schema.symbol_id_seq
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
-  START 6
+  START 1
   CACHE 1;
 ALTER TABLE trading_schema.symbol_id_seq
   OWNER TO trading;
 
 CREATE TABLE trading_schema.symbol
 (
-  id bigserial NOT NULL,
+  id bigserial NOT NULL DEFAULT nextval('trading_schema.symbol_id_seq1'::regclass),
   exchange_id bigint NOT NULL,
   name text NOT NULL,
   symbol text NOT NULL,
