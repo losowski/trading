@@ -52,8 +52,21 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsSymbol(
 	p_symbol	trading_schema.symbol.symbol%TYPE
 	) RETURNS integer AS $$
 DECLARE
+	exchange_id trading_schema.symbol.exchange_id%TYPE;
 	inserted_id integer := 0;
 BEGIN
+	-- Get Exchange ID
+	SELECT
+		id
+	INTO
+		exchange_id
+	FROM
+		trading_schema.exchange
+	WHERE
+		name = p_exchange
+	;
+	--TODO: Break on "no_data" with RAISE "Exchange not found"
+	-- Insert data
 	INSERT INTO
 	trading_schema.symbol
 		(
@@ -63,7 +76,7 @@ BEGIN
 		)
 	VALUES
 		(
-			(SELECT id FROM trading_schema.exchange WHERE name=p_exchange),
+			exchange_id,
 			p_symbol,
 			p_name
 		);
