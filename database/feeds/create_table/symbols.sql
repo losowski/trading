@@ -10,7 +10,7 @@ ALTER TABLE trading_schema.symbol_id_seq
 
 CREATE TABLE trading_schema.symbol
 (
-  id bigint NOT NULL DEFAULT nextval('trading_schema.symbol_id_seq1'::regclass),
+  id bigint NOT NULL DEFAULT nextval('trading_schema.symbol_id_seq'::regclass),
   exchange_id bigint NOT NULL,
   name text NOT NULL,
   symbol text NOT NULL,
