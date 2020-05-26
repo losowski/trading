@@ -11,7 +11,7 @@ ALTER TABLE trading_schema.quote_id_seq
 
 CREATE TABLE trading_schema.quote
 (
-  id bigserial NOT NULL DEFAULT nextval('trading_schema.quote_id_seq'::regclass),
+  id bigint NOT NULL DEFAULT nextval('trading_schema.quote_id_seq'::regclass),
   symbol_id bigint,
   datestamp timestamp without time zone NOT NULL,
   volume bigint NOT NULL,
