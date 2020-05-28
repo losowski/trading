@@ -10,7 +10,7 @@ import logging
 #Database
 from python.database import db_connection
 
-class StockBaseClass:
+class StockBase:
 
 	getSymbolsForUpdate="""
 		SELECT

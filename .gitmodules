@@ -1,6 +1,6 @@
 [submodule "python/database"]
-	path = pythonOLD/database
-	url = ssh://localhost/home/eugene/git/database_repo
+	path = python/database
+	url = https://github.com/losowski/psycopg2_xml_config
 [submodule "python/feeds/ystockquote"]
 	path = python/feeds/ystockquote
 	url = git://github.com/cgoldberg/ystockquote.git

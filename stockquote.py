@@ -9,7 +9,7 @@ from python.historical import yahoo
 def main():
 	print ("Quote Importer")
 	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',level=logging.DEBUG)
-	feeds = feeds_application.FeedsApplication()
+	feeds = yahoo.Yahoo()
 	feeds.initialise()
 	feeds.run()
 	feeds.shutdown()

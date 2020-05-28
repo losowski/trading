@@ -10,14 +10,14 @@ import collections
 import logging
 
 
-from python.historical import stockDataBase
+from python.historical import stockBase
 
-class Yahoo (stockDataBase.StockDataBase):
+class Yahoo (stockBase.StockBase):
 	def __init__(self):
-		stockDataBase.StockDataBase.__init__(self)
+		stockBase.StockBase.__init__(self)
 
 	def __del__(self):
-		stockDataBase.StockDataBase.__del__(self)
+		stockBase.StockBase.__del__(self)
 
 	# Overridden Quote function
 	def insertQuote(self, dataQuery, symbol, data):
