@@ -14,6 +14,15 @@ README
 ## INSTALL
 sudo pip3 install yahoo-historical
 
+## Test Exchanges
+./symbol.py --exchange=NASDAQ
+./symbol.py --exchange=NYSE
+./symbol.py --exchange=LSE
+
+## Test Symbols
+./symbol.py --exchange=NASDAQ --symbol=GOOG --name="Alphabet Inc Class C"
+./symbol.py --exchange=NASDAQ --symbol=GOOGL --name="Alphabet Inc."
+
 
 ## Brief
 + Obtains the stock quotes for last years for all stocks by symbol
