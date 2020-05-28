@@ -79,7 +79,7 @@ class FeedsApplication:
 					update_query = self.database.get_query()
 					logging.info("Updating %s: from %s to %s", symbol, last_record.isoformat(), datetime.date.today())
 					#Begin a transation to insert the data
-					for record_date, record_info in symbol_quote.iteritems():
+					for record_date, record_info in symbol_quote[1:].iteritems():
 						logging.info("DATE: %s : %s", record_date, record_info)
 						data_parameters = collections.OrderedDict()
 						data_parameters['symbol']			= symbol
@@ -91,6 +91,7 @@ class FeedsApplication:
 						data_parameters['adj_close_price']	= record_info.get('Adj Close')
 						data_parameters['volume']			= record_info.get('Volume')
 						data_list = list(data_parameters.values())
+						logging.info("Inserting %s", data_list)
 						#execute the stored procedure
 						update_query.callproc(feeds_queries.insert_quote_data, data_list)
 						#commit the data
