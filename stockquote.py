@@ -8,7 +8,7 @@ from python.feeds import feeds_application
 
 def main():
 	print ("Quote Importer")
-	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s', filename='quote.log',level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',level=logging.DEBUG)
 	feeds = feeds_application.FeedsApplication()
 	feeds.initialise()
 	feeds.run()
