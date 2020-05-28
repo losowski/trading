@@ -64,6 +64,7 @@ class FeedsApplication:
 				if (last_record.date() <  datetime.date.today()):
 					logging.info("Historical: %s < %s", last_record.date(), datetime.date.today())
 					symbol_quote = self.feeds_object.get_historical(symbol, last_record.isoformat(), datetime.date.today().isoformat())
+					logging.debug("Daily Data: %s", symbol_quote)
 					data_to_update = True
 				else:
 					#TODO: Find suitable call for current details (before historic)
