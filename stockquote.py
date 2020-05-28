@@ -4,7 +4,7 @@ Import the Stock Data from Yahoo Finance
 '''
 #import
 import logging
-from python.feeds import feeds_application
+from python.feeds import stockHistoricalData
 
 def main():
 	print ("Quote Importer")
