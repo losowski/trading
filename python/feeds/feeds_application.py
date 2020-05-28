@@ -63,7 +63,7 @@ class FeedsApplication:
 				#Get the missing data
 				if (last_record.date() <  datetime.date.today()):
 					logging.info("Historical: %s < %s", last_record.date(), datetime.date.today())
-					symbol_quote = self.feeds_object.get_historical(symbol, last_record.isoformat(), datetime.date.today().isoformat())
+					symbol_quote = self.feeds_object.get_historical(symbol, last_record, datetime.date.today())
 					logging.debug("Daily Data: %s", symbol_quote)
 					data_to_update = True
 				else:

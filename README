@@ -10,12 +10,9 @@ README
 		build-essential
 		python-lxml
 		python-pip xvfb
-+ Submodule
-		yahoo-finance
-		ystockquote
 
 ## INSTALL
-sudo pip3 install ystockquote
+sudo pip3 install yahoo-historical
 
 
 ## Brief
