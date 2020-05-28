@@ -1,3 +1,1 @@
-#!/usr/bin/python
-
-__all__ = []
+from . import ystockquote

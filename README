@@ -1,8 +1,7 @@
 README
 ======
 
-Dependencies
-============
+## Dependencies
 +	postgresql database
 +	Python:
 		psycopg
@@ -15,14 +14,15 @@ Dependencies
 		yahoo-finance
 		ystockquote
 
+## INSTALL
+sudo pip3 install ystockquote
 
-Brief
-=====
+
+## Brief
 + Obtains the stock quotes for last years for all stocks by symbol
 + Additional functions to perform mathematical analysis
 
-Binaries
-========
+## Binaries
 -- Stable
 +	stockquote.py
 	- Obtain the daily stock pricing for a stock for last 10-years
