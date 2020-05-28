@@ -1,5 +1,6 @@
 #!/usr/bin/python
-import python.feeds.ystockquote
+# sudo pip3 install ystockquote
+import ystockquote
 '''
 git clone git://github.com/cgoldberg/ystockquote.git
 cd ystockquote
