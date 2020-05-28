@@ -93,3 +93,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- Ownership
+ALTER FUNCTION trading_schema.pInsQuote OWNER TO trading;
