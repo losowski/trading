@@ -18,7 +18,7 @@ class YStockQuoteAPI:
 		pass
 
 	def get_current_price (self, symbol):
-		return ystockquote.get_price_book('GOOGL')
+		return ystockquote.get_price_book(symbol)
 		#return ystockquote.get_bid_realtime('GOOGL')
 
 	def get_historical(self, symbol, start_date, end_date):
