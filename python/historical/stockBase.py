@@ -67,8 +67,13 @@ class StockBase:
 	# Generic Function to get last updates
 	def getSymbolLastUpdate(self):
 		selectQuery = self.database.get_query()
-		#TODO: implement function to return:
-		#	list ((Symbol : lastUpdates),...)
+		selectQuery.execute(self.getSymbolsForUpdate)
+		updateSymbols = selectQuery.fetchall()
+		logging.info("Got %s symbols for update", len(update_symbols))
+		#get a list of symbols to update
+		for symbol, last_entry, update in updateSymbols:
+			logging.debug("SYM: %s : %s UPDATE: %s",symbol, last_entry, update)
+		return updateSymbols
 
 	#Generic insert quote date
 	def rawInsertQuote(query, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
@@ -94,7 +99,7 @@ class StockBase:
 		# Get the list of Symbols: (Last update)
 		symbols = self.getSymbolLastUpdate()
 		# For each symbol
-		for symbol, lastUpdate in symbols.iteritems():
+		for symbol, last_entry, update in symbols.iteritems():
 			#	Get the Stock data for that range
 			dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate)
 			#	Insert the data
