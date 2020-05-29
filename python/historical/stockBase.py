@@ -78,8 +78,8 @@ class StockBase:
 				#	Get the Stock data for that range
 				dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
 				#	Insert the data
-				dataQuery = self.database.get_query()
-				self.insertQuote(dataQuery, symbol, dataRows)
+				insertQuery = self.database.get_query()
+				self.insertQuote(insertQuery, symbol, dataRows)
 				#commit the data
 				self.database.commit()
 			else:
@@ -99,7 +99,7 @@ class StockBase:
 
 
 	#Generic insert quote date
-	def rawInsertQuote(self, query, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
+	def rawInsertQuote(self, insertQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
 		data_parameters = collections.OrderedDict()
 		data_parameters['symbol']			= symbol
 		data_parameters['date']				= date
@@ -109,10 +109,10 @@ class StockBase:
 		data_parameters['close_price']		= closePrice
 		data_parameters['adj_close_price']	= adjClosePrice
 		data_parameters['volume']			= volume
-		data_list = list(data_parameters.values())
-		logging.info("Inserting %s", data_list)
+		dataList = list(data_parameters.values())
+		logging.info("Inserting %s", dataList)
 		#execute the stored procedure
-		update_query.callproc(feeds_queries.insert_quote_data, data_list)
+		insertQuery.callproc(self.insertQuoteData, dataList)
 
 
 	# Overridden Quote function
