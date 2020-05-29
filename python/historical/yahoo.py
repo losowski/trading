@@ -16,15 +16,10 @@ class Yahoo (stockBase.StockBase):
 	def __init__(self):
 		stockBase.StockBase.__init__(self)
 
+
 	def __del__(self):
 		stockBase.StockBase.__del__(self)
 
-
-
-	# Overridden Quote function
-	def insertQuote(self, dataQuery, symbol, data):
-		self.logger.info("Do nothing - %s", data)
-		# Calls rawInsertQuote
 
 	def __convertDateToHistoricalFormat(self, dateInput):
 		logging.debug("Date: %s", dateInput)
@@ -34,6 +29,18 @@ class Yahoo (stockBase.StockBase):
 		dateData = [dateInput.year,dateInput.month, dateInput.day]
 		return dateData
 
+
 	# Overridden Quote function
 	def getHistoricalData(self, symbol, lastUpdate, todayDate):
-		self.logger.info("Do nothing - %s: (%s->%s)", symbol, lastUpdate, todayDate)
+		logging.debug("Start Stamp: %s", lastUpdate)
+		logging.debug("End Date Stamp: %s", todayDate)
+		sd = self.__convertDateToHistoricalFormat(lastUpdate)
+		ed = self.__convertDateToHistoricalFormat(todayDate)
+		data = yahoo_historical.Fetcher(symbol, sd, ed)
+		return data.get_historical()
+
+
+	# Overridden Quote function
+	def insertQuote(self, dataQuery, symbol, data):
+		self.logger.info("Do nothing - %s", data)
+		# Calls rawInsertQuote
