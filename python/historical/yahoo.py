@@ -25,5 +25,5 @@ class Yahoo (stockBase.StockBase):
 		# Calls rawInsertQuote
 
 	# Overridden Quote function
-	def getHistoricalData(symbol, lastUpdate, todayDate):
+	def getHistoricalData(self, symbol, lastUpdate, todayDate):
 		self.logger.info("Do nothing - %s: (%s->%s)", symbol, lastUpdate, todayDate)

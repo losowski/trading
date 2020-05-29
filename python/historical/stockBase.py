@@ -62,7 +62,7 @@ class StockBase:
 		self.logger.info("Do nothing - %s", data)
 
 	# Overridden Quote function
-	def getHistoricalData(symbol, lastUpdate, todayDate):
+	def getHistoricalData(self, symbol, lastUpdate, todayDate):
 		self.logger.info("Do nothing - %s: (%s->%s)", symbol, lastUpdate, todayDate)
 
 
@@ -71,7 +71,7 @@ class StockBase:
 		selectQuery = self.database.get_query()
 		selectQuery.execute(self.getSymbolsForUpdate)
 		updateSymbols = selectQuery.fetchall()
-		logging.info("Got %s symbols for update", len(update_symbols))
+		logging.info("Got %s symbols for update", len(updateSymbols))
 		#get a list of symbols to update
 		for symbol, last_entry, update in updateSymbols:
 			logging.debug("SYM: %s : %s UPDATE: %s",symbol, last_entry, update)
@@ -99,9 +99,9 @@ class StockBase:
 		#Get date now
 		todayDate = datetime.date.today()
 		# Get the list of Symbols: (Last update)
-		symbols = self.getSymbolLastUpdate()
+		updateSymbols = self.getSymbolLastUpdate()
 		# For each symbol
-		for symbol, last_entry, update in symbols.iteritems():
+		for symbol, lastUpdate, update in updateSymbols:
 			#	Get the Stock data for that range
 			dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate)
 			#	Insert the data
