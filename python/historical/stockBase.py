@@ -16,7 +16,10 @@ class StockBase:
 		SELECT
 			s.symbol,
 			date_trunc('day', MAX(q.datestamp)) as last_update,
-			justify_days(age(MAX(q.datestamp))) > '1 days' as update
+			CASE	WHEN justify_days(age(MAX(q.datestamp))) > '1 days' THEN 'Y'
+					WHEN MAX(q.datestamp) IS NULL THEN 'Y'
+					ELSE 'N'
+				END AS update
 		FROM
 			trading_schema.symbol s
 			LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
