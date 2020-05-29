@@ -26,6 +26,8 @@ class StockBase:
 			s.symbol
 		;
 	"""
+	#TODO: "update" should return Y on NONE
+	#TODO: "last_update" should return today +1 by default
 
 	# SELECT <function_name>(args);
 	#'2013-01-03': {'Adj Close': '723.67',
