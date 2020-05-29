@@ -5,14 +5,19 @@ README
 +	postgresql database
 +	Python:
 		psycopg
+
+## INSTALL
+sudo pip3 install yahoo-historical
+
+
+## Additional modules (pending)
 		qt5-default
 		libqt5webkit5-dev
 		build-essential
 		python-lxml
 		python-pip xvfb
 
-## INSTALL
-sudo pip3 install yahoo-historical
+
 
 ## Test Exchanges
 ./symbol.py --exchange=NASDAQ
@@ -29,29 +34,9 @@ sudo pip3 install yahoo-historical
 + Additional functions to perform mathematical analysis
 
 ## Binaries
--- Stable
-+	stockquote.py
-	- Obtain the daily stock pricing for a stock for last 10-years
++ symbol.py
+	- Import exchanges
+	- Import companie names by symbol
 
--- In-Progress
-+	trade_strategy.py
-	- Perform some calculations on quotes for technical analyis
-+	predictions.py
-	- Record predictions using Database
-	- Looks for signatures of particular incidents in the dataset
-
--- Incomplete binaries
-+	reliability_tester.py
-	- Test the predictions against more symbols
-+	user_interface.py
-	-	UI interface for technical analysis
-+	option_pricing.py
-	- Gets the current stock pricing for options on the symbols
-	- Idea is to provide a more whole approach to trading (for underpriced markets)
-
-
--- DEMO code bases
-+	jsonscraper.py
-		- Scraping the fundamental details of the company (from Yahoo finance)
-+	htmlscraper.py
-		- Superceded by jsonscraper (as the details are served by JSON)
++ stockquote.py
+	- Get the historical data for the stocks mentioned

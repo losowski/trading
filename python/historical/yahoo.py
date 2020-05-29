@@ -42,9 +42,11 @@ class Yahoo (stockBase.StockBase):
 
 	# Overridden Quote function
 	def insertQuote(self, dataQuery, symbol, data):
-		self.logger.info("Doing nothing - %s", data)
-		for rowData in data.iteritems():
-			date			=	rowData.get('Date')
+		#self.logger.info("Doing nothing - %s", data)
+		for rowHeader, rowData in data.iteritems():
+			self.logger.info("rowHeader - %s", rowHeader)
+			self.logger.info("rowData - %s", rowData)
+			date			=	rowHeader.get('Date')
 			openPrice		=	rowData.get('Open')
 			highPrice		=	rowData.get('High')
 			lowPrice		=	rowData.get('Low')
