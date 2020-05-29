@@ -70,13 +70,16 @@ class StockBase:
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
-			#	Get the Stock data for that range
-			dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
-			#	Insert the data
-			dataQuery = self.database.get_query()
-			self.insertQuote(dataQuery, symbol, dataRows)
-			#commit the data
-			self.database.commit()
+			if ('Y' == update):
+				#	Get the Stock data for that range
+				dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
+				#	Insert the data
+				dataQuery = self.database.get_query()
+				self.insertQuote(dataQuery, symbol, dataRows)
+				#commit the data
+				self.database.commit()
+			else:
+				self.logger.warn("No Update needed")
 
 
 	# Generic Function to get last updates
