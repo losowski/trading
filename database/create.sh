@@ -3,7 +3,7 @@
 # Script to read back backups of the database
 #
 #Create a blank file
-echo "" > create/create_tradedb.sql
+echo "" > create_tradedb.sql
 
 #Setup the basics of the database
 cat create/trading_user.sql >> create_tradedb.sql
