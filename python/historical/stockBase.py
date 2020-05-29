@@ -51,7 +51,7 @@ class StockBase:
 		self.database.connect()
 
 	def run(self):
-		self.update_quotes()
+		self.updateQuotes()
 		#self.update_key_statistics() # Temporarily disabled
 
 	def shutdown (self):
