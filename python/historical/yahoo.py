@@ -31,7 +31,7 @@ class Yahoo (stockBase.StockBase):
 
 
 	# Overridden Quote function
-	def getHistoricalData(self, symbol, lastUpdate, todayDate):
+	def getHistoricalData(self, symbol, lastUpdate, todayDate, update):	
 		logging.debug("Start Stamp: %s", lastUpdate)
 		logging.debug("End Date Stamp: %s", todayDate)
 		sd = self.__convertDateToHistoricalFormat(lastUpdate)

@@ -69,8 +69,9 @@ class StockBase:
 		updateSymbols = self.getSymbolLastUpdate()
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
+			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
 			#	Get the Stock data for that range
-			dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate)
+			dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
 			#	Insert the data
 			dataQuery = self.database.get_query()
 			self.insertQuote(dataQuery, symbol, dataRows)
@@ -108,8 +109,8 @@ class StockBase:
 
 
 	# Overridden Quote function
-	def getHistoricalData(self, symbol, lastUpdate, todayDate):
-		self.logger.info("Do nothing - %s: (%s->%s)", symbol, lastUpdate, todayDate)
+	def getHistoricalData(self, symbol, lastUpdate, todayDate, update):
+		self.logger.info("Do nothing - %s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
 
 
 	# Overridden Quote function
