@@ -43,6 +43,7 @@ class StockBase:
 		self.database		= db_connection.DBConnection()
 		self.logger		= logging.getLogger('DataImportTicker')
 
+
 	def __del__(self):
 		self.database		= None
 
@@ -50,20 +51,31 @@ class StockBase:
 	def initialise(self):
 		self.database.connect()
 
+
 	def run(self):
 		self.updateQuotes()
 		#self.update_key_statistics() # Temporarily disabled
 
+
 	def shutdown (self):
 		pass
 
-	# Overridden Quote function
-	def insertQuote(self, dataQuery, symbol, data):
-		self.logger.info("Do nothing - %s", data)
 
-	# Overridden Quote function
-	def getHistoricalData(self, symbol, lastUpdate, todayDate):
-		self.logger.info("Do nothing - %s: (%s->%s)", symbol, lastUpdate, todayDate)
+	#Generic Function to import data
+	def updateQuotes(self):
+		#Get date now
+		todayDate = datetime.date.today()
+		# Get the list of Symbols: (Last update)
+		updateSymbols = self.getSymbolLastUpdate()
+		# For each symbol
+		for symbol, lastUpdate, update in updateSymbols:
+			#	Get the Stock data for that range
+			dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate)
+			#	Insert the data
+			dataQuery = self.database.get_query()
+			self.insertQuote(dataQuery, symbol, dataRows)
+			#commit the data
+			self.database.commit()
 
 
 	# Generic Function to get last updates
@@ -76,6 +88,7 @@ class StockBase:
 		for symbol, last_entry, update in updateSymbols:
 			logging.debug("SYM: %s : %s UPDATE: %s",symbol, last_entry, update)
 		return updateSymbols
+
 
 	#Generic insert quote date
 	def rawInsertQuote(query, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
@@ -94,18 +107,14 @@ class StockBase:
 		update_query.callproc(feeds_queries.insert_quote_data, data_list)
 
 
-	#Generic Function to import data
-	def updateQuotes(self):
-		#Get date now
-		todayDate = datetime.date.today()
-		# Get the list of Symbols: (Last update)
-		updateSymbols = self.getSymbolLastUpdate()
-		# For each symbol
-		for symbol, lastUpdate, update in updateSymbols:
-			#	Get the Stock data for that range
-			dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate)
-			#	Insert the data
-			dataQuery = self.database.get_query()
-			self.insertQuote(dataQuery, symbol, dataRows)
-			#commit the data
-			self.database.commit()
+	# Overridden Quote function
+	def getHistoricalData(self, symbol, lastUpdate, todayDate):
+		self.logger.info("Do nothing - %s: (%s->%s)", symbol, lastUpdate, todayDate)
+
+
+	# Overridden Quote function
+	def insertQuote(self, dataQuery, symbol, data):
+		self.logger.info("Do nothing - %s", data)
+
+
+
