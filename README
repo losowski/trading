@@ -9,20 +9,20 @@ README
 ## INSTALL
 sudo pip3 install yahoo-historical
 
-
-## Additional modules (pending)
-		qt5-default
-		libqt5webkit5-dev
-		build-essential
-		python-lxml
-		python-pip xvfb
-
+## Setup
+1) cd database
+2) ./create.sh
+3) sudo su postgres
+4) psql
+	-- may need to cd back to directory --
+5) \i create_tradedb.sql
 
 
 ## Test Exchanges
 ./symbol.py --exchange=NASDAQ
 ./symbol.py --exchange=NYSE
 ./symbol.py --exchange=LSE
+
 
 ## Test Symbols
 ./symbol.py --exchange=NASDAQ --symbol=GOOG --name="Alphabet Inc Class C"
@@ -31,7 +31,7 @@ sudo pip3 install yahoo-historical
 
 ## Brief
 + Obtains the stock quotes for last years for all stocks by symbol
-+ Additional functions to perform mathematical analysis
+
 
 ## Binaries
 + symbol.py
@@ -40,3 +40,4 @@ sudo pip3 install yahoo-historical
 
 + stockquote.py
 	- Get the historical data for the stocks mentioned
+
