@@ -12,10 +12,13 @@ from python.database import db_connection
 
 class StockBase:
 
+	#SQL to get the current updates needed
+	#	If we have no data, presume we start form 01-Jan-1960
+	#	If checking for update, return Y if >1 day to update, or if we have nothing
 	getSymbolsForUpdate="""
 		SELECT
 			s.symbol,
-			date_trunc('day', MAX(q.datestamp)) as last_update,
+			COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', '1960-01-01') as last_update,
 			CASE	WHEN justify_days(age(MAX(q.datestamp))) > '1 days' THEN 'Y'
 					WHEN MAX(q.datestamp) IS NULL THEN 'Y'
 					ELSE 'N'
@@ -29,7 +32,6 @@ class StockBase:
 			s.symbol
 		;
 	"""
-	#TODO: "last_update" should return today +1 by default
 
 	# SELECT <function_name>(args);
 	#'2013-01-03': {'Adj Close': '723.67',
