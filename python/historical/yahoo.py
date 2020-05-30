@@ -43,6 +43,7 @@ class Yahoo (stockBase.StockBase):
 	# Overridden Quote function
 	def insertQuote(self, dataQuery, symbol, data):
 		#self.logger.info("Doing nothing - %s", data)
+		#NOTE: We get data in form of pandas.DataFrame
 		for date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume in zip(data.get('Date'), data.get('Open'), data.get('High'), data.get('Low'), data.get('Close'), data.get('Adj Close'), data.get('Volume')):
 			# Calls rawInsertQuote
 			self.rawInsertQuote(dataQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume)
