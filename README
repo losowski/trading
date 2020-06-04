@@ -19,6 +19,7 @@ sudo pip3 install yahoo-historical
 
 
 ## Test Exchanges
+./symbol.py --exchange=AMEX
 ./symbol.py --exchange=NASDAQ
 ./symbol.py --exchange=NYSE
 ./symbol.py --exchange=LSE
