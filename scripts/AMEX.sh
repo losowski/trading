@@ -1,5 +1,6 @@
 #/bin/sh
 # Insert AMEX Symbols
+( cd ../
 # Insert Stock Exchange
 ./symbol.py --exchange=AMEX
 # Insert Stock Symbols
@@ -218,3 +219,4 @@
 ./symbol.py --exchange "AMEX" --symbol"SCE-D" --name"Southern California Edison Co 4.32% Cum Pfd Usd25"
 ./symbol.py --exchange "AMEX" --symbol"SCE-E" --name"Southern California Edison Co 4.78% Cum Pfd Usd25"
 ./symbol.py --exchange "AMEX" --symbol"YCBD-A" --name"Cbdmd Inc 8% Series A Cum Convert Pfd Stk Usd25"
+) #END of Change Directory

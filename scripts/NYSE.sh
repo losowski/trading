@@ -1,5 +1,6 @@
 #/bin/sh
 # Insert NYSE Symbols
+( cd ../
 # Insert Stock Exchange
 ./symbol.py --exchange=NYSE
 # Insert Stock Symbols
@@ -2024,3 +2025,4 @@
 ./symbol.py --exchange "NYSE" --symbol"WRB-E" --name"Berkley(W.R.)Corp 5.70% Subordinated Debentures 30/03/2058"
 ./symbol.py --exchange "NYSE" --symbol"WRB-F" --name"Berkley(W.R.)Corp 5.10%Subord Debentures Due 30/12/2059"
 ./symbol.py --exchange "NYSE" --symbol"XAN-C" --name"Exantas Capital Corp 8.625% Cum Red Fxd To Floating Prf Ser C"
+) #END of Change Directory

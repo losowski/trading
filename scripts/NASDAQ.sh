@@ -1,5 +1,6 @@
 #/bin/sh
 # Insert NASDAQ Symbols
+( cd ../
 # Insert Stock Exchange
 ./symbol.py --exchange=NASDAQ
 # Insert Stock Symbols
@@ -1406,3 +1407,4 @@
 ./symbol.py --exchange "NASDAQ" --symbol"WTFCM" --name"Wintrust Financial Corp Fxd/Fltg Non Cum Perp Pfd"
 ./symbol.py --exchange "NASDAQ" --symbol"WTFCP" --name"Wintrust Financial Corp 6.875% Dep Shs Rep 1/1000 Pep Pfd Ser E"
 ./symbol.py --exchange "NASDAQ" --symbol"WTREP" --name"Watford Holdings Ltd 8.5% Cum Red Pref Shs Usd25.00"
+) #END of Change Directory
