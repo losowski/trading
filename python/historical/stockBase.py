@@ -2,13 +2,16 @@
 #
 # Base class - Contains the queries to run and basic functionality
 #
-
 import datetime
 import collections
 import logging
+import sys
+
+import psycopg2
 
 #Database
 from python.database import db_connection
+
 
 class StockBase:
 
@@ -86,6 +89,11 @@ class StockBase:
 				except psycopg2.Error as e:
 					logging.error("PGCODE: %s", e.pgcode)
 					logging.error("PGERROR: %s", e.pgerror)
+					if ('25P02' != e.pgcode):
+						logging.critical("Irrecoverable error!")
+						logging.error("PGCODE: %s", e.pgcode)
+						logging.error("PGERROR: %s", e.pgerror)
+						sys.exit()
 			else:
 				self.logger.warn("No Update needed")
 
