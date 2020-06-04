@@ -23,6 +23,9 @@ cd scripts
 ./NASDAQ.sh
 ./NYSE.sh
 
+# Daily running
+./stockquote.py
+
 # TEST
 ## Test Exchanges
 ./symbol.py --exchange=AMEX
