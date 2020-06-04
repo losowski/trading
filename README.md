@@ -17,7 +17,13 @@ sudo pip3 install yahoo-historical
 	-- may need to cd back to directory --
 5) \i create_tradedb.sql
 
+# Import Symbols
+cd scripts
+./AMEX.sh
+./NASDAQ.sh
+./NYSE.sh
 
+# TEST
 ## Test Exchanges
 ./symbol.py --exchange=AMEX
 ./symbol.py --exchange=NASDAQ
