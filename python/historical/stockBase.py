@@ -77,11 +77,15 @@ class StockBase:
 			if ('Y' == update):
 				#	Get the Stock data for that range
 				dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
-				#	Insert the data
-				insertQuery = self.database.get_query()
-				self.insertQuote(insertQuery, symbol, dataRows)
-				#commit the data
-				self.database.commit()
+				try:
+					#	Insert the data
+					insertQuery = self.database.get_query()
+					self.insertQuote(insertQuery, symbol, dataRows)
+					#commit the data
+					self.database.commit()
+				except psycopg2.Error as e:
+					logging.error("PGCODE: %s", e.pgcode)
+					logging.error("PGERROR: %s", e.pgerror)
 			else:
 				self.logger.warn("No Update needed")
 
