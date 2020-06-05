@@ -125,7 +125,7 @@ class StockBase:
 		data_parameters['adj_close_price']	= adjClosePrice
 		data_parameters['volume']			= volume
 		dataList = list(data_parameters.values())
-		logging.info("Inserting %s", dataList)
+		logging.debug("Inserting %s", dataList)
 		#execute the stored procedure
 		insertQuery.callproc(self.insertQuoteData, dataList)
 
