@@ -94,7 +94,7 @@ def setSymbolEnabled(db, symbol, state):
 	update_symbols = query.fetchall()
 
 def main():
-	logging.basicConfig(format='%(asctime)s\t%(name)-16s\t%(funcName)-16s\t[%(levelname)-8s] %(message)s', level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s\t%(name)-16s\t%(funcName)-16s\t[%(levelname)-8s] %(message)s', level=logging.INFO)
 	logger = logging.getLogger('main')
 	blurb = "Symbol Adder"
 	logger.warning(blurb)
