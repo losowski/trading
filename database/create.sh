@@ -26,10 +26,3 @@ echo "-- SCRIPT END" >> create_tradedb.sql
 )
 
 cat feeds/feeds.sql >> create_tradedb.sql
-
-#Write the data into the system
-#cat tradingdb.sql >> create_tradedb.sql
-#cat tradingdb_data.sql >> create_tradedb.sql
-
-#Modify the schema so we load the correct one
-#sed -iv 's/trading_schema/tradingdb.trading_schema/' create_tradedb.sql
