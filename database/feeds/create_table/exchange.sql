@@ -13,7 +13,8 @@ CREATE TABLE trading_schema.exchange
   id bigint NOT NULL DEFAULT nextval('trading_schema.exchange_id_seq'::regclass),
   name text NOT NULL,
   enabled character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
-  CONSTRAINT pk_exchange PRIMARY KEY (id)
+  CONSTRAINT pk_exchange PRIMARY KEY (id),
+  CONSTRAINT ck_exchange_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar])) NOT VALID
 )
 WITH (
   OIDS=FALSE

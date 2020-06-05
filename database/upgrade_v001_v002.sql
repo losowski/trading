@@ -2,9 +2,17 @@
 ALTER TABLE trading_schema.exchange
     ADD COLUMN enabled character(1) NOT NULL DEFAULT 'Y';
 
+ALTER TABLE trading_schema.exchange
+    ADD CONSTRAINT ck_exchange_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar]))
+    NOT VALID;
+
 -- Symbol
 ALTER TABLE trading_schema.symbol
     ADD COLUMN enabled character(1) NOT NULL DEFAULT 'Y';
+
+ALTER TABLE trading_schema.symbol
+    ADD CONSTRAINT ck_symbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar]))
+    NOT VALID;
 
 -- Disable Exchange
 CREATE OR REPLACE FUNCTION trading_schema.pDisableExchange(

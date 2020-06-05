@@ -19,7 +19,8 @@ CREATE TABLE trading_schema.symbol
   CONSTRAINT fk_symbol_exchange_id FOREIGN KEY (exchange_id)
       REFERENCES trading_schema.exchange (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT uc_symbol UNIQUE (symbol)
+  CONSTRAINT uc_symbol UNIQUE (symbol),
+  CONSTRAINT ck_symbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar])) NOT VALID
 )
 WITH (
   OIDS=FALSE
