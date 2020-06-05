@@ -22,18 +22,18 @@ DISABLE		=	'N'
 
 def getEnableState(enabled):
 	logger = logging.getLogger('getEnableState')
-	logger.info("Enabled: %s", enabled)
+	logger.debug("Enabled: %s", enabled)
 	state = NONE
 	if enabled in (ENABLE, DISABLE):
 		state = enabled
-	logger.info("State: %s", state)
+	logger.debug("State: %s", state)
 	return state
 
 
 # -- Exchange
 def addExchange (db, exchange):
 	logger = logging.getLogger('addExchange')
-	logger.info("Exchange: %s", exchange)
+	logger.debug("Exchange: %s", exchange)
 	query = db.get_query()
 	data_parameters = collections.OrderedDict()
 	data_parameters['exchange']			= exchange
@@ -45,8 +45,8 @@ def addExchange (db, exchange):
 
 def setExchangeEnabled(db, exchange, state):
 	logger = logging.getLogger('setExchangeEnabled')
-	logger.info("Exchange: %s", exchange)
-	logger.info("State: %s", state)
+	logger.debug("Exchange: %s", exchange)
+	logger.debug("State: %s", state)
 	query = db.get_query()
 	data_parameters = collections.OrderedDict()
 	data_parameters['exchange']			= exchange
@@ -63,9 +63,9 @@ def setExchangeEnabled(db, exchange, state):
 # -- Symbol
 def addSymbol (db, exchange, symbol, name):
 	logger = logging.getLogger('addSymbol')
-	logger.info("Exchange: %s", exchange)
-	logger.info("Name: %s", name)
-	logger.info("Symbol: %s", symbol)
+	logger.debug("Exchange: %s", exchange)
+	logger.debug("Name: %s", name)
+	logger.debug("Symbol: %s", symbol)
 	query = db.get_query()
 	data_parameters = collections.OrderedDict()
 	data_parameters['exchange']			= exchange
@@ -79,8 +79,8 @@ def addSymbol (db, exchange, symbol, name):
 
 def setSymbolEnabled(db, symbol, state):
 	logger = logging.getLogger('setSymbolEnabled')
-	logger.info("Symbol: %s", symbol)
-	logger.info("State: %s", state)
+	logger.debug("Symbol: %s", symbol)
+	logger.debug("State: %s", state)
 	query = db.get_query()
 	data_parameters = collections.OrderedDict()
 	data_parameters['symbol']			= symbol
