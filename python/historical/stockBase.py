@@ -27,8 +27,11 @@ class StockBase:
 					ELSE 'N'
 				END AS update
 		FROM
-			trading_schema.symbol s
+			trading_schema.exchange e
+			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
 			LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
+		WHERE
+			e.enabled = 'Y'
 		GROUP BY
 			s.symbol
 		ORDER BY
