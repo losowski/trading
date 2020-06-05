@@ -62,17 +62,27 @@ class StockBase:
 		self.database.connect()
 
 
-	def run(self):
-		self.updateQuotes()
+	def run(self, ignore):
+		self.updateQuotes(ignore)
 		#self.update_key_statistics() # Temporarily disabled
 
 
 	def shutdown (self):
 		pass
 
+	#Disable problem symbols
+	def setSymbolDisabled(self, symbol, state):
+		query = self.database.get_query()
+		data_parameters = collections.OrderedDict()
+		data_parameters['symbol']			= symbol
+		data_list = list(data_parameters.values())
+		query.callproc("trading_schema.pDisableSymbol", data_list)
+		update_symbols = query.fetchall()
+		#commit the data
+		self.database.commit()
 
 	#Generic Function to import data
-	def updateQuotes(self):
+	def updateQuotes(self, ignore):
 		#Get date now
 		todayDate = datetime.date.today()
 		# Get the list of Symbols: (Last update)
@@ -92,11 +102,16 @@ class StockBase:
 				except psycopg2.Error as e:
 					logging.error("PGCODE: %s", e.pgcode)
 					logging.error("PGERROR: %s", e.pgerror)
-					if ('25P02' != e.pgcode):
+					if (('25P02' == e.pgcode) or ('42883' == e.pgcode)):
+						self.database.rollback()
+						if (True == ignore):
+							self.setSymbolDisabled(symbol, 'N')
+					elif ('25P02' != e.pgcode):
 						logging.critical("Irrecoverable error!")
 						logging.error("PGCODE: %s", e.pgcode)
 						logging.error("PGERROR: %s", e.pgerror)
 						sys.exit()
+
 			else:
 				self.logger.warn("No Update needed")
 

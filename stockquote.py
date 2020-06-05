@@ -11,7 +11,7 @@ def main():
 	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',level=logging.INFO)
 	feeds = yahoo.Yahoo()
 	feeds.initialise()
-	feeds.run()
+	feeds.run(True)
 	feeds.shutdown()
 	print("Exiting...")
 
