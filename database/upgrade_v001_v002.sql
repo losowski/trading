@@ -15,9 +15,9 @@ DECLARE
 BEGIN
 	UPDATE trading_schema.exchange SET enabled = 'N' WHERE name = p_exchange;
 
-	changed := SQL%rowcount;
+	GET DIAGNOSTICS changed = ROW_COUNT;
 
-	RETURN inserted_id;
+	RETURN changed;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -33,9 +33,9 @@ DECLARE
 BEGIN
 	UPDATE trading_schema.exchange SET enabled = 'Y' WHERE name = p_exchange;
 
-	changed := SQL%rowcount;
+	GET DIAGNOSTICS changed = ROW_COUNT;
 
-	RETURN inserted_id;
+	RETURN changed;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -51,9 +51,9 @@ DECLARE
 BEGIN
 	UPDATE trading_schema.symbol SET enabled = 'N' WHERE symbol = p_name;
 
-	changed := SQL%rowcount;
+	GET DIAGNOSTICS changed = ROW_COUNT;
 
-	RETURN inserted_id;
+	RETURN changed;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -69,9 +69,9 @@ DECLARE
 BEGIN
 	UPDATE trading_schema.symbol SET enabled = 'Y' WHERE symbol = p_name;
 
-	changed := SQL%rowcount;
+	GET DIAGNOSTICS changed = ROW_COUNT;
 
-	RETURN inserted_id;
+	RETURN changed;
 END;
 $$ LANGUAGE plpgsql;
 
