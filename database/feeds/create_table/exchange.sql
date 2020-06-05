@@ -12,7 +12,7 @@ CREATE TABLE trading_schema.exchange
 (
   id bigint NOT NULL DEFAULT nextval('trading_schema.exchange_id_seq'::regclass),
   name text NOT NULL,
-  enable character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+  enabled character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
   CONSTRAINT pk_exchange PRIMARY KEY (id)
 )
 WITH (

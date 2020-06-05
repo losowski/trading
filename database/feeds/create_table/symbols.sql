@@ -14,7 +14,7 @@ CREATE TABLE trading_schema.symbol
   exchange_id bigint NOT NULL,
   name text NOT NULL,
   symbol text NOT NULL,
-  enable character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
+  enabled character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
   CONSTRAINT pk_symbol PRIMARY KEY (id),
   CONSTRAINT fk_symbol_exchange_id FOREIGN KEY (exchange_id)
       REFERENCES trading_schema.exchange (id) MATCH SIMPLE
