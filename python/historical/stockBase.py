@@ -85,6 +85,7 @@ class StockBase:
 		#Get date now
 		todayDate = self.getTodaysDate()
 		# Get the list of Symbols: (Last update)
+		#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
 		updateSymbols = self.getSymbolLastUpdate()
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
@@ -113,8 +114,10 @@ class StockBase:
 
 
 	# Generic Function to get last updates
+	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
 	def getSymbolLastUpdate(self):
 		selectQuery = self.database.get_query()
+		# TODO: Pass in Friday here to get a reduce number of entries
 		selectQuery.execute(self.getSymbolsForUpdate)
 		updateSymbols = selectQuery.fetchall()
 		logging.info("Got %s symbols for update", len(updateSymbols))
