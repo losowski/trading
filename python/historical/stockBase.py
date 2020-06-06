@@ -70,11 +70,20 @@ class StockBase:
 	def shutdown (self):
 		pass
 
+	def getTodaysDate(self):
+		doy = datetime.date.today().weekday()
+		friday = 0
+		#Can only get quotes Monday to Friday (0-4)
+		if (doy > 4):
+			friday = doy - 4
+		#Create an interval
+		date = datetime.date.today() - datetime.timedelta(days=friday)
+		return date
 
 	#Generic Function to import data
 	def updateQuotes(self):
 		#Get date now
-		todayDate = datetime.date.today()
+		todayDate = self.getTodaysDate()
 		# Get the list of Symbols: (Last update)
 		updateSymbols = self.getSymbolLastUpdate()
 		# For each symbol
