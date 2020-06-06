@@ -89,7 +89,9 @@ class StockBase:
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
-			if ('Y' == update):
+			#Check if we are more than 1 day (Monday-Friday)
+			#TODO: Implement check for if we are more than 1 day monday-friday
+			if ('Y' == update)::
 				#	Get the Stock data for that range
 				dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
 				try:
