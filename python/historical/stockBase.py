@@ -78,6 +78,7 @@ class StockBase:
 			friday = doy - 4
 		#Create an interval
 		date = datetime.date.today() - datetime.timedelta(days=friday)
+		self.logger.info("Weekday date: %s", date)
 		return date
 
 	#Generic Function to import data
@@ -92,7 +93,7 @@ class StockBase:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
 			#Check if we are more than 1 day (Monday-Friday)
 			#TODO: Implement check for if we are more than 1 day monday-friday
-			if ('Y' == update)::
+			if ('Y' == update):
 				#	Get the Stock data for that range
 				dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
 				try:
