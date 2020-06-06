@@ -32,6 +32,8 @@ class StockBase:
 			LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
 		WHERE
 			e.enabled = 'Y'
+		AND
+			s.datestamp >= TIMESTAMP %s
 		GROUP BY
 			s.symbol
 		ORDER BY
@@ -86,8 +88,7 @@ class StockBase:
 		#Get date now
 		todayDate = self.getTodaysDate()
 		# Get the list of Symbols: (Last update)
-		#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
-		updateSymbols = self.getSymbolLastUpdate()
+		updateSymbols = self.getSymbolLastUpdate(todayDate)
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
@@ -116,10 +117,9 @@ class StockBase:
 
 	# Generic Function to get last updates
 	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
-	def getSymbolLastUpdate(self):
+	def getSymbolLastUpdate(self, todayDate):
 		selectQuery = self.database.get_query()
-		# TODO: Pass in Friday here to get a reduce number of entries
-		selectQuery.execute(self.getSymbolsForUpdate)
+		selectQuery.execute(self.getSymbolsForUpdate, todayDate.isoformat())
 		updateSymbols = selectQuery.fetchall()
 		logging.info("Got %s symbols for update", len(updateSymbols))
 		#get a list of symbols to update
