@@ -18,36 +18,11 @@ class StockBase:
 	#SQL to get the current updates needed
 	#	If we have no data, presume we start form 01-Jan-1960
 	#	If checking for update, return Y if >1 day to update, or if we have nothing
-	getSymbolsForUpdate2="""
-		SELECT
-			s.symbol,
-			COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', '1960-01-01') as last_update,
-			CASE	WHEN justify_days(age(MAX(q.datestamp))) > '1 days' THEN 'Y'
-					WHEN MAX(q.datestamp) IS NULL THEN 'Y'
-					ELSE 'N'
-				END AS update
-		FROM
-			trading_schema.exchange e
-			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
-			LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
-		WHERE
-			e.enabled = 'Y'
-		AND
-			( q.datestamp < %(currentdate)s
-				OR
-			q.datestamp IS NULL)
-		GROUP BY
-			s.symbol
-		ORDER BY
-			s.symbol
-		;
-	"""
-	
 	getSymbolsForUpdate="""
 		WITH data AS (
 			SELECT
 				s.symbol,
-				COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', '1960-01-01') as last_update
+				COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', '1960-01-01') AS last_update
 			FROM
 				trading_schema.exchange e
 				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
