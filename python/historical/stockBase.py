@@ -33,7 +33,9 @@ class StockBase:
 		WHERE
 			e.enabled = 'Y'
 		AND
-			q.datestamp >= %(currentdate)s
+			(q.datestamp <= %(currentdate)s
+				OR
+			q.datestamp IS NULL)
 		GROUP BY
 			s.symbol
 		ORDER BY
