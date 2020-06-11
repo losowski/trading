@@ -41,7 +41,7 @@ class StockBase:
 		FROM
 			data d
 		WHERE
-			d.last_update < %(currentdate)
+			d.last_update < %(currentdate)s
 		ORDER BY
 			d.symbol
 		;
