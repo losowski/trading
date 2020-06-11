@@ -19,23 +19,31 @@ class StockBase:
 	#	If we have no data, presume we start form 01-Jan-1960
 	#	If checking for update, return Y if >1 day to update, or if we have nothing
 	getSymbolsForUpdate="""
+		WITH data AS (
+			SELECT
+				s.symbol,
+				COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', '1960-01-01') AS last_update
+			FROM
+				trading_schema.exchange e
+				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
+				LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
+			WHERE
+				e.enabled = 'Y'
+			GROUP BY
+				s.symbol
+		)
 		SELECT
-			s.symbol,
-			COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', '1960-01-01') as last_update,
-			CASE	WHEN justify_days(age(MAX(q.datestamp))) > '1 days' THEN 'Y'
-					WHEN MAX(q.datestamp) IS NULL THEN 'Y'
+			d.symbol,
+			d.last_update,
+			CASE	WHEN justify_days(age(d.last_update)) > '1 days' THEN 'Y'
 					ELSE 'N'
-				END AS update
+			END AS update
 		FROM
-			trading_schema.exchange e
-			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
-			LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
+			data d
 		WHERE
-			e.enabled = 'Y'
-		GROUP BY
-			s.symbol
+			d.last_update < %(currentdate)s
 		ORDER BY
-			s.symbol
+			d.symbol
 		;
 	"""
 
@@ -70,6 +78,7 @@ class StockBase:
 	def shutdown (self):
 		pass
 
+
 	#Disable problem symbols
 	def setSymbolDisabled(self, symbol, state):
 		query = self.database.get_query()
@@ -81,15 +90,29 @@ class StockBase:
 		#commit the data
 		self.database.commit()
 
+
+	def getTodaysDate(self):
+		doy = datetime.date.today().weekday()
+		friday = 0
+		#Can only get quotes Monday to Friday (0-4)
+		if (doy > 4):
+			friday = doy - 4
+		#Create an interval
+		date = datetime.date.today() - datetime.timedelta(days=friday)
+		self.logger.info("Weekday date: %s", date)
+		return date
+
 	#Generic Function to import data
 	def updateQuotes(self, ignore):
 		#Get date now
-		todayDate = datetime.date.today()
+		todayDate = self.getTodaysDate()
 		# Get the list of Symbols: (Last update)
-		updateSymbols = self.getSymbolLastUpdate()
+		updateSymbols = self.getSymbolLastUpdate(todayDate)
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
+			#Check if we are more than 1 day (Monday-Friday)
+			#TODO: Implement check for if we are more than 1 day monday-friday
 			if ('Y' == update):
 				#	Get the Stock data for that range
 				dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
@@ -117,9 +140,14 @@ class StockBase:
 
 
 	# Generic Function to get last updates
-	def getSymbolLastUpdate(self):
+	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
+	def getSymbolLastUpdate(self, todayDate):
 		selectQuery = self.database.get_query()
-		selectQuery.execute(self.getSymbolsForUpdate)
+		logging.info("Today format: %s", todayDate)
+		dataDict = dict()
+		dataDict['currentdate']			= todayDate.isoformat()
+		logging.debug("Inserting %s", dataDict)
+		selectQuery.execute(self.getSymbolsForUpdate, dataDict)
 		updateSymbols = selectQuery.fetchall()
 		logging.info("Got %s symbols for update", len(updateSymbols))
 		#get a list of symbols to update
