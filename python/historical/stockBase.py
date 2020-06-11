@@ -33,7 +33,7 @@ class StockBase:
 		WHERE
 			e.enabled = 'Y'
 		AND
-			s.datestamp >= TIMESTAMP %s
+			q.datestamp >= %(currentdate)s
 		GROUP BY
 			s.symbol
 		ORDER BY
@@ -119,7 +119,12 @@ class StockBase:
 	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
 	def getSymbolLastUpdate(self, todayDate):
 		selectQuery = self.database.get_query()
-		selectQuery.execute(self.getSymbolsForUpdate, todayDate.isoformat())
+		logging.info("Today format: %s", todayDate)
+		dataDict = dict()
+		dataDict['currentdate']			= todayDate.isoformat()
+		logging.debug("Inserting %s", dataDict)
+		selectQuery.execute(self.getSymbolsForUpdate, dataDict)
+		
 		updateSymbols = selectQuery.fetchall()
 		logging.info("Got %s symbols for update", len(updateSymbols))
 		#get a list of symbols to update
