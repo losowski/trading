@@ -105,6 +105,7 @@ def main():
 	parser.add_argument('--symbol', dest='symbol', type=str, help='Stock symbol')
 	parser.add_argument('--name', dest='name', type=str, help='Human readable name')
 	parser.add_argument('--enable', dest='enable', type=str, default='Y', help='Enable')
+	#TODO: Add means to query exchange and symbols (--get)
 	#Get the arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)
