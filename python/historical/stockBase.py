@@ -47,7 +47,7 @@ class StockBase:
 		;
 	"""
 	#TODO: INDEX on s.enabled
-	#TODO: INDEX on e.enabled
+	#TODO: Improve speed (takes an age)
 
 	# SELECT <function_name>(args);
 	#'2013-01-03': {'Adj Close': '723.67',
