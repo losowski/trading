@@ -8,25 +8,6 @@ ALTER TABLE trading_schema.symbol
 
 CREATE INDEX idx_symbol_last_update ON trading_schema.symbol USING btree (last_update);
 
--- Set the symbol.last_update
--- Set the last update with NOW (localtimestamp)
-CREATE OR REPLACE FUNCTION trading_schema.pSymbolLastUpdate(
-	p_symbol_id  trading_schema.symbol.id%TYPE
-	) RETURNS integer AS $$
-DECLARE
-	changed integer := 0;
-BEGIN
-	UPDATE trading_schema.symbol SET last_update = localtimestamp WHERE id = p_symbol_id;
-
-	GET DIAGNOSTICS changed = ROW_COUNT;
-
-	RETURN changed;
-END;
-$$ LANGUAGE plpgsql;
-
--- Ownership
-ALTER FUNCTION trading_schema.pSymbolLastUpdate OWNER TO trading;
-
 -- Stored Procedures --
 -- InsQuote(%(symbol), %(date), %(open_price), %(high_price), %(low_price), %(close_price), %(adj_close_price), %(volume))
 CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
@@ -79,7 +60,7 @@ BEGIN
 		);
 
 	-- Call the update function
-	SELECT trading_schema.pSymbolLastUpdate(symbol_id);
+	UPDATE trading_schema.symbol SET last_update = localtimestamp WHERE id = p_symbol_id;
 	-- Get the inserted index
 	SELECT
 		*
