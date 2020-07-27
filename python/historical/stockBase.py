@@ -29,6 +29,8 @@ class StockBase:
 				LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
 			WHERE
 				e.enabled = 'Y'
+			AND
+				q.datestamp < %(currentdate)s
 			GROUP BY
 				s.symbol
 		)
@@ -40,8 +42,6 @@ class StockBase:
 			END AS update
 		FROM
 			data d
-		WHERE
-			d.last_update < %(currentdate)s
 		ORDER BY
 			d.symbol
 		;
