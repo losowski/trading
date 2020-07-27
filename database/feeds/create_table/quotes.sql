@@ -49,7 +49,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
 	p_symbol				trading_schema.symbol.symbol%TYPE,
 	p_date					trading_schema.quote.datestamp%TYPE,
 	p_open_price			trading_schema.quote.open_price%TYPE,
-	p_high_price		  	trading_schema.quote.high_price%TYPE,
+	p_high_price			trading_schema.quote.high_price%TYPE,
 	p_low_price				trading_schema.quote.low_price%TYPE,
 	p_close_price			trading_schema.quote.close_price%TYPE,
 	p_adj_close_price		trading_schema.quote.adjusted_close_price%TYPE,
@@ -57,7 +57,19 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
 	) RETURNS integer AS $$
 DECLARE
 	inserted_id integer := 0;
+	symbol_id trading_schema.symbol.id%TYPE := NULL;
 BEGIN
+	-- Get the symbol id
+	SELECT
+		id
+	INTO
+		symbol_id
+	FROM
+		trading_schema.symbol
+	WHERE
+		symbol = p_symbol
+	;
+	-- Insert the quote
 	INSERT INTO
 	trading_schema.quote
 		(
@@ -72,7 +84,7 @@ BEGIN
 		)
 	VALUES
 		(
-			(SELECT id FROM trading_schema.symbol WHERE symbol=p_symbol),
+			symbol_id,
 			p_date,
 			p_open_price,
 			p_high_price,
@@ -82,6 +94,9 @@ BEGIN
 			p_volume
 		);
 
+	-- Call the update function
+	UPDATE trading_schema.symbol SET last_update = localtimestamp WHERE id = symbol_id;
+	-- Get the inserted index
 	SELECT
 		*
 	INTO
