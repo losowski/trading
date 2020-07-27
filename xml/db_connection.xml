@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="render.xsl"?>
 <!DOCTYPE ui SYSTEM "db_connection.dtd">
-<!-- psql -d tradingdb -U trading -w -->
+<!-- psql -h localhost -d tradingdb -U trading -->
 <database>
 	<type>postgresql</type>
 	<connection>

@@ -1,4 +1,4 @@
-﻿-- Get latest quote
+-- Get latest quote
 CREATE OR REPLACE FUNCTION quote_latest_date(symbol_name TEXT) 
 RETURNS timestamp without time zone AS $$
 DECLARE

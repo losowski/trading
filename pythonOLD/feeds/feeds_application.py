@@ -3,10 +3,10 @@ import datetime
 import collections
 import logging
 
-from database import db_connection
-from feeds import feeds_core_api
-from feeds import feeds_queries
-from feeds.yahoo_finance import yahoo_statistics
+from python.database import db_connection
+from python.feeds import feeds_core_api
+from python.feeds import feeds_queries
+#from python.feeds.yahoo_finance import yahoo_statistics
 
 
 class FeedsApplication:
@@ -26,7 +26,7 @@ class FeedsApplication:
 
 	def run(self):
 		self.update_quotes()
-		self.update_key_statistics() # Temporarily disabled
+		#self.update_key_statistics() # Temporarily disabled
 
 	def shutdown (self):
 		pass
@@ -49,7 +49,7 @@ class FeedsApplication:
 			#Inquire how much data we have: None = get all, else get last date
 			if last_entry == None and update == None:
 				logging.info("New Symbol: %s", symbol)
-				date_interval = datetime.date.today() - datetime.timedelta(365*10) # Go back maximum number of years
+				date_interval = datetime.date.today() - datetime.timedelta(366*60) # Go back maximum number of years
 				logging.info("Date Interval %s", date_interval)
 				last_entry = datetime.datetime( date_interval.year, date_interval.month, date_interval.day )
 				last_record = last_entry
@@ -63,7 +63,8 @@ class FeedsApplication:
 				#Get the missing data
 				if (last_record.date() <  datetime.date.today()):
 					logging.info("Historical: %s < %s", last_record.date(), datetime.date.today())
-					symbol_quote = self.feeds_object.get_historical(symbol, last_record.isoformat(), datetime.date.today().isoformat())
+					symbol_quote = self.feeds_object.get_historical(symbol, last_record, datetime.date.today())
+					logging.debug("Daily Data: %s", symbol_quote)
 					data_to_update = True
 				else:
 					#TODO: Find suitable call for current details (before historic)
@@ -78,7 +79,7 @@ class FeedsApplication:
 					update_query = self.database.get_query()
 					logging.info("Updating %s: from %s to %s", symbol, last_record.isoformat(), datetime.date.today())
 					#Begin a transation to insert the data
-					for record_date, record_info in symbol_quote.iteritems():
+					for record_date, record_info in symbol_quote[1:].iteritems():
 						logging.info("DATE: %s : %s", record_date, record_info)
 						data_parameters = collections.OrderedDict()
 						data_parameters['symbol']			= symbol
@@ -90,6 +91,7 @@ class FeedsApplication:
 						data_parameters['adj_close_price']	= record_info.get('Adj Close')
 						data_parameters['volume']			= record_info.get('Volume')
 						data_list = list(data_parameters.values())
+						logging.info("Inserting %s", data_list)
 						#execute the stored procedure
 						update_query.callproc(feeds_queries.insert_quote_data, data_list)
 						#commit the data
