@@ -12,12 +12,12 @@ CREATE INDEX idx_symbol_last_update ON trading_schema.symbol USING btree (last_u
 -- InsQuote(%(symbol), %(date), %(open_price), %(high_price), %(low_price), %(close_price), %(adj_close_price), %(volume))
 CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
 	p_symbol				trading_schema.symbol.symbol%TYPE,
-	p_date				  trading_schema.quote.datestamp%TYPE,
+	p_date					trading_schema.quote.datestamp%TYPE,
 	p_open_price			trading_schema.quote.open_price%TYPE,
 	p_high_price			trading_schema.quote.high_price%TYPE,
-	p_low_price			 trading_schema.quote.low_price%TYPE,
-	p_close_price		   trading_schema.quote.close_price%TYPE,
-	p_adj_close_price	   trading_schema.quote.adjusted_close_price%TYPE,
+	p_low_price				trading_schema.quote.low_price%TYPE,
+	p_close_price			trading_schema.quote.close_price%TYPE,
+	p_adj_close_price		trading_schema.quote.adjusted_close_price%TYPE,
 	p_volume				trading_schema.quote.volume%TYPE
 	) RETURNS integer AS $$
 DECLARE
