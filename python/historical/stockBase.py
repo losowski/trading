@@ -26,7 +26,7 @@ class StockBase:
 			FROM
 				trading_schema.exchange e
 				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
-				LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id)
+				LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id AND q.datestamp >= s.last_update - INTERVAL '7 day')
 			WHERE
 				e.enabled = 'Y'
 			AND
