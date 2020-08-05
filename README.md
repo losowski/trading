@@ -7,6 +7,7 @@ README
 		psycopg
 
 ## INSTALL
+sudo apt-get install python-psycopg2 python3-psycopg2
 sudo pip3 install yahoo-historical
 
 ## Setup
