@@ -83,10 +83,8 @@ BEGIN
 			s.*
 		FROM
 			trading_schema.exchange e
-			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
+			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id)
 		WHERE
-			e.enabled='Y'
-		AND
 			s.last_update IS NULL
 		ORDER BY
 			s.id
