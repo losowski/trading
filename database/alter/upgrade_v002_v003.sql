@@ -80,7 +80,7 @@ DO $$DECLARE
 BEGIN
 	FOR sym IN
 		SELECT
-			*
+			s.*
 		FROM
 			trading_schema.exchange e
 			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
