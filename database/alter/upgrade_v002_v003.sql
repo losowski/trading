@@ -72,3 +72,36 @@ BEGIN
 	RETURN inserted_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Script to fix the DB
+DO $$DECLARE
+	sym trading_schema.symbol%rowtype;
+	lastupdated trading_schema.symbol.last_update%TYPE;
+BEGIN
+	FOR sym IN
+		SELECT
+			*
+		FROM
+			trading_schema.exchange e
+			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
+		WHERE
+			e.enabled='Y'
+		AND
+			s.last_update IS NULL
+		ORDER BY
+			s.id
+	LOOP
+		SELECT
+			MAX(q.datestamp)
+		INTO
+			lastupdated
+		FROM
+			trading_schema.quote q
+		WHERE
+			q.symbol_id = sym.id
+		;
+		-- Perform the update
+		UPDATE trading_schema.symbol SET last_update = lastupdated  WHERE id = sym.id;
+	END LOOP;
+END$$
+;
