@@ -3,6 +3,7 @@
 # Base class - Contains the queries to run and basic functionality
 #
 import datetime
+import time
 import collections
 import logging
 import sys
@@ -26,7 +27,7 @@ class StockBase:
 			FROM
 				trading_schema.exchange e
 				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
-				LEFT OUTER JOIN trading_schema.quote q ON (s.id = q.symbol_id AND q.datestamp >= s.last_update - INTERVAL '7 day')
+				LEFT JOIN trading_schema.quote q ON (s.id = q.symbol_id AND (q.datestamp >= s.last_update OR s.last_update IS NULL))
 			WHERE
 				e.enabled = 'Y'
 			AND
@@ -136,6 +137,8 @@ class StockBase:
 						logging.error("PGCODE: %s", e.pgcode)
 						logging.error("PGERROR: %s", e.pgerror)
 						sys.exit()
+				# Sleep to stop Yahoo kicking us
+				time.sleep(2)
 
 			else:
 				self.logger.warn("No Update needed")
