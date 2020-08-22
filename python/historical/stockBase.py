@@ -23,7 +23,7 @@ class StockBase:
 		WITH data AS (
 			SELECT
 				s.symbol,
-				COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', '1960-01-01') AS last_update
+				COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', date_trunc('day',s.last_update), '1960-01-01') AS last_update
 			FROM
 				trading_schema.exchange e
 				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y' AND (s.last_update < %(currentdate)s OR s.last_update IS NULL))
@@ -31,7 +31,8 @@ class StockBase:
 			WHERE
 				e.enabled = 'Y'
 			GROUP BY
-				s.symbol
+				s.symbol,
+				s.last_update
 		)
 		SELECT
 			d.symbol,
