@@ -27,11 +27,11 @@ class StockBase:
 			FROM
 				trading_schema.exchange e
 				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
-				LEFT JOIN trading_schema.quote q ON (s.id = q.symbol_id AND (q.datestamp >= s.last_update OR s.last_update IS NULL))
+				LEFT JOIN trading_schema.quote q ON (s.id = q.symbol_id AND (q.datestamp >= s.last_update - INTERVAL '3 days' OR s.last_update IS NULL))
 			WHERE
 				e.enabled = 'Y'
 			AND
-				(s.last_update <= %(currentdate)s OR s.last_update IS NULL)
+				(s.last_update < %(currentdate)s OR s.last_update IS NULL)
 			GROUP BY
 				s.symbol
 		)
