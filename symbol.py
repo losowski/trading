@@ -119,13 +119,17 @@ def main():
 	# Change DB
 	if (None != args.symbol):
 		if (None != state):
+			logger.info("Enable Symbol: %s - %s", args.symbol, state)
 			setSymbolEnabled(db, args.symbol, state)
 		else:
+			logger.info("Add Symbol: %s", arg.symbol)
 			addSymbol(db, args.exchange, args.symbol, args.name)
 	else:
 		if (None != state):
+			logger.info("Enable Exchange: %s - %s", args.exchange, state)
 			setExchangeEnabled(db, args.exchange, state)
 		else:
+			logger.info("Add Exchange: %s", args.exchange)
 			addExchange(db, args.exchange)
 	#Commit
 	logger.info("Commiting transaction")
