@@ -123,7 +123,7 @@ def main():
 			logger.info("Enable Symbol: %s - %s", args.symbol, state)
 			setSymbolEnabled(db, args.symbol, state)
 		else:
-			logger.info("Add Symbol: %s", arg.symbol)
+			logger.info("Add Symbol: %s", args.symbol)
 			addSymbol(db, args.exchange, args.symbol, args.name)
 	else:
 		if (None != state):
