@@ -104,7 +104,7 @@ def main():
 	parser.add_argument('--exchange', dest='exchange', type=str, help='Exchange')
 	parser.add_argument('--symbol', dest='symbol', type=str, help='Stock symbol')
 	parser.add_argument('--name', dest='name', type=str, help='Human readable name')
-	parser.add_argument('--enable', dest='enable', type=str, default='Y', help='Enable')
+	parser.add_argument('--enable', dest='enable', type=str, help='Enable')
 	#TODO: Add means to query exchange and symbols (--get)
 	#Get the arguments
 	args = parser.parse_args()
@@ -116,6 +116,7 @@ def main():
 	db.connect()
 	#Get change state
 	state = getEnableState(args.enable)
+	logging.info("Enabled state: %s", state)
 	# Change DB
 	if (None != args.symbol):
 		if (None != state):
