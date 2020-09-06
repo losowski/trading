@@ -48,7 +48,7 @@ class StockBase:
 		;
 	"""
 	getSymbolsForUpdate	=	symbolsForUpdateBase.format(where="")
-	getSymbolUpdate		=	symbolsForUpdateBase.format(where="AND s.symbol = '%(symbol)'")
+	getSymbolUpdate		=	symbolsForUpdateBase.format(where="AND s.symbol = %(symbol)s")
 	#TODO: INDEX on s.enabled
 	#TODO: Improve speed (takes an age)
 
@@ -87,7 +87,7 @@ class StockBase:
 	#	Beware that this does not override the restrictions in place
 	def runSymbol(self, ignore, symbol):
 		self.logger.info("Updating particular symbol: %s", symbol)
-		self.updateQuotes(ignore)
+		self.updateQuotes(ignore, symbol)
 
 	#Disable problem symbols
 	def setSymbolDisabled(self, symbol, state):
