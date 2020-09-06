@@ -19,7 +19,7 @@ class StockBase:
 	#SQL to get the current updates needed
 	#	If we have no data, presume we start form 01-Jan-1960
 	#	If checking for update, return Y if >1 day to update, or if we have nothing
-	getSymbolsForUpdate="""
+	symbolsForUpdateBase="""
 		WITH data AS (
 			SELECT
 				s.symbol,
@@ -30,6 +30,7 @@ class StockBase:
 				LEFT JOIN trading_schema.quote q ON (s.id = q.symbol_id AND (q.datestamp >= s.last_update - INTERVAL '3 days' OR s.last_update IS NULL))
 			WHERE
 				e.enabled = 'Y'
+				{where}
 			GROUP BY
 				s.symbol,
 				s.last_update
@@ -46,6 +47,8 @@ class StockBase:
 			d.symbol
 		;
 	"""
+	getSymbolsForUpdate	=	symbolsForUpdateBase.format(where="")
+	getSymbolUpdate		=	symbolsForUpdateBase.format(where="AND s.symbol = '%(symbol)'")
 	#TODO: INDEX on s.enabled
 	#TODO: Improve speed (takes an age)
 
@@ -74,14 +77,16 @@ class StockBase:
 		#Get date now
 		self.todayDate = self.getTodaysDate()
 
+	# Perform updates for all symbols
 	def run(self, ignore):
 		self.updateQuotes(ignore)
 		#self.update_key_statistics() # Temporarily disabled
 
 
-	def shutdown (self):
-		pass
-
+	# Perform update of only one symbol
+	#	Beware that this does not override the restrictions in place
+	def runSymbol(self, ignore, symbol):
+		self.updateQuotes(ignore)
 
 	#Disable problem symbols
 	def setSymbolDisabled(self, symbol, state):
@@ -94,7 +99,7 @@ class StockBase:
 		#commit the data
 		self.database.commit()
 
-
+	# Get Todays date as if it was a 5 day week
 	def getTodaysDate(self):
 		doy = datetime.date.today().weekday()
 		friday = 0
@@ -106,12 +111,8 @@ class StockBase:
 		self.logger.info("Weekday date: %s", date)
 		return date
 
-	# Single Symbol update
-	def singleUpdate(self, symbol):
-		pass
-
 	#Generic Function to import data
-	def updateQuotes(self, ignore):
+	def updateQuotes(self, ignore, symbol=None):
 		# Get the list of Symbols: (Last update)
 		updateSymbols = self.getSymbolLastUpdate()
 		# For each symbol
@@ -149,13 +150,18 @@ class StockBase:
 
 	# Generic Function to get last updates
 	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
-	def getSymbolLastUpdate(self):
+	def getSymbolLastUpdate(self, symbol=None):
 		selectQuery = self.database.get_query()
 		logging.info("Today format: %s", self.todayDate)
 		dataDict = dict()
-		dataDict['currentdate']			= self.todayDate.isoformat()
+		dataDict['currentdate']			=	self.todayDate.isoformat()
+		dataDict['symbol']				=	symbol
 		logging.debug("Inserting %s", dataDict)
-		selectQuery.execute(self.getSymbolsForUpdate, dataDict)
+		if (symbol is not None):
+			query	=	self.getSymbolUpdate
+		else:
+			query	=	self.getSymbolsForUpdate
+		selectQuery.execute(query, dataDict)
 		updateSymbols = selectQuery.fetchall()
 		logging.info("Got %s symbols for update", len(updateSymbols))
 		#get a list of symbols to update
