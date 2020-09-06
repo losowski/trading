@@ -60,17 +60,19 @@ class StockBase:
 	insertQuoteData = "trading_schema.pInsQuote"
 
 	def __init__(self):
-		self.database		= db_connection.DBConnection()
-		self.logger		= logging.getLogger('DataImportTicker')
+		self.database		=	db_connection.DBConnection()
+		self.logger			=	logging.getLogger('DataImportTicker')
+		self.todayDate		=	None
 
 
 	def __del__(self):
-		self.database		= None
+		self.database		=	None
 
 
 	def initialise(self):
 		self.database.connect()
-
+		#Get date now
+		self.todayDate = self.getTodaysDate()
 
 	def run(self, ignore):
 		self.updateQuotes(ignore)
@@ -104,20 +106,22 @@ class StockBase:
 		self.logger.info("Weekday date: %s", date)
 		return date
 
+	# Single Symbol update
+	def singleUpdate(self, symbol):
+		pass
+
 	#Generic Function to import data
 	def updateQuotes(self, ignore):
-		#Get date now
-		todayDate = self.getTodaysDate()
 		# Get the list of Symbols: (Last update)
-		updateSymbols = self.getSymbolLastUpdate(todayDate)
+		updateSymbols = self.getSymbolLastUpdate()
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
-			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, todayDate, update)
+			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, self.todayDate, update)
 			#Check if we are more than 1 day (Monday-Friday)
 			#TODO: Implement check for if we are more than 1 day monday-friday
 			if ('Y' == update):
 				#	Get the Stock data for that range
-				dataRows = self.getHistoricalData(symbol,lastUpdate, todayDate, update)
+				dataRows = self.getHistoricalData(symbol,lastUpdate, self.todayDate, update)
 				try:
 					#	Insert the data
 					insertQuery = self.database.get_query()
@@ -145,11 +149,11 @@ class StockBase:
 
 	# Generic Function to get last updates
 	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
-	def getSymbolLastUpdate(self, todayDate):
+	def getSymbolLastUpdate(self):
 		selectQuery = self.database.get_query()
-		logging.info("Today format: %s", todayDate)
+		logging.info("Today format: %s", self.todayDate)
 		dataDict = dict()
-		dataDict['currentdate']			= todayDate.isoformat()
+		dataDict['currentdate']			= self.todayDate.isoformat()
 		logging.debug("Inserting %s", dataDict)
 		selectQuery.execute(self.getSymbolsForUpdate, dataDict)
 		updateSymbols = selectQuery.fetchall()
