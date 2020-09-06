@@ -19,7 +19,7 @@ class StockBase:
 	#SQL to get the current updates needed
 	#	If we have no data, presume we start form 01-Jan-1960
 	#	If checking for update, return Y if >1 day to update, or if we have nothing
-	getSymbolsForUpdate="""
+	symbolsForUpdateBase="""
 		WITH data AS (
 			SELECT
 				s.symbol,
@@ -30,6 +30,7 @@ class StockBase:
 				LEFT JOIN trading_schema.quote q ON (s.id = q.symbol_id AND (q.datestamp >= s.last_update - INTERVAL '3 days' OR s.last_update IS NULL))
 			WHERE
 				e.enabled = 'Y'
+				{where}
 			GROUP BY
 				s.symbol,
 				s.last_update
@@ -46,6 +47,8 @@ class StockBase:
 			d.symbol
 		;
 	"""
+	getSymbolsForUpdate	=	symbolsForUpdateBase.format(where="")
+	getSymbolUpdate		=	symbolsForUpdateBase.format(where="AND s.symbol = %(symbol)s")
 	#TODO: INDEX on s.enabled
 	#TODO: Improve speed (takes an age)
 
@@ -69,18 +72,29 @@ class StockBase:
 		self.database		=	None
 
 
+	#Setup "constants" for this run
 	def initialise(self):
 		self.database.connect()
 		#Get date now
 		self.todayDate = self.getTodaysDate()
 
+
+	# Shutdown
+	def shutdown(self):
+		self.logger.info("Shutting Down")
+
+
+	# Perform updates for all symbols
 	def run(self, ignore):
 		self.updateQuotes(ignore)
 		#self.update_key_statistics() # Temporarily disabled
 
 
-	def shutdown (self):
-		pass
+	# Perform update of only one symbol
+	#	Beware that this does not override the restrictions in place
+	def runSymbol(self, ignore, symbol):
+		self.logger.info("Updating particular symbol: %s", symbol)
+		self.updateQuotes(ignore, symbol)
 
 
 	#Disable problem symbols
@@ -95,6 +109,7 @@ class StockBase:
 		self.database.commit()
 
 
+	# Get Todays date as if it was a 5 day week
 	def getTodaysDate(self):
 		doy = datetime.date.today().weekday()
 		friday = 0
@@ -106,14 +121,11 @@ class StockBase:
 		self.logger.info("Weekday date: %s", date)
 		return date
 
-	# Single Symbol update
-	def singleUpdate(self, symbol):
-		pass
 
 	#Generic Function to import data
-	def updateQuotes(self, ignore):
+	def updateQuotes(self, ignore, symbol=None):
 		# Get the list of Symbols: (Last update)
-		updateSymbols = self.getSymbolLastUpdate()
+		updateSymbols = self.getSymbolLastUpdate(symbol)
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, self.todayDate, update)
@@ -129,16 +141,16 @@ class StockBase:
 					#commit the data
 					self.database.commit()
 				except psycopg2.Error as e:
-					logging.error("PGCODE: %s", e.pgcode)
-					logging.error("PGERROR: %s", e.pgerror)
+					self.logger.error("PGCODE: %s", e.pgcode)
+					self.logger.error("PGERROR: %s", e.pgerror)
 					if (('25P02' == e.pgcode) or ('42883' == e.pgcode)):
 						self.database.rollback()
 						if (True == ignore):
 							self.setSymbolDisabled(symbol, 'N')
 					elif ('25P02' != e.pgcode):
-						logging.critical("Irrecoverable error!")
-						logging.error("PGCODE: %s", e.pgcode)
-						logging.error("PGERROR: %s", e.pgerror)
+						self.logger.critical("Irrecoverable error!")
+						self.logger.error("PGCODE: %s", e.pgcode)
+						self.logger.error("PGERROR: %s", e.pgerror)
 						sys.exit()
 				# Sleep to stop Yahoo kicking us
 				time.sleep(2)
@@ -149,13 +161,22 @@ class StockBase:
 
 	# Generic Function to get last updates
 	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
-	def getSymbolLastUpdate(self):
+	def getSymbolLastUpdate(self, symbol=None):
 		selectQuery = self.database.get_query()
 		logging.info("Today format: %s", self.todayDate)
 		dataDict = dict()
-		dataDict['currentdate']			= self.todayDate.isoformat()
-		logging.debug("Inserting %s", dataDict)
-		selectQuery.execute(self.getSymbolsForUpdate, dataDict)
+		dataDict['currentdate']			=	self.todayDate.isoformat()
+		dataDict['symbol']				=	symbol
+		self.logger.debug("Query Parameters %s", dataDict)
+		self.logger.debug("Symbol: %s", symbol)
+		if (symbol is not None):
+			self.logger.info("Symbol Query")
+			query	=	self.getSymbolUpdate
+		else:
+			self.logger.info("All Symbols")
+			query	=	self.getSymbolsForUpdate
+		self.logger.info("Query: %s", query)
+		selectQuery.execute(query, dataDict)
 		updateSymbols = selectQuery.fetchall()
 		logging.info("Got %s symbols for update", len(updateSymbols))
 		#get a list of symbols to update
@@ -189,6 +210,3 @@ class StockBase:
 	# Overridden Quote function
 	def insertQuote(self, dataQuery, symbol, data):
 		self.logger.info("Do nothing - %s", data)
-
-
-
