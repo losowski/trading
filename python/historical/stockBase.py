@@ -72,10 +72,17 @@ class StockBase:
 		self.database		=	None
 
 
+	#Setup "constants" for this run
 	def initialise(self):
 		self.database.connect()
 		#Get date now
 		self.todayDate = self.getTodaysDate()
+
+
+	# Shutdown
+	def shutdown(self):
+		self.logger.info("Shutting Down")
+
 
 	# Perform updates for all symbols
 	def run(self, ignore):
@@ -89,6 +96,7 @@ class StockBase:
 		self.logger.info("Updating particular symbol: %s", symbol)
 		self.updateQuotes(ignore, symbol)
 
+
 	#Disable problem symbols
 	def setSymbolDisabled(self, symbol, state):
 		query = self.database.get_query()
@@ -99,6 +107,7 @@ class StockBase:
 		update_symbols = query.fetchall()
 		#commit the data
 		self.database.commit()
+
 
 	# Get Todays date as if it was a 5 day week
 	def getTodaysDate(self):
@@ -111,6 +120,7 @@ class StockBase:
 		date = datetime.date.today() - datetime.timedelta(days=friday)
 		self.logger.info("Weekday date: %s", date)
 		return date
+
 
 	#Generic Function to import data
 	def updateQuotes(self, ignore, symbol=None):
@@ -200,6 +210,3 @@ class StockBase:
 	# Overridden Quote function
 	def insertQuote(self, dataQuery, symbol, data):
 		self.logger.info("Do nothing - %s", data)
-
-
-
