@@ -86,6 +86,7 @@ class StockBase:
 	# Perform update of only one symbol
 	#	Beware that this does not override the restrictions in place
 	def runSymbol(self, ignore, symbol):
+		self.logger.info("Updating particular symbol: %s", symbol)
 		self.updateQuotes(ignore)
 
 	#Disable problem symbols
@@ -114,7 +115,7 @@ class StockBase:
 	#Generic Function to import data
 	def updateQuotes(self, ignore, symbol=None):
 		# Get the list of Symbols: (Last update)
-		updateSymbols = self.getSymbolLastUpdate()
+		updateSymbols = self.getSymbolLastUpdate(symbol)
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, self.todayDate, update)
@@ -130,16 +131,16 @@ class StockBase:
 					#commit the data
 					self.database.commit()
 				except psycopg2.Error as e:
-					logging.error("PGCODE: %s", e.pgcode)
-					logging.error("PGERROR: %s", e.pgerror)
+					self.logger.error("PGCODE: %s", e.pgcode)
+					self.logger.error("PGERROR: %s", e.pgerror)
 					if (('25P02' == e.pgcode) or ('42883' == e.pgcode)):
 						self.database.rollback()
 						if (True == ignore):
 							self.setSymbolDisabled(symbol, 'N')
 					elif ('25P02' != e.pgcode):
-						logging.critical("Irrecoverable error!")
-						logging.error("PGCODE: %s", e.pgcode)
-						logging.error("PGERROR: %s", e.pgerror)
+						self.logger.critical("Irrecoverable error!")
+						self.logger.error("PGCODE: %s", e.pgcode)
+						self.logger.error("PGERROR: %s", e.pgerror)
 						sys.exit()
 				# Sleep to stop Yahoo kicking us
 				time.sleep(2)
@@ -156,11 +157,15 @@ class StockBase:
 		dataDict = dict()
 		dataDict['currentdate']			=	self.todayDate.isoformat()
 		dataDict['symbol']				=	symbol
-		logging.debug("Inserting %s", dataDict)
+		self.logger.debug("Query Parameters %s", dataDict)
+		self.logger.debug("Symbol: %s", symbol)
 		if (symbol is not None):
+			self.logger.info("Symbol Query")
 			query	=	self.getSymbolUpdate
 		else:
+			self.logger.info("All Symbols")
 			query	=	self.getSymbolsForUpdate
+		self.logger.info("Query: %s", query)
 		selectQuery.execute(query, dataDict)
 		updateSymbols = selectQuery.fetchall()
 		logging.info("Got %s symbols for update", len(updateSymbols))

@@ -20,6 +20,7 @@ def main():
 	parser.add_argument('--symbol', dest='symbol', type=str, help="Symbol to update")
 	#Parse the arguments
 	args = parser.parse_args()
+	logger.info("Args: %s", args)
 	#Process
 	feeds = yahoo.Yahoo()
 	feeds.initialise()
