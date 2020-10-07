@@ -4,3 +4,6 @@
 [submodule "python/feeds/ystockquote"]
 	path = python/feeds/ystockquote
 	url = git://github.com/cgoldberg/ystockquote.git
+[submodule "python/comms"]
+	path = python/comms
+	url = https://github.com/losowski/lzerocomms.git
