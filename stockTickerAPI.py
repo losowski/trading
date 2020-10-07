@@ -24,7 +24,7 @@ def main():
 	#Build a datetime object with Current time
 	dt = datetime.datetime.now()
 	#Make the logging file
-	loggingfile = "/tmp/stock_engine_{timestamp}.log".format(timestamp = dt.now().isoformat())
+	loggingfile = "/tmp/stock_ticker_api_{timestamp}.log".format(timestamp = dt.now().isoformat())
 	#Setup logging
 	logging.basicConfig(format='%(asctime)s\t%(name)-16s\t%(funcName)-16s\t[%(levelname)-8s] %(message)s', level=logging.DEBUG)
 	#Let everyone know where we logged tp
