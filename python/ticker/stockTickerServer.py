@@ -10,7 +10,7 @@ from python.comms import server
 from python.database import db_connection
 
 #Messages
-from python.proto import stock-price_pb2
+from python.proto import stockticker_pb2
 
 class StockTickerServer (server.Server):
 	def __init__(self, port):
@@ -34,16 +34,16 @@ class StockTickerServer (server.Server):
 	# ReceiveHandler is the only code we need to write
 	# Default functionality is all you need
 	def receiveHandler(self, data):
-		resp = stock-price_pb2.tickerRes()
+		resp = stockticker_pb2.tickerRes()
 		# Interprets the message
-		msg = stock-price_pb2.tickerReq.FromString(data)
+		msg = stockticker_pb2.tickerReq.FromString(data)
 		try:
 			# Get the data from the database
 			#TODO: Implement getting data from database
 			data = list()
 			# For loop entering into td
 			#	# Build the response
-			#	td = stock-price_pb2.tickerData()
+			#	td = stockticker_pb2.tickerData()
 			#	#Append the response
 			#	td.high			=	data['high']
 			#	td.low			=	data['low']
