@@ -1,0 +1,65 @@
+# Base class for ticker server
+
+import logging
+import sys
+import traceback
+import zmq
+
+from python.comms import server
+
+from python.database import db_connection
+
+#Messages
+from python.proto import stock-price_pb2
+
+class StockTickerServer (server.Server):
+	def __init__(self, port):
+		super(StockTickerServer, self).__init__(port)
+		self.logger				=	logging.getLogger('StockTickerServer')
+		# Service of data retrieval
+		self.database			=	db_connection.DBConnection()
+
+
+	def __del__(self):
+		super(StockTickerServer, self).__del__()
+
+
+	# Setup the various components of the service
+	def initialise(self):
+		super(StockTickerServer, self).initialise()
+		#Connect to the DB
+		self.database.connect()
+
+
+	# ReceiveHandler is the only code we need to write
+	# Default functionality is all you need
+	def receiveHandler(self, data):
+		resp = stock-price_pb2.tickerRes()
+		# Interprets the message
+		msg = stock-price_pb2.tickerReq.FromString(data)
+		try:
+			# Get the data from the database
+			#TODO: Implement getting data from database
+			data = list()
+			# For loop entering into td
+			#	# Build the response
+			#	td = stock-price_pb2.tickerData()
+			#	#Append the response
+			#	td.high			=	data['high']
+			#	td.low			=	data['low']
+			#	td.open			=	data['open']
+			#	td.close		=	data['close']
+			#	td.adj_close	=	data['adj_close']
+			#	resp.tickerData.append(td)
+			resp.symbol	=	msg.symbol
+			resp.date	=	msg.date
+		except:
+			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
+			self.logger.critical("Traceback: %s", traceback.format_exc())
+		# Build the response
+		resp.timestamp = msg.timestamp
+		resp.lookahead = msg.lookahead
+		# Check the response
+		self.logger.info("Response: %s", resp)
+		# Encode the response
+		return resp.SerializeToString()
