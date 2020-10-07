@@ -19,7 +19,7 @@ from python.proto import stockticker_pb2
 
 
 def buildRequest(symbol, ISODate, ahead=None, behind=None, enddate=None):
-	tr = ticker_pb2.tickerReq()
+	tr = stockticker_pb2.tickerReq()
 	# Symbol
 	tr.symbol = symbol
 	# Date
@@ -31,7 +31,7 @@ def buildRequest(symbol, ISODate, ahead=None, behind=None, enddate=None):
 	# tr.ahead = ??
 	# tr.behind = ??
 	# tr.enddate = ??
-	ogging.info("Sending: %s", tr)
+	logging.info("Sending: %s", tr)
 	return tr.SerializeToString()
 
 def handleResponse(response):

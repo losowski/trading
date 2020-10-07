@@ -51,14 +51,12 @@ class StockTickerServer (server.Server):
 			#	td.close		=	data['close']
 			#	td.adj_close	=	data['adj_close']
 			#	resp.tickerData.append(td)
-			resp.symbol	=	msg.symbol
-			resp.date	=	msg.date
 		except:
 			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
 			self.logger.critical("Traceback: %s", traceback.format_exc())
 		# Build the response
-		resp.timestamp = msg.timestamp
-		resp.lookahead = msg.lookahead
+		resp.symbol	=	msg.symbol
+		resp.date	=	msg.date
 		# Check the response
 		self.logger.info("Response: %s", resp)
 		# Encode the response
