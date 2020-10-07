@@ -10,6 +10,7 @@ message tickerReq {
 	required	string				date		=	2;
 	optional	uint32				ahead		=	3;
 	optional	uint32				behind		=	4;
+	optional	string				enddate		=	5;
 }
 
 
