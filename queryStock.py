@@ -61,7 +61,7 @@ def main():
 	parser = argparse.ArgumentParser(description = blurb)
 	# Specifics for the arguments
 	parser.add_argument('--symbol', dest='symbol', type=str, help='Symbol to get ticker for')
-	parser.add_argument('--isodate', dest='isodate', type=str, help='Datestamp')
+	parser.add_argument('--isodate', dest='isodate', type=str, help='Datestamp - YYYY-MM-DD')
 	# Generate the parsed arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)

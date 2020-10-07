@@ -40,7 +40,7 @@ class TickerRequest(object):
 		self.symbol		=	symbol
 		self.date		=	date
 		# Get pandas DataFrame
-		self.dataframe	=	None
+		self.dataset	=	None
 
 	def __del__(self):
 		self.database = None
@@ -63,4 +63,4 @@ class TickerRequest(object):
 		pass
 
 	def getData(self):
-		return self.dataframe
+		return self.dataset
