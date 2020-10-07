@@ -9,6 +9,9 @@ from python.comms import server
 
 from python.database import db_connection
 
+# Request handler
+from python.ticker import tickerRequest
+
 #Messages
 from python.proto import stockticker_pb2
 
@@ -39,8 +42,13 @@ class StockTickerServer (server.Server):
 		msg = stockticker_pb2.tickerReq.FromString(data)
 		try:
 			# Get the data from the database
-			#TODO: Implement getting data from database
-			data = list()
+			tr = tickerRequest.TickerRequest(self.database, msg.symbol, msg.date)
+			# Initialise
+			tr.initialise()
+			# Run the query
+			tr.runQuery()
+			# return the data
+			data = tr.getData()
 			# For loop entering into td
 			#	# Build the response
 			#	td = stockticker_pb2.tickerData()
