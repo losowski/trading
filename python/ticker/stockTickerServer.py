@@ -62,7 +62,7 @@ class StockTickerServer (server.Server):
 					td.close		=	data['close_price']
 					td.adj_close	=	data['adjusted_close_price']
 					td.volume		=	data['volume']
-					resp.tickerData.append(td)
+					resp.ticker.append(td)
 		except:
 			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
 			self.logger.critical("Traceback: %s", traceback.format_exc())

@@ -39,7 +39,7 @@ def handleResponse(response):
 	logging.info("Symbol: %s", msg.symbol)
 	logging.info("Date: %s", msg.date)
 	for sy in msg.ticker:
-		logging.info("Symbol: %s: H: %s; L: %s; O: %s; C: %s; AC: %s;", msg.symbol, sy.high, sy.low, sy.open, sy.clos,e, sy.adj_close)
+		logging.info("Symbol: %s: H: %s; L: %s; O: %s; C: %s; AC: %s;", msg.symbol, sy.high, sy.low, sy.open, sy.close, sy.adj_close)
 		
 
 
