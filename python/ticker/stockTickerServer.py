@@ -47,19 +47,22 @@ class StockTickerServer (server.Server):
 			tr.initialise()
 			# Run the query
 			tr.load()
-			# return the data
+			# Return the data
 			data = tr.getData()
-			# For loop entering into td
-			#	# Build the response
-			#	td = stockticker_pb2.tickerData()
-			#	#Append the response
-			#	td.high			=	data['high']
-			#	td.low			=	data['low']
-			#	td.open			=	data['open']
-			#	td.close		=	data['close']
-			#	td.adj_close	=	data['adj_close']
-			#	td.volume		=	data['volume']
-			#	resp.tickerData.append(td)
+			#Dataset might be empty (not a function)
+			if (True != data.empty):
+				# For loop entering into td
+				for row in data.iterrows():
+					# Build the response
+					td = stockticker_pb2.tickerData()
+					#Append the response
+					td.high			=	data['high_price']
+					td.low			=	data['low_price']
+					td.open			=	data['open_price']
+					td.close		=	data['close_price']
+					td.adj_close	=	data['adjusted_close_price']
+					td.volume		=	data['volume']
+					resp.tickerData.append(td)
 		except:
 			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
 			self.logger.critical("Traceback: %s", traceback.format_exc())
