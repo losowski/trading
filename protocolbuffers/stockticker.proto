@@ -21,6 +21,7 @@ message tickerData {
 	required	float				open		=	3;
 	optional	float				close		=	4;
 	required	float				adj_close	=	5;
+	required	float				volume		=	6;
 }
 
 // Prediction response

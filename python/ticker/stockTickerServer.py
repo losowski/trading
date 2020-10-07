@@ -46,7 +46,7 @@ class StockTickerServer (server.Server):
 			# Initialise
 			tr.initialise()
 			# Run the query
-			tr.runQuery()
+			tr.load()
 			# return the data
 			data = tr.getData()
 			# For loop entering into td
@@ -58,6 +58,7 @@ class StockTickerServer (server.Server):
 			#	td.open			=	data['open']
 			#	td.close		=	data['close']
 			#	td.adj_close	=	data['adj_close']
+			#	td.volume		=	data['volume']
 			#	resp.tickerData.append(td)
 		except:
 			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
