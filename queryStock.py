@@ -28,8 +28,12 @@ def buildRequest(symbol, ISODate, ahead=None, behind=None, enddate=None):
 		dateObj = datetime.date.fromisoformat(ISODate)
 	tr.date = dateObj.isoformat()
 	# Optional fields
-	# tr.ahead = ??
-	# tr.behind = ??
+	# Ahead
+	if (ahead is not None):
+		tr.ahead = ahead
+	# Behind
+	if (behind is not None):
+		tr.behind = behind
 	# tr.enddate = ??
 	logging.info("Sending: %s", tr)
 	return tr.SerializeToString()
@@ -62,6 +66,8 @@ def main():
 	# Specifics for the arguments
 	parser.add_argument('--symbol', dest='symbol', type=str, help='Symbol to get ticker for')
 	parser.add_argument('--isodate', dest='isodate', type=str, help='Datestamp - YYYY-MM-DD')
+	parser.add_argument('--ahead', dest='ahead', type=int, help='Days ahead')
+	parser.add_argument('--behind', dest='behind', type=int, help='Days behind')
 	# Generate the parsed arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)
@@ -69,7 +75,7 @@ def main():
 	cl = client.Client('localhost', 9456)
 	cl.initialise()
 	#Build request
-	data = buildRequest(args.symbol, args.isodate)
+	data = buildRequest(args.symbol, args.isodate, args.ahead, args.behind)
 	# Process response
 	cl.send(data)
 	# Get response
