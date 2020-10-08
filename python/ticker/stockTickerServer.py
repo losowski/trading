@@ -40,6 +40,7 @@ class StockTickerServer (server.Server):
 		resp = stockticker_pb2.tickerRes()
 		# Interprets the message
 		msg = stockticker_pb2.tickerReq.FromString(data)
+		self.logger.info("Msg: %s", msg)
 		try:
 			# Get the data from the database
 			tr = tickerRequest.TickerRequest(self.database, msg.symbol, msg.date)
