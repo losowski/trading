@@ -18,20 +18,13 @@ class TickerRequest(object):
 			trading_schema.symbol s
 		INNER JOIN trading_schema.quote q ON (q.symbol_id = s.id)
 		WHERE
+			s.symbol = '{symbol}'
 		{where}
 		ORDER BY
 			s.symbol,
 			q.datestamp
 		;
 		"""
-	#Adapt SQL for generic case
-	SimpleSQL = BaseSQL.format(where = """
-		s.symbol = '{symbol}'
-	AND
-		q.datestamp = '{datestamp}'
-		{where}
-		""")
-
 
 	def __init__(self, database, symbol, date, ahead, behind, endDate):
 		self.logger		=	logging.getLogger('TickerRequest')
@@ -58,8 +51,15 @@ class TickerRequest(object):
 	def load(self):
 		# Log out data
 		self.logger.info("Loading Symbol: %s @ %s", self.symbol, self.date)
+		# Build the "where" statement
+		whereSQL = "{where}"
+		if (0 < self.ahead):
+			self.logger.debug("Ahead: %s", self.ahead)
+			whereSQL = whereSQL.format(where = "AND q.datestamp <= date '{datestamp}' + INTERVAL '{ahead} DAYS' ".format(datestamp = self.date, ahead = self.ahead))
+		else:
+			whereSQL = "AND q.datestamp = '{datestamp}'".format(datestamp = self.date)
 		# Build using default query
-		query	=	self.SimpleSQL.format(symbol = self.symbol, datestamp = self.date, where="")
+		query	=	self.BaseSQL.format(symbol = self.symbol, datestamp = self.date, where = whereSQL)
 		#TODO: Build using other queries
 		self.dataset = pd.read_sql_query(query, con=self.database.get_connection())
 		self.logger.debug("Loaded dataset:\n%s", self.dataset)
