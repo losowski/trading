@@ -41,9 +41,18 @@ class StockTickerServer (server.Server):
 		# Interprets the message
 		msg = stockticker_pb2.tickerReq.FromString(data)
 		self.logger.info("Msg: %s", msg)
+		ahead	=	None
+		behind	=	None
+		endDate	=	None
+		if(msg.HasField('ahead')):
+			ahead = msg.ahead
+		if(msg.HasField('behind')):
+			behind = msg.behind
+		if(msg.HasField('enddate')):
+			endDate = msg.enddate
 		try:
 			# Get the data from the database
-			tr = tickerRequest.TickerRequest(self.database, msg.symbol, msg.date)
+			tr = tickerRequest.TickerRequest(self.database, msg.symbol, msg.date, ahead, behind, endDate)
 			# Initialise
 			tr.initialise()
 			# Run the query

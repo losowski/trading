@@ -32,13 +32,16 @@ class TickerRequest(object):
 		""")
 
 
-	def __init__(self, database, symbol, date):
+	def __init__(self, database, symbol, date, ahead, behind, endDate):
 		self.logger		=	logging.getLogger('TickerRequest')
 		# Database
 		self.database	=	database
 		# Query parameters
 		self.symbol		=	symbol
 		self.date		=	date
+		self.ahead		=	ahead
+		self.behind		=	behind
+		self.endDate	=	endDate
 		# Get pandas DataFrame
 		self.dataset	=	None
 
