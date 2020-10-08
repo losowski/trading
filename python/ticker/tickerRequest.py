@@ -29,6 +29,7 @@ class TickerRequest(object):
 		s.symbol = '{symbol}'
 	AND
 		q.datestamp = '{datestamp}'
+		{where}
 		""")
 
 
@@ -58,7 +59,7 @@ class TickerRequest(object):
 		# Log out data
 		self.logger.info("Loading Symbol: %s @ %s", self.symbol, self.date)
 		# Build using default query
-		query	=	self.SimpleSQL.format(symbol = self.symbol, datestamp = self.date)
+		query	=	self.SimpleSQL.format(symbol = self.symbol, datestamp = self.date, where="")
 		#TODO: Build using other queries
 		self.dataset = pd.read_sql_query(query, con=self.database.get_connection())
 		self.logger.debug("Loaded dataset:\n%s", self.dataset)
