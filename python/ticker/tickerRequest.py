@@ -55,11 +55,12 @@ class TickerRequest(object):
 		whereSQL = "{where}"
 		if (0 < self.ahead):
 			self.logger.debug("Ahead: %s", self.ahead)
-			whereSQL = whereSQL.format(where = "AND q.datestamp <= date '{datestamp}' + INTERVAL '{ahead} DAYS' ".format(datestamp = self.date, ahead = self.ahead))
+			whereSQL = whereSQL.format(where = "AND q.datestamp >= '{datestamp}' AND q.datestamp <= date '{datestamp}' + INTERVAL '{ahead} DAYS' ".format(datestamp = self.date, ahead = self.ahead))
 		else:
 			whereSQL = "AND q.datestamp = '{datestamp}'".format(datestamp = self.date)
 		# Build using default query
 		query	=	self.BaseSQL.format(symbol = self.symbol, datestamp = self.date, where = whereSQL)
+		self.logger.debug("Query: %s", query)
 		#TODO: Build using other queries
 		self.dataset = pd.read_sql_query(query, con=self.database.get_connection())
 		self.logger.debug("Loaded dataset:\n%s", self.dataset)
