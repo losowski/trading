@@ -34,7 +34,9 @@ def buildRequest(symbol, ISODate, ahead=None, behind=None, enddate=None):
 	# Behind
 	if (behind is not None):
 		tr.behind = behind
-	# tr.enddate = ??
+	# Enddate 
+	if (enddate is not None):
+		tr.enddate = enddate
 	logging.info("Sending: %s", tr)
 	return tr.SerializeToString()
 
@@ -68,6 +70,7 @@ def main():
 	parser.add_argument('--isodate', dest='isodate', type=str, help='Datestamp - YYYY-MM-DD')
 	parser.add_argument('--ahead', dest='ahead', type=int, help='Days ahead')
 	parser.add_argument('--behind', dest='behind', type=int, help='Days behind')
+	parser.add_argument('--enddate', dest='enddate', type=str, help='Datestamp - YYYY-MM-DD end date')
 	# Generate the parsed arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)
@@ -75,7 +78,7 @@ def main():
 	cl = client.Client('localhost', 9456)
 	cl.initialise()
 	#Build request
-	data = buildRequest(args.symbol, args.isodate, args.ahead, args.behind)
+	data = buildRequest(args.symbol, args.isodate, args.ahead, args.behind, args.enddate)
 	# Process response
 	cl.send(data)
 	# Get response
