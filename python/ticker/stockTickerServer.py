@@ -41,9 +41,9 @@ class StockTickerServer (server.Server):
 		# Interprets the message
 		msg = stockticker_pb2.tickerReq.FromString(data)
 		self.logger.info("Msg: %s", msg)
-		ahead	=	None
-		behind	=	None
-		endDate	=	None
+		ahead	=	""
+		behind	=	""
+		endDate	=	""
 		if(msg.HasField('ahead')):
 			ahead = msg.ahead
 		if(msg.HasField('behind')):
