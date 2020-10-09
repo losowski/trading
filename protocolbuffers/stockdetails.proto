@@ -8,8 +8,8 @@ syntax = "proto2";
 message stockReq {
 	optional	string				symbol		=	1;
 	optional	string				exchange	=	2;
-	optional	string				enabled		=	3; // exchange
-	optional	string				random		=	4;
+	optional	bool				enabled		=	3; // Above filtered on enabled
+	optional	bool				random		=	4; // Ignores exchange
 }
 
 // Entity
@@ -29,7 +29,7 @@ message symbolData {
 }
 
 // Prediction response
-message	tickerRes {
-	repeated	entityData			exchagne	=	1;
+message	symbolRes {
+	repeated	entityData			exchange	=	1;
 	repeated	symbolData			stock		=	2;
 }
