@@ -1,0 +1,32 @@
+/*
+	Google Protocol Buffers
+		- Stock Price 
+*/
+syntax = "proto2";
+
+// Request stock data
+message tickerReq {
+	required	string				symbol		=	1;
+	required	string				date		=	2;
+	optional	uint32				ahead		=	3;
+	optional	uint32				behind		=	4;
+	optional	string				enddate		=	5;
+}
+
+
+// Prediction
+message tickerData {
+	required	float				high		=	1;
+	required	float				low			=	2;
+	required	float				open		=	3;
+	optional	float				close		=	4;
+	required	float				adj_close	=	5;
+	required	float				volume		=	6;
+}
+
+// Prediction response
+message	tickerRes {
+	required	string				symbol		=	1;
+	required	string				date		=	2;
+	repeated	tickerData			ticker		=	3;
+}
