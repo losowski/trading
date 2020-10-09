@@ -11,6 +11,9 @@ import signal
 # Import the protocol buffer libraries
 sys.path.append('python/proto')
 
+# Database
+from python.database import db_connection
+
 #Message client
 from python.ticker import stockTickerServer
 
@@ -37,8 +40,11 @@ def main():
 	# Generate the parsed arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)
+	# Database
+	db = db_connection.DBConnection()
+	db.connect()
 	# Server
-	ps = stockTickerServer.StockTickerServer(9456)
+	ps = stockTickerServer.StockTickerServer(9456, db)
 	ps.initialise()
 	ps.start()
 	#Clean up everything else...

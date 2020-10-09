@@ -3,11 +3,8 @@
 import logging
 import sys
 import traceback
-import zmq
 
 from python.comms import server
-
-from python.database import db_connection
 
 # Request handler
 from python.ticker import tickerRequest
@@ -16,11 +13,11 @@ from python.ticker import tickerRequest
 from python.proto import stockticker_pb2
 
 class StockTickerServer (server.Server):
-	def __init__(self, port):
+	def __init__(self, port, database):
 		super(StockTickerServer, self).__init__(port)
 		self.logger				=	logging.getLogger('StockTickerServer')
 		# Service of data retrieval
-		self.database			=	db_connection.DBConnection()
+		self.database			=	database
 
 
 	def __del__(self):
@@ -30,8 +27,6 @@ class StockTickerServer (server.Server):
 	# Setup the various components of the service
 	def initialise(self):
 		super(StockTickerServer, self).initialise()
-		#Connect to the DB
-		self.database.connect()
 
 
 	# ReceiveHandler is the only code we need to write
