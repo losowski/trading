@@ -5,11 +5,11 @@
 syntax = "proto2";
 
 // Request stock data
+// Random is an empty message
 message stockReq {
 	optional	string				symbol		=	1;
 	optional	string				exchange	=	2;
 	optional	bool				enabled		=	3; // Above filtered on enabled
-	optional	bool				random		=	4; // Ignores exchange
 }
 
 // Entity
@@ -22,10 +22,10 @@ message entityData {
 
 // Prediction
 message symbolData {
-	optional	entityData			exchange	=	1;
-	optional	entityData			stock		=	2;
-	optional	string				earliest	=	3;
-	optional	string				latest		=	4;
+	optional	entityData			exchange	=	1; // Not included on random
+	required	entityData			stock		=	2;
+	required	string				earliest	=	3;
+	required	string				latest		=	4;
 }
 
 // Prediction response
