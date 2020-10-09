@@ -53,7 +53,11 @@ class TickerRequest(object):
 		self.logger.info("Loading Symbol: %s @ %s", self.symbol, self.date)
 		# Build the "where" statement
 		whereSQL = ""
-		if (0 < self.ahead) and (0 < self.behind):
+		if ("" != self.endDate):
+			self.logger.debug("EndDate: %s", self.endDate)
+			#TODO: Add code to ensure correct order
+			whereSQL = "AND q.datestamp >= date '{datestamp}' AND q.datestamp <= date '{enddate}'".format(datestamp = self.date, enddate = self.endDate)
+		elif (0 < self.ahead) and (0 < self.behind):
 			self.logger.debug("Ahead:Behind (%s:%s)", self.ahead, self.behind)
 			whereSQL = "AND q.datestamp >= date '{datestamp}' - INTERVAL '{behind} DAYS' AND q.datestamp <= date '{datestamp}' + INTERVAL '{ahead} DAYS' ".format(datestamp = self.date, behind = self.behind, ahead = self.ahead)
 		elif (0 < self.ahead):
