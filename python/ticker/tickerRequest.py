@@ -52,12 +52,18 @@ class TickerRequest(object):
 		# Log out data
 		self.logger.info("Loading Symbol: %s @ %s", self.symbol, self.date)
 		# Build the "where" statement
-		whereSQL = "{where}"
-		if (0 < self.ahead):
+		whereSQL = ""
+		if (0 < self.ahead) and (0 < self.behind):
+			self.logger.debug("Ahead:Behind (%s:%s)", self.ahead, self.behind)
+			whereSQL = "AND q.datestamp >= date '{datestamp}' - INTERVAL '{behind} DAYS' AND q.datestamp <= date '{datestamp}' + INTERVAL '{ahead} DAYS' ".format(datestamp = self.date, behind = self.behind, ahead = self.ahead)
+		elif (0 < self.ahead):
 			self.logger.debug("Ahead: %s", self.ahead)
-			whereSQL = whereSQL.format(where = "AND q.datestamp >= '{datestamp}' AND q.datestamp <= date '{datestamp}' + INTERVAL '{ahead} DAYS' ".format(datestamp = self.date, ahead = self.ahead))
+			whereSQL = "AND q.datestamp >= date '{datestamp}' AND q.datestamp <= date '{datestamp}' + INTERVAL '{ahead} DAYS' ".format(datestamp = self.date, ahead = self.ahead)
+		elif (0 < self.behind):
+			self.logger.debug("Behind: %s", self.ahead)
+			whereSQL = "AND q.datestamp <= date '{datestamp}' AND q.datestamp >= date '{datestamp}' - INTERVAL '{behind} DAYS' ".format(datestamp = self.date, behind = self.behind)
 		else:
-			whereSQL = "AND q.datestamp = '{datestamp}'".format(datestamp = self.date)
+			whereSQL = "AND q.datestamp = date '{datestamp}'".format(datestamp = self.date)
 		# Build using default query
 		query	=	self.BaseSQL.format(symbol = self.symbol, datestamp = self.date, where = whereSQL)
 		self.logger.debug("Query: %s", query)
