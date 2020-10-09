@@ -1,0 +1,35 @@
+/*
+	Google Protocol Buffers
+		- Stock Details
+*/
+syntax = "proto2";
+
+// Request stock data
+message stockReq {
+	optional	string				symbol		=	1;
+	optional	string				exchange	=	2;
+	optional	string				enabled		=	3; // exchange
+	optional	string				random		=	4;
+}
+
+// Entity
+message entityData {
+	required	string				symbol		=	1;
+	required	bool				enabled		=	2;
+	optional	string				name		=	3;
+}
+
+
+// Prediction
+message symbolData {
+	optional	entityData			exchange	=	1;
+	optional	entityData			stock		=	2;
+	optional	string				earliest	=	3;
+	optional	string				latest		=	4;
+}
+
+// Prediction response
+message	tickerRes {
+	repeated	entityData			exchagne	=	1;
+	repeated	symbolData			stock		=	2;
+}
