@@ -74,8 +74,8 @@ def main():
 	# Specifics for the arguments
 	parser.add_argument('--symbol', dest='symbol', type=str, help='Symbol to get ticker for')
 	parser.add_argument('--exchange', dest='exchange', type=str, help='Datestamp - YYYY-MM-DD')
-	parser.add_argument('--enabled', dest='enabled', type=str, help='Filter on enabled state (Y/N)', default=False)
-	parser.add_argument('--listsym', dest='listsym', type=str, help='Force list of symbols (Y/N)', default=False)
+	parser.add_argument('--enabled', dest='enabled', type=str, help='Filter on enabled state (Y/N)')
+	parser.add_argument('--listsym', dest='listsym', type=str, help='Force list of symbols (Y/N)')
 	# Generate the parsed arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)
