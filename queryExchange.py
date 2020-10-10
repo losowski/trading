@@ -18,7 +18,7 @@ from python.comms import client
 from python.proto import stockdetails_pb2
 
 
-def buildRequest(symbol, exchange=None, enabled=None):
+def buildRequest(symbol, exchange=None, enabled=None, listsym=None):
 	sr = stockdetails_pb2.detailsReq()
 	# symbol
 	if (symbol is not None):
@@ -29,6 +29,9 @@ def buildRequest(symbol, exchange=None, enabled=None):
 	# enabled
 	if (enabled is not None):
 		sr.enabled = enabled
+	# listsym
+	if (listsym is not None):
+		sr.listsym = listsym
 	logging.info("Sending: %s", sr)
 	return sr.SerializeToString()
 
@@ -72,6 +75,7 @@ def main():
 	parser.add_argument('--symbol', dest='symbol', type=str, help='Symbol to get ticker for')
 	parser.add_argument('--exchange', dest='exchange', type=str, help='Datestamp - YYYY-MM-DD')
 	parser.add_argument('--enabled', dest='enabled', type=str, help='Filter on enabled state (Y/N)', default=False)
+	parser.add_argument('--listsym', dest='listsym', type=str, help='Force list of symbols (Y/N)', default=False)
 	# Generate the parsed arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)
@@ -79,7 +83,7 @@ def main():
 	cl = client.Client('localhost', 9456)
 	cl.initialise()
 	#Build request
-	data = buildRequest(args.symbol, args.exchange, args.enabled)
+	data = buildRequest(args.symbol, args.exchange, args.enabled, args.listsym)
 	# Process response
 	cl.send(data)
 	# Get response

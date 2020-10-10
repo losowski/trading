@@ -9,7 +9,8 @@ syntax = "proto2";
 message detailsReq {
 	optional	string				symbol		=	1;
 	optional	string				exchange	=	2;
-	optional	bool				enabled		=	3; // Above filtered on enabled
+	optional	string				enabled		=	3; // Above filtered on enabled
+	optional	string				listsym		=	4; // List ALL (force output of symbol)
 }
 
 // Entity

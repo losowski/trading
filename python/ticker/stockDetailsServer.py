@@ -39,12 +39,15 @@ class StockDetailsServer (server.Server):
 		symbol		=	""
 		exchange	=	""
 		enabled		=	""
+		listsym		=	""
 		if(msg.HasField('symbol')):
 			symbol = msg.symbol
 		if(msg.HasField('exchange')):
 			exchange = msg.exchange
 		if(msg.HasField('enabled')):
 			enabled = msg.enabled
+		if(msg.HasField('listsym')):
+			listsym = msg.listsym
 		try:
 			# Initialise
 			tr.initialise()
@@ -76,33 +79,18 @@ class StockDetailsServer (server.Server):
 						resp.stock.append(sd)
 			else if (exchange is not None):
 				logging.info("Exchange query")
+				#TODO: Implement this properly
 				# Run the query
-				tr.load()
+				#tr.load()
 				# Return the data
-				data = tr.getData()
+				#data = tr.getData()
 			else:
 				logging.info("Random query")
+				#TODO: Generate a random stock
 				# Run the query
-				tr.load()
+				#tr.load()
 				# Return the data
-				data = tr.getData()
-			## Additional code
-			#Dataset might be empty (not a function)
-			if (True != data.empty):
-				#TODO: Build the output properly
-				# For loop entering into td
-				#for row in data.itertuples():
-				#	# Build the response
-				#	td = stockdetails_pb2.detailsData()
-				#	#Append the response
-				#	td.high			=	row.high_price
-				#	td.low			=	row.low_price
-				#	td.open			=	row.open_price
-				#	td.close		=	row.close_price
-				#	td.adj_close	=	row.adjusted_close_price
-				#	td.volume		=	row.volume
-				#	resp.stock.append(td)
-				pass
+				#data = tr.getData()
 		except:
 			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
 			self.logger.critical("Traceback: %s", traceback.format_exc())
