@@ -1,14 +1,25 @@
 README
 ======
 
-## Dependencies
-+	postgresql database
-+	Python:
-		psycopg
+# Dependencies
+## pip
+pandas
+zmq
+
+## Runtime Packages (apt-get)
+libzmq5
+python3-psycopg2
+python3-protobuf
+
+## Additional build libraries (apt-get)
+libzmq3-dev
+libczmq-dev
+protobuf-compiler
+
 
 ## INSTALL
-sudo apt-get install python-psycopg2 python3-psycopg2
-sudo pip3 install yahoo-historical
+sudo apt-get install python-psycopg2 python3-psycopg2 libzmq5 python3-protobuf
+sudo pip3 install yahoo-historical zmq pandas
 
 ## Setup
 1) cd database
