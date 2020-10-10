@@ -7,7 +7,7 @@ import traceback
 from python.comms import server
 
 # Request handler
-from python.details import detailsRequest
+from python.details import stockDetailRequest
 
 #Messages
 from python.proto import stockdetails_pb2
@@ -36,9 +36,9 @@ class StockDetailsServer (server.Server):
 		# Interprets the message
 		msg = stockdetails_pb2.detailsReq.FromString(data)
 		self.logger.info("Msg: %s", msg)
-		symbol		=	None
-		exchange	=	None
-		enabled		=	None
+		symbol		=	""
+		exchange	=	""
+		enabled		=	""
 		if(msg.HasField('symbol')):
 			symbol = msg.symbol
 		if(msg.HasField('exchange')):
@@ -47,13 +47,28 @@ class StockDetailsServer (server.Server):
 			enabled = msg.enabled
 		try:
 			# Get the data from the database
-			tr = detailsRequest.DetailsRequest(self.database, symbol, exchange, enabled)
+			tr = stockDetailRequest.StockDetailRequest(self.database, symbol, exchange, enabled)
 			# Initialise
 			tr.initialise()
-			# Run the query
-			tr.load()
-			# Return the data
-			data = tr.getData()
+			if (symbol is not None):
+				logging.info("Symbol query")
+				# Run the query
+				tr.loadSymbol()
+				# Return the data
+				data = tr.getData()
+			else if (exchange is not None):
+				logging.info("Exchange query")
+				# Run the query
+				tr.loadExchange()
+				# Return the data
+				data = tr.getData()
+			else:
+				logging.info("Random query")
+				# Run the query
+				tr.loadExchange()
+				# Return the data
+				data = tr.getData()
+			## Additional code
 			#Dataset might be empty (not a function)
 			if (True != data.empty):
 				#TODO: Build the output properly
