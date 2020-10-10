@@ -46,26 +46,44 @@ class StockDetailsServer (server.Server):
 		if(msg.HasField('enabled')):
 			enabled = msg.enabled
 		try:
-			# Get the data from the database
-			tr = stockDetailRequest.StockDetailRequest(self.database, symbol, exchange, enabled)
 			# Initialise
 			tr.initialise()
 			if (symbol is not None):
 				logging.info("Symbol query")
+				# Get the data from the database
+				tr = stockDetailRequest.StockDetailRequest(self.database, symbol, exchange, enabled)
 				# Run the query
-				tr.loadSymbol()
+				tr.load()
 				# Return the data
 				data = tr.getData()
+				#Dataset might be empty (not a function)
+				if (True != data.empty):
+					for row in data.itertuples():
+						# Build the response message
+						sd = stock_details_pb2.symbolData()
+						# Build the response message
+						# Exchange
+						ex = stock_details_pb2.entityData()
+						ex.symbol	=	row.exchange_name # Weirdly named column in DB
+						ex.enabled	=	row.exchange_enabled
+						sd.exchange = ex
+						# Stock
+						sym = stock_details_pb2.entityData()
+						sym.symbol	=	row.stock_symbol
+						sym.name	=	row.stock_name
+						sym.enabled	=	row.stock_enabled
+						sd.stock = sym
+						resp.stock.append(sd)
 			else if (exchange is not None):
 				logging.info("Exchange query")
 				# Run the query
-				tr.loadExchange()
+				tr.load()
 				# Return the data
 				data = tr.getData()
 			else:
 				logging.info("Random query")
 				# Run the query
-				tr.loadExchange()
+				tr.load()
 				# Return the data
 				data = tr.getData()
 			## Additional code

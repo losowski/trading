@@ -15,7 +15,7 @@ message detailsReq {
 // Entity
 message entityData {
 	required	string				symbol		=	1;
-	required	bool				enabled		=	2;
+	required	string				enabled		=	2;
 	optional	string				name		=	3;
 }
 

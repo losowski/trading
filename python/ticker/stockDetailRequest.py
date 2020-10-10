@@ -8,11 +8,11 @@ import pandas as pd
 class StockDetailRequest(object):
 	SymbolSQL	= """
 		SELECT
-			e.name,	
-			e.enabled,
-			s.name,
-			s.symbol,
-			s.enabled,
+			e.name AS exchange_name,	
+			e.enabled AS exchange_enabled,
+			s.name AS stock_name,
+			s.symbol AS stock_symbol,
+			s.enabled AS stock_enabled,
 			MIN(q.datestamp) AS earliest,
 			MAX(q.datestamp) AS latest,
 		FROM
