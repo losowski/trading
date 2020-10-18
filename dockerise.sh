@@ -7,6 +7,10 @@ docker image tag tradingbase localhost:5000/tradingbase
 docker push localhost:5000/tradingbase
 
 # Build Complilation image
+docker build -f Dockerfile -t trading .
+docker image tag trading localhost:5000/trading
+docker push localhost:5000/trading
+
 
 # Build final symbol updater
 
