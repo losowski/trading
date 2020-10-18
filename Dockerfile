@@ -5,8 +5,8 @@ EXPOSE 9456/tcp
 RUN protocolBuffers/build.sh
 COPY python .
 COPY xml .
-COPY stockTickerAPI.py
-COPY queryStock.py
-COPY symbol.py
-COPY stockQuote.py
+COPY stockTickerAPI.py .
+COPY queryStock.py .
+COPY symbol.py .
+COPY stockQuote.py .
 CMD stockTickerAPI.py
