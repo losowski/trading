@@ -24,6 +24,9 @@ cd scripts
 ./NASDAQ.sh
 ./NYSE.sh
 
+# Database login (Default)
+psql -h localhost -U trading -d tradingdb
+
 # Daily running
 ./stockquote.py
 
