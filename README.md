@@ -4,7 +4,7 @@ README
 # Dependencies
 ## pip
 pandas
-zmq
+pyzmq
 
 ## Runtime Packages (apt-get)
 libzmq5
