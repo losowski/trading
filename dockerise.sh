@@ -3,8 +3,8 @@
 
 # Build Base Image
 docker build -f BaseDockerfile -t tradingbase .
-docker tag tradingbase localhost:10000/tradingbase
-docker push localhost:10000/tradingbase
+docker image tag tradingbase localhost:5000/tradingbase
+docker push localhost:5000/tradingbase
 
 # Build Complilation image
 
