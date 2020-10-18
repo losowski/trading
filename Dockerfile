@@ -7,7 +7,7 @@ RUN mkdir -p /app/python/proto
 WORKDIR /app
 
 #Build the Protocol Buffers
-COPY protocolbuffers/. /app/.
+COPY protocolbuffers /app/
 RUN /app/protocolbuffers/build.sh
 COPY python /app
 
