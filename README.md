@@ -19,7 +19,9 @@ protobuf-compiler
 
 ## INSTALL
 sudo apt-get install python-psycopg2 python3-psycopg2 libzmq5 python3-protobuf
-sudo pip3 install yahoo-historical zmq pandas
+
+sudo pip3 install yahoo-historical pyzmq
+
 
 ## Setup
 1) cd database
@@ -31,9 +33,15 @@ sudo pip3 install yahoo-historical zmq pandas
 
 # Import Symbols
 cd scripts
+
 ./AMEX.sh
+
 ./NASDAQ.sh
+
 ./NYSE.sh
+
+# Database login (Default)
+psql -h localhost -U trading -d tradingdb
 
 # Daily running
 ./stockquote.py
@@ -41,13 +49,17 @@ cd scripts
 # TEST
 ## Test Exchanges
 ./symbol.py --exchange=AMEX
+
 ./symbol.py --exchange=NASDAQ
+
 ./symbol.py --exchange=NYSE
+
 ./symbol.py --exchange=LSE
 
 
 ## Test Symbols
 ./symbol.py --exchange=NASDAQ --symbol=GOOG --name="Alphabet Inc Class C"
+
 ./symbol.py --exchange=NASDAQ --symbol=GOOGL --name="Alphabet Inc."
 
 
