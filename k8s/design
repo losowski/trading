@@ -1,0 +1,12 @@
+DESGN
+ansible
+	clone/git pull trading
+	template out index.xml
+		substitue username and password with 64 random string
+
+build docker containers
+push images
+run job
+
+TODO
+figure out how to push to minikube server

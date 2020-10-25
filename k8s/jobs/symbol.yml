@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: trading
+  name: pi
+spec:
+  template:
+    spec:
+      volumes:
+      - name: xml-volume
+        secret:
+          secretName: db-connection
+      containers:
+      - name: pi
+        image: symbol
+        command: ["bash", "/app/scripts/AMEX.sh"]
+        volumeMounts:
+        - name: xml-volume
+          readOnly: true
+          mountPath: "/app/xml/"
+      restartPolicy: Never
+  backoffLimit: 4
