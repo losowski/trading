@@ -32,7 +32,7 @@ cd scripts
 psql -h localhost -U trading -d tradingdb
 
 # Daily running
-./stockquote.py
+./stockQuote.py
 
 # TEST
 ## Test Exchanges
@@ -60,6 +60,13 @@ psql -h localhost -U trading -d tradingdb
 	- Import exchanges
 	- Import companie names by symbol
 
-+ stockquote.py
++ stockQuote.py
 	- Get the historical data for the stocks mentioned
 
+# ServerAPI
+	./stockTickerAPI.py
+		- Opens a ZeroMQ port 9456
+		- Responds to quote requests
+
+	./queryStock.py
+		- User client for communicating with stockTickerAPI.py
