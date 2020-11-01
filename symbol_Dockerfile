@@ -12,5 +12,8 @@ RUN mkdir -p /app/python/database /app/scripts /app/xml
 WORKDIR /app
 
 ADD symbol.py /app
-ADD scripts/AMEX.sh /app/scripts/
+ADD scripts/* /app/scripts/
 ADD python/database/ /app/python/database
+ADD xml/db_connection.xml xml/db_connection.xml
+
+CMD /app/scripts/$SYMBOL.sh

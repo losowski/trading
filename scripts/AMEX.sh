@@ -1,6 +1,6 @@
 #/bin/sh
 # Insert AMEX Symbols
-( cd ../
+(
 # Insert Stock Exchange
 ./symbol.py --exchange=AMEX
 # Insert Stock Symbols

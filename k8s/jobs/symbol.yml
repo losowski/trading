@@ -12,7 +12,7 @@ spec:
           secretName: db-connection
       containers:
       - name: pi
-        image: symbol
+        image: localhost:5000/symbol
         command: ["bash", "/app/scripts/AMEX.sh"]
         volumeMounts:
         - name: xml-volume
