@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: trading
-  name: pi
+  name: symbol-add
 spec:
   template:
     spec:
@@ -11,7 +11,7 @@ spec:
         secret:
           secretName: db-connection
       containers:
-      - name: pi
+      - name: symbol-add
         image: localhost:5000/symbol
         command: ["bash", "/app/scripts/AMEX.sh"]
         volumeMounts:

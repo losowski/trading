@@ -1,0 +1,19 @@
+#---
+#- hosts: localhost
+#  tasks:
+  - name: creating database/feeds/feeds.sql
+    file:
+      path: ../database/feeds/feeds.sql
+      state: touch
+
+  - name: building database/feeds/feeds.sql
+    blockinfile:
+      state: present
+      insertafter: EOF
+      path: ../database/feeds/feeds.sql
+      marker: ''
+      block: |
+        {{ lookup('file', '../database/feeds/create_table/exchange.sql') }}
+        {{ lookup('file', '../database/feeds/create_table/symbols.sql') }}
+        {{ lookup('file', '../database/feeds/create_table/quotes.sql') }}
+        {{ lookup('file', '../database/feeds/create_table/key_statistics.sql') }}

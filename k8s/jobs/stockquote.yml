@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  namespace: trading
+  name: symbol-add
+spec:
+  schedule: "* 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: xml-volume
+            secret:
+              secretName: db-connection
+          containers:
+          - name: symbo-add
+            image: localhost:5000/stockquote
+            command: ["bash", "/app/stockQuote.py"]
+            volumeMounts:
+            - name: xml-volume
+              readOnly: true
+              mountPath: "/app/xml/"
+          restartPolicy: Never

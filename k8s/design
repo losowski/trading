@@ -8,13 +8,13 @@ build docker containers
 push images
 run job
 
-TODO
-figure out how to push to minikube server
-
-
-
-aidanfitzpatrick@aidanfitzpatrick-CELSIUS-H720:~/git/trading/k8s$ kubectl port-forward --namespace kube-system $(kubectl get po -n kube-system | grep kube-registry-v0 | \awk '{print $1;}') 5000:5000
-
+START MINIKUBE AND ENABLE REGISTRY
+minikube addons enable registry
+kubectl port-forward --namespace kube-system $(kubectl get po -n kube-system | grep kube-registry-v0 | \awk '{print $1;}') 5000:5000
+ANOTHER WAY
+apply kube-registry.yaml
+kubectl port-forward --namespace kube-system $(kubectl get po -n kube-system | grep kube-registry-v0 | \awk '{print $1;}') 5000:5000
 
 append in local /etc/hosts file
 <postgres ip> postgres.db.trading
+

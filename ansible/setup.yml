@@ -1,0 +1,45 @@
+---
+- hosts: localhost
+  vars:
+    random_string: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=64') }}"
+  tasks:
+  - set_fact:
+      password: "{{ random_string }}"
+
+  - set_fact:
+      xml: "{{ lookup('file', './files/db_connection.xml') | replace('PSQL_PASSWORD', password) }}"
+      trading_user: "{{ lookup('file', '../database/create/trading_user.sql') | replace('PSQL_PASSWORD', password) }}"
+
+  - name: appending xml secret to db_connection
+    lineinfile:
+      path: ../k8s/1_db_connection.yml
+      line: "  db_connection.xml: {{ xml | b64encode }}"
+      insertbefore: EOF
+
+  - name: building feeds/feeds.sql
+    include: feeds.yml
+
+  - name: creating database/create_tradedb.sql
+    file:
+      path: ../database/create_tradedb.sql
+      state: touch
+
+  - name: building database/feeds/feeds.sql
+    blockinfile:
+      state: present
+      insertafter: EOF
+      path: ../database/create_tradedb.sql
+      marker: ''
+      block: |
+        {{ trading_user }}
+        {{ lookup('file', '../database/create/trading_database.sql') }}
+        {{ lookup('file', '../database/create/trading_grant.sql') }}
+        -- SCRIPT BEGIN: set up connection and schema
+        \connect tradingdb
+        --
+        -- Create the schema
+        --
+        CREATE SCHEMA IF NOT EXISTS trading_schema AUTHORIZATION trading;\n
+        set schema 'trading_schema';
+        -- SCRIPT END
+        {{ lookup('file', '../database/feeds/feeds.sql') }}

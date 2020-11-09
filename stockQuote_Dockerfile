@@ -1,0 +1,17 @@
+FROM tensorflow/tensorflow:latest-gpu
+
+RUN apt update
+RUN apt upgrade -y
+RUN pip install --upgrade pip
+
+RUN pip install yahoo-historical
+RUN apt install -y python3-psycopg2
+
+RUN mkdir -p /app/xml
+
+WORKDIR /app
+
+ADD stockQuote.py /app
+ADD python/database/ /app/python/database
+
+CMD /app/stockQuote.py

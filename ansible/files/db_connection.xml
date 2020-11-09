@@ -8,6 +8,6 @@
 		<host>postgres.db.trading</host>
 		<database>tradingdb</database>
 		<username>trading</username>
-		<password>PASSWORD</password>
+		<password>PSQL_PASSWORD</password>
 	</connection>
 </database>
