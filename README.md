@@ -63,3 +63,66 @@ psql -h localhost -U trading -d tradingdb
 + stockquote.py
 	- Get the historical data for the stocks mentioned
 
+
+# K8S and Ansible
+The K8S stuff might be broken out into it's own repo later
+
+## Ansible
+### Current Setup
+Currently in the xml directory there is a file called db_connection.xml, this file holds the connection data for the database, including the password. This is a major security issue, passwords should never be in the code base.
+
+To solve this issue the current ansible has it's own version of db_connection.xml that contains place holders for an automatically generated password.
+
+### Current Process - setup.yml
+1. Generate a random password string and save to a reusable variable
+1. Import db_connection.xml and replace 'PSQL_PASSWORD' with the generated password and store in variable 'xml'
+1. import trading_user.sql and replace 'PSQL_PASSWORD' with the generated password and store in variable 'trading_user'.
+1. Base64 encrypt the xml variable and append it to '1_db_connection.yml'
+1. Run feeds.yml
+1. Create and append the below files to 'create_tradedb.sql'
+* trading_user
+* trading_database.sql
+* trading_grant.sql
+* feeds.sql
+* Schema creation and authorization sql.
+
+### Current Process - feeds.yml
+1. Create and append the following to feeds.sql
+* create_table/exchange.sql
+* create_table/symbols.sql
+* create_table/quotes.sql
+* create_table/key_statistics.sql
+
+### 0_namespace.yml
+* The trading namespace, needs to be run first
+### 1_db_connection.yml
+* the database connection secret
+* contains the db_connection.xml file
+### jobs/symbol.yml
+* Runs a specified script in the scripts directory
+* Script is currently hard coded but will end up being an environment variable
+* Dockerfile: symbol_Dockerfile
+* added files & directories
+  * symbol.py
+  * scripts/
+  * python/database
+  * xml/db_connection.db
+### jobs/stockquote.yml
+* sets up a cronjob to update all the symbols in the database
+* curently set to run at midnight every day
+* Dockerfile: stockQuote_Dockerfile
+* added files & directories
+  * stockQuote.py
+  * python/database
+### kube-registry.yaml
+* For dev purposes only
+* sets up the registry to be able to transfer images from localhost to minikube
+### database.yaml
+* For dev purposes only
+* sets up a postgres database in minikube
+* obviously this is not nearly suitable for production
+* Only there until we get proper infra setup
+### ubuntu.yaml
+* For dev purposes only
+* sets up an ubuntu pod running in minikube
+* makes troubleshooting/hacking a little easier
