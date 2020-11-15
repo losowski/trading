@@ -1,6 +1,7 @@
 # Ticker request code
 
 import logging
+import datetime
 
 # Pandas driven code
 import pandas as pd
@@ -26,6 +27,27 @@ class TickerRequest(object):
 		;
 		"""
 
+	SymbolSQL = """
+		SELECT
+			s.symbol
+		FROM
+			trading_schema.exchange e
+			INNER JOIN trading_schema.symbol s ON (s.exchange_id = e.id AND s.enabled = 'Y')
+		WHERE
+			e.enabled = 'Y'
+		"""
+
+	SymbolTimeSQL	= """
+		SELECT
+			q.datestamp
+		FROM
+			trading_schema.symbol s
+		INNER JOIN trading_schema.quote q ON (q.symbol_id = s.id)
+		WHERE
+			s.symbol = '{symbol}'
+		;
+		"""
+
 	def __init__(self, database, symbol, date, ahead, behind, endDate):
 		self.logger		=	logging.getLogger('TickerRequest')
 		# Database
@@ -43,10 +65,45 @@ class TickerRequest(object):
 		self.database = None
 
 
+	# If symbol is not set, return a random symbol
+	def __randomSymbol(self, symbol):
+		randomSymbol = "GOOG"
+		self.logger.debug("symbol input: %s", symbol)
+		if (symbol is not None):
+			randomSymbol = symbol
+		else:
+			self.logger.info("Randomly choosing symbol")
+			symbolDF = pd.read_sql_query(self.SymbolSQL, con=self.database.get_connection())
+			#self.logger.debug("SymbolDF: %s", symbolDF)
+			for sym in symbolDF['symbol'].sample(1, axis=None):
+				randomSymbol = sym
+		self.logger.debug("Symbol: %s", randomSymbol)
+		return randomSymbol
+
+
+	# If date is not set, return a random date for that symbol
+	def __randomDate(self, symbol, date):
+		randomDate = "01-01-2001"
+		self.logger.debug("symbol:date input: %s:%s", symbol, date)
+		if (date is not ""):
+			randomDate = date
+		else:
+			self.logger.info("Randomly choosing date")
+			query = self.SymbolTimeSQL.format(symbol = symbol)
+			self.logger.debug("Query: %s", query)
+			dateDF = pd.read_sql_query(query, con=self.database.get_connection())
+			#self.logger.debug("dateDF: %s", dateDF)
+			for d in dateDF['datestamp'].sample(1, axis=None):
+				randomDate = d
+		self.logger.debug("Date: %s", randomDate)
+		return randomDate
+
+
 	def initialise(self):
 		# setup the query
-		pass
-
+		# If we do not have a symbol or date, we should replace these with random values
+		self.symbol = self.__randomSymbol(self.symbol)
+		self.date = self.__randomDate(self.symbol, self.date)
 
 	def load(self):
 		# Log out data
@@ -79,3 +136,8 @@ class TickerRequest(object):
 
 	def getData(self):
 		return self.dataset
+
+	# Helper function to format the date into a string
+	def getFormattedDate(self):
+		dateObj = datetime.date.fromisoformat(str(self.date)[:10])
+		return dateObj.isoformat()

@@ -12,7 +12,7 @@ import signal
 sys.path.append('python/proto')
 
 #Message client
-from python.ticker import stockTickerServer
+from python.service import stockTickerServer
 
 #Messages
 from python.proto import stockticker_pb2

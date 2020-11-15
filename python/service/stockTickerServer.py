@@ -41,9 +41,19 @@ class StockTickerServer (server.Server):
 		# Interprets the message
 		msg = stockticker_pb2.tickerReq.FromString(data)
 		self.logger.info("Msg: %s", msg)
+		symbol	=	None
+		date	=	""
 		ahead	=	0
 		behind	=	0
 		endDate	=	""
+		if(msg.HasField('symbol')):
+			symbol = msg.symbol
+			#Setup the response too
+			resp.symbol	=	msg.symbol
+		if(msg.HasField('date')):
+			date = msg.date
+			#Setup the response too
+			resp.date	=	msg.date
 		if(msg.HasField('ahead')):
 			ahead = msg.ahead
 		if(msg.HasField('behind')):
@@ -52,14 +62,16 @@ class StockTickerServer (server.Server):
 			endDate = msg.enddate
 		try:
 			# Get the data from the database
-			tr = tickerRequest.TickerRequest(self.database, msg.symbol, msg.date, ahead, behind, endDate)
+			tr = tickerRequest.TickerRequest(self.database, symbol, date, ahead, behind, endDate)
 			# Initialise
 			tr.initialise()
 			# Run the query
 			tr.load()
 			# Return the data
 			data = tr.getData()
-			#Dataset might be empty (not a function)
+			# Set the data that we got from the request (including randomised)
+			resp.symbol = tr.symbol
+			resp.date	= tr.getFormattedDate()
 			if (True != data.empty):
 				# For loop entering into td
 				for row in data.itertuples():
@@ -76,9 +88,6 @@ class StockTickerServer (server.Server):
 		except:
 			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
 			self.logger.critical("Traceback: %s", traceback.format_exc())
-		# Build the response
-		resp.symbol	=	msg.symbol
-		resp.date	=	msg.date
 		# Check the response
 		self.logger.info("Response: %s", resp)
 		# Encode the response
