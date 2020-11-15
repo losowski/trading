@@ -70,8 +70,10 @@ class TickerRequest(object):
 		if (symbol is not None):
 			randomSymbol = symbol
 		else:
+			self.logger.info("Randomly choosing symbol")
 			symbolDF = pd.read_sql_query(self.SymbolSQL, con=self.database.get_connection())
 			randomSymbol = symbolDF['symbol'].sample(1)
+		self.logger.debug("Symbol: %s", randomSymbol)
 		return randomSymbol
 
 
@@ -81,9 +83,11 @@ class TickerRequest(object):
 		if (date is not ""):
 			randomDate = date
 		else:
+			self.logger.info("Randomly choosing date")
 			query = self.SymbolTimeSQL.format(symbol = symbol)
 			symbolDF = pd.read_sql_query(query, con=self.database.get_connection())
 			randomSymbol = symbolDF['datestamp'].sample(1)
+		self.logger.debug("Date: %s", randomSymbol)
 		return randomDate
 
 
