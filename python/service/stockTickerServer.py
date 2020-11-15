@@ -58,7 +58,7 @@ class StockTickerServer (server.Server):
 			endDate = msg.enddate
 		try:
 			# Get the data from the database
-			tr = tickerRequest.TickerRequest(database, symbol, msg.date, ahead, behind, endDate)
+			tr = tickerRequest.TickerRequest(self.database, symbol, date, ahead, behind, endDate)
 			# Initialise
 			tr.initialise()
 			# Run the query
