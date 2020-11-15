@@ -67,6 +67,7 @@ class TickerRequest(object):
 	# If symbol is not set, return a random symbol
 	def __randomSymbol(self, symbol):
 		randomSymbol = "GOOG"
+		self.logger.debug("symbol input: %s", symbol)
 		if (symbol is not None):
 			randomSymbol = symbol
 		else:
