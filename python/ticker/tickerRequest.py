@@ -73,8 +73,7 @@ class TickerRequest(object):
 		else:
 			self.logger.info("Randomly choosing symbol")
 			symbolDF = pd.read_sql_query(self.SymbolSQL, con=self.database.get_connection())
-			self.logger.debug("SymbolDF: %s", symbolDF)
-			#randomSymbol = symbolDF['symbol'].sample(1, axis=None)
+			#self.logger.debug("SymbolDF: %s", symbolDF)
 			for sym in symbolDF['symbol'].sample(1, axis=None):
 				randomSymbol = sym
 		self.logger.debug("Symbol: %s", randomSymbol)
@@ -92,7 +91,9 @@ class TickerRequest(object):
 			query = self.SymbolTimeSQL.format(symbol = symbol)
 			self.logger.debug("Query: %s", query)
 			dateDF = pd.read_sql_query(query, con=self.database.get_connection())
-			randomDate = dateDF['datestamp'].sample(1)
+			#self.logger.debug("dateDF: %s", dateDF)
+			for d in dateDF['datestamp'].sample(1, axis=None):
+				randomDate = d
 		self.logger.debug("Date: %s", randomDate)
 		return randomDate
 
