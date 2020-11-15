@@ -3,11 +3,14 @@ kind: Service
 metadata:
   name: postgres
   namespace: trading
+  labels:
+    app: postres
 spec:
   selector:
-    app: postres
+    app: postgres
   ports:
-    - protocol: TCP
+    - name: default
+      protocol: TCP
       port: 5432
       targetPort: 5432
 ---

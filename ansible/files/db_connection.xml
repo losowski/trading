@@ -5,7 +5,7 @@
 <database>
 	<type>postgresql</type>
 	<connection>
-		<host>postgres.db.trading</host>
+		<host>postgres</host>
 		<database>tradingdb</database>
 		<username>trading</username>
 		<password>PSQL_PASSWORD</password>
