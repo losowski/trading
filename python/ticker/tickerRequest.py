@@ -81,14 +81,15 @@ class TickerRequest(object):
 	# If date is not set, return a random date for that symbol
 	def __randomDate(self, symbol, date):
 		randomDate = "01-01-2001"
+		self.logger.debug("symbol:date input: %s:%s", symbol, date)
 		if (date is not ""):
 			randomDate = date
 		else:
 			self.logger.info("Randomly choosing date")
 			query = self.SymbolTimeSQL.format(symbol = symbol)
 			symbolDF = pd.read_sql_query(query, con=self.database.get_connection())
-			randomSymbol = symbolDF['datestamp'].sample(1)
-		self.logger.debug("Date: %s", randomSymbol)
+			randomDate = symbolDF['datestamp'].sample(1)
+		self.logger.debug("Date: %s", randomDate)
 		return randomDate
 
 
