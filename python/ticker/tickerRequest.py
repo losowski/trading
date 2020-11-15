@@ -87,8 +87,8 @@ class TickerRequest(object):
 		else:
 			self.logger.info("Randomly choosing date")
 			query = self.SymbolTimeSQL.format(symbol = symbol)
-			symbolDF = pd.read_sql_query(query, con=self.database.get_connection())
-			randomDate = symbolDF['datestamp'].sample(1)
+			dateDF = pd.read_sql_query(query, con=self.database.get_connection())
+			randomDate = dateDF['datestamp'].sample(1)
 		self.logger.debug("Date: %s", randomDate)
 		return randomDate
 
