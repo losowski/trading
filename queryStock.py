@@ -21,12 +21,12 @@ from python.proto import stockticker_pb2
 def buildRequest(symbol, ISODate, ahead=None, behind=None, enddate=None):
 	tr = stockticker_pb2.tickerReq()
 	# Symbol
-	tr.symbol = symbol
+	if (symbol is not ''):
+		tr.symbol = symbol
 	# Date
-	dateObj = datetime.date.today()
-	if (ISODate is not None):
+	if (ISODate is not ''):
 		dateObj = datetime.date.fromisoformat(ISODate)
-	tr.date = dateObj.isoformat()
+		tr.date = dateObj.isoformat()
 	# Optional fields
 	# Ahead
 	if (ahead is not None):
@@ -66,8 +66,8 @@ def main():
 	# Parse the args
 	parser = argparse.ArgumentParser(description = blurb)
 	# Specifics for the arguments
-	parser.add_argument('--symbol', dest='symbol', type=str, help='Symbol to get ticker for')
-	parser.add_argument('--isodate', dest='isodate', type=str, help='Datestamp - YYYY-MM-DD')
+	parser.add_argument('--symbol', dest='symbol', type=str, help='Symbol to get ticker for', default='')
+	parser.add_argument('--isodate', dest='isodate', type=str, help='Datestamp - YYYY-MM-DD', default='')
 	parser.add_argument('--ahead', dest='ahead', type=int, help='Days ahead')
 	parser.add_argument('--behind', dest='behind', type=int, help='Days behind')
 	parser.add_argument('--enddate', dest='enddate', type=str, help='Datestamp - YYYY-MM-DD end date')
