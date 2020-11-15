@@ -14,7 +14,7 @@ message tickerReq {
 }
 
 
-// Prediction
+// Ticker Data
 message tickerData {
 	required	float				high		=	1;
 	required	float				low			=	2;
@@ -24,7 +24,7 @@ message tickerData {
 	required	float				volume		=	6;
 }
 
-// Prediction response
+// Ticker response
 message	tickerRes {
 	required	string				symbol		=	1;
 	required	string				date		=	2;
