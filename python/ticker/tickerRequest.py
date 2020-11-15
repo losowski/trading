@@ -43,10 +43,29 @@ class TickerRequest(object):
 		self.database = None
 
 
+	# If symbol is not set, return a random symbol
+	def __randomSymbol(self, symbol):
+		randomSymbol = "GOOG"
+		# TODO: Properly implement this
+		if (symbol is not None):
+			randomSymbol = symbol
+		return randomSymbol
+
+
+	# If date is not set, return a random date for that symbol
+	def __randomDate(self, symbol, date):
+		randomDate = "01-01-2001"
+		# TODO: Properly implement this
+		if (date is not ""):
+			randomDate = date
+		return randomDate
+
+
 	def initialise(self):
 		# setup the query
-		pass
-
+		# If we do not have a symbol or date, we should replace these with random values
+		self.symbol = self.__randomSymbol(self.symbol)
+		self.date = self.__randomDate(self.symbol, self.date)
 
 	def load(self):
 		# Log out data
