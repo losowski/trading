@@ -1,6 +1,7 @@
 # Ticker request code
 
 import logging
+import datetime
 
 # Pandas driven code
 import pandas as pd
@@ -135,3 +136,8 @@ class TickerRequest(object):
 
 	def getData(self):
 		return self.dataset
+
+	# Helper function to format the date into a string
+	def getFormattedDate(self):
+		dateObj = datetime.date.fromisoformat(str(self.date)[:10])
+		return dateObj.isoformat()

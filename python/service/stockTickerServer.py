@@ -65,7 +65,9 @@ class StockTickerServer (server.Server):
 			tr.load()
 			# Return the data
 			data = tr.getData()
-			#Dataset might be empty (not a function)
+			# Set the data that we got from the request (including randomised)
+			resp.symbol = tr.symbol
+			resp.date	= tr.getFormattedDate()
 			if (True != data.empty):
 				# For loop entering into td
 				for row in data.itertuples():
