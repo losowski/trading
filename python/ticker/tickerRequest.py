@@ -26,6 +26,16 @@ class TickerRequest(object):
 		;
 		"""
 
+	SymbolSQL = """
+		SELECT
+			s.symbol
+		FROM
+			trading_schema.exchange e
+			INNER JOIN trading_schema.symbol s ON (s.exchange_id = e.id AND s.enabled = 'Y')
+		WHERE
+			e.enabled = 'Y'
+		"""
+
 	def __init__(self, database, symbol, date, ahead, behind, endDate):
 		self.logger		=	logging.getLogger('TickerRequest')
 		# Database
@@ -46,9 +56,12 @@ class TickerRequest(object):
 	# If symbol is not set, return a random symbol
 	def __randomSymbol(self, symbol):
 		randomSymbol = "GOOG"
-		# TODO: Properly implement this
 		if (symbol is not None):
 			randomSymbol = symbol
+		else:
+			symbolDF = pd.read_sql_query(SymbolSQL, con=self.database.get_connection())
+			randomSymbol = symbolDF['symbol'].sample(1)
+		# TODO: Properly implement this
 		return randomSymbol
 
 
