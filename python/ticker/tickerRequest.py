@@ -36,6 +36,17 @@ class TickerRequest(object):
 			e.enabled = 'Y'
 		"""
 
+	SymbolTimeSQL	= """
+		SELECT
+			q.datestamp
+		FROM
+			trading_schema.symbol s
+		INNER JOIN trading_schema.quote q ON (q.symbol_id = s.id)
+		WHERE
+			s.symbol = '{symbol}'
+		;
+		"""
+
 	def __init__(self, database, symbol, date, ahead, behind, endDate):
 		self.logger		=	logging.getLogger('TickerRequest')
 		# Database
@@ -61,16 +72,18 @@ class TickerRequest(object):
 		else:
 			symbolDF = pd.read_sql_query(SymbolSQL, con=self.database.get_connection())
 			randomSymbol = symbolDF['symbol'].sample(1)
-		# TODO: Properly implement this
 		return randomSymbol
 
 
 	# If date is not set, return a random date for that symbol
 	def __randomDate(self, symbol, date):
 		randomDate = "01-01-2001"
-		# TODO: Properly implement this
 		if (date is not ""):
 			randomDate = date
+		else:
+			query = SymbolTimeSQL.format(symbol = symbol)
+			symbolDF = pd.read_sql_query(query, con=self.database.get_connection())
+			randomSymbol = symbolDF['datestamp'].sample(1)
 		return randomDate
 
 
