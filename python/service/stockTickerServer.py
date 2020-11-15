@@ -48,8 +48,12 @@ class StockTickerServer (server.Server):
 		endDate	=	""
 		if(msg.HasField('symbol')):
 			symbol = msg.symbol
+			#Setup the response too
+			resp.symbol	=	msg.symbol
 		if(msg.HasField('date')):
 			date = msg.date
+			#Setup the response too
+			resp.date	=	msg.date
 		if(msg.HasField('ahead')):
 			ahead = msg.ahead
 		if(msg.HasField('behind')):
@@ -84,9 +88,6 @@ class StockTickerServer (server.Server):
 		except:
 			self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
 			self.logger.critical("Traceback: %s", traceback.format_exc())
-		# Build the response
-		resp.symbol	=	msg.symbol
-		resp.date	=	msg.date
 		# Check the response
 		self.logger.info("Response: %s", resp)
 		# Encode the response
