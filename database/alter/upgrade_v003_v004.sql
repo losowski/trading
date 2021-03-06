@@ -70,4 +70,35 @@ BEGIN
 	-- DONE
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- Process all symbols
+CREATE OR REPLACE FUNCTION trading_schema.pCategoriseActiveSymbols(
+	) RETURNS void AS $$
+DECLARE
+	v_symbols	refcursor;
+BEGIN
+	-- Create cursor
+	OPEN v_symbols FOR SELECT
+			symbol,
+			last_update
+		FROM
+			trading_schema.exchange e
+			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
+		WHERE
+			e.enabled = 'Y'
+		AND
+			s.category  IS NULL
+		ORDER BY
+			s.symbol
+		;
+	-- Iterate over cursor
+	FOR vs IN v_symbols LOOP
+		-- Call trading_schema.pCategoriseSymbol
+		SELECT trading_schema.pCategoriseSymbol(vs.symbol, vs.last_update);
+	END LOOP
+	-- DONE
+END;
+$$ LANGUAGE plpgsql;
+
 -- Running the procedure
