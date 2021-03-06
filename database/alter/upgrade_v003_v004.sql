@@ -15,6 +15,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pCategorise(
 DECLARE
 	v_category		smallint := 0;
 BEGIN
+	-- Calculate category
 	IF p_price >= 10000 THEN
 		v_category := 4;
 	ELSIF p_price >= 1000 THEN
@@ -26,6 +27,9 @@ BEGIN
 	ELSE
 		v_category := 0;
 	END IF;
+
+	-- Return value
+	RETURN v_category;
 END;
 $$ LANGUAGE plpgsql;
 
