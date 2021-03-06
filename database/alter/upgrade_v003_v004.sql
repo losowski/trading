@@ -98,7 +98,11 @@ BEGIN
 	FOR vs IN v_symbols LOOP
 		-- Call trading_schema.pCategoriseSymbol
 		SELECT trading_schema.pCategoriseSymbol(vs.symbol, vs.last_update);
+		-- Commit the change
+		COMMIT;
 	END LOOP
+	-- Close cursor
+	CLOSE v_symbols;
 	-- DONE
 END;
 $$ LANGUAGE plpgsql;
