@@ -57,13 +57,13 @@ BEGIN
 	WHERE
 		s.symbol = p_symbol
 	AND
-		q.datestamp >= p_date
+		q.datestamp <= p_date
 	AND
-		q.datestamp <= p_date -  p_interval::interval
+		q.datestamp >= p_date -  p_interval::interval
 	;
 	-- Generate category
 	SELECT
-		*
+		pcategorise
 	INTO
 		v_category
 	FROM

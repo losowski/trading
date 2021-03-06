@@ -26,6 +26,8 @@ GROUP BY
 	s.enabled,
 	s.last_update,
 	s.category
+ORDER BY
+	s.symbol
 LIMIT
 	10
 ;
@@ -60,6 +62,9 @@ GROUP BY
 	s.enabled,
 	s.last_update,
 	s.category
-LIMIT 10
+ORDER BY
+	s.symbol
+LIMIT
+	10
 ;
 {code}
