@@ -10,7 +10,7 @@ CREATE INDEX idx_symbol_category ON trading_schema.symbol USING btree (category)
 -- Stored Procedures --
 -- Categorise the prices
 CREATE OR REPLACE FUNCTION trading_schema.pCategorise(
-	p_price	numeric
+	p_price			numeric
 	) RETURNS smallint AS $$
 DECLARE
 	v_category		smallint := 0;
@@ -37,8 +37,8 @@ $$ LANGUAGE plpgsql;
 
 -- Procedure to Categorise a single symbol
 CREATE OR REPLACE FUNCTION trading_schema.pCategoriseSymbol(
-	p_symbol		trading_schema.symbol%TYPE,
-	p_date			trading_schema.quote.datestamp%TYPE,
+	p_symbol		trading_schema.symbol.symbol%TYPE,
+	p_date			trading_schema.symbol.last_update%TYPE,
 	p_interval		varchar(10) default '365 days'
 	) RETURNS void AS $$
 DECLARE
@@ -47,21 +47,23 @@ DECLARE
 BEGIN
 	-- Get minimum price
 	SELECT
-		MIN(open_price)
+		MIN(q.open_price)
 	INTO
 		v_price
 	FROM
-		trading_schema.symbol
+		trading_schema.symbol s
+		INNER JOIN trading_schema.quote q ON (q.symbol_id = s.id)
+
 	WHERE
-		symbol = p_symbol
+		s.symbol = p_symbol
 	AND
-		datestamp >= p_date
+		q.datestamp >= p_date
 	AND
-		datestamp <= p_date -  p_interval::interval
+		q.datestamp <= p_date -  p_interval::interval
 	;
 	-- Generate category
 	SELECT
-		trading_schema.pCategorise
+		*
 	INTO
 		v_category
 	FROM
@@ -96,7 +98,7 @@ BEGIN
 		LOOP
 
 		-- Call trading_schema.pCategoriseSymbol
-		SELECT * FROM trading_schema.pCategoriseSymbol(v_symbols.symbol, v_symbols.last_update);
+		SELECT * FROM trading_schema.pCategoriseSymbol(v_symbols.symbol::text, v_symbols.last_update::timestamp without time zone);
 		-- Commit the change
 		COMMIT;
 	END LOOP;
