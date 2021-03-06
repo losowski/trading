@@ -65,9 +65,7 @@ BEGIN
 	INTO
 		v_category
 	FROM
-		trading_schema.pCategorise(
-			p_price => v_price
-			)
+		trading_schema.pCategorise(v_price)
 	;
 	-- Update the table
 	UPDATE trading_schema.symbol SET category = v_category WHERE symbol = p_symbol;
