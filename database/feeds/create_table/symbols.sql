@@ -16,6 +16,7 @@ CREATE TABLE trading_schema.symbol
   symbol text NOT NULL,
   enabled character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
   last_update timestamp without time zone,
+  category smallint,
   CONSTRAINT pk_symbol PRIMARY KEY (id),
   CONSTRAINT fk_symbol_exchange_id FOREIGN KEY (exchange_id)
       REFERENCES trading_schema.exchange (id) MATCH SIMPLE
@@ -58,6 +59,12 @@ CREATE INDEX idx_symbol_last_update
   ON trading_schema.symbol
   USING btree
   (last_update COLLATE pg_catalog."default");
+
+-- Index: trading_schema.idx_symbol_category
+CREATE INDEX idx_symbol_category
+  ON trading_schema.symbol
+  USING btree
+  (category COLLATE pg_catalog."default");
 
 -- Stored Procedures --
 -- INSERT
