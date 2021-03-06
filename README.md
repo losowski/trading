@@ -34,6 +34,9 @@ psql -h localhost -U trading -d tradingdb
 # Daily running
 ./stockQuote.py
 
+# Categorisation script
+./scripts/categorise.sh
+
 # TEST
 ## Test Exchanges
 ./symbol.py --exchange=AMEX

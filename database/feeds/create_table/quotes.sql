@@ -179,3 +179,33 @@ BEGIN
 	-- DONE
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- Process all symbols
+CREATE OR REPLACE FUNCTION trading_schema.pCategoriseActiveSymbols(
+	) RETURNS void AS $$
+DECLARE
+	v_symbols	RECORD;
+	v_looped	text;
+BEGIN
+	-- Iterate over query
+	FOR v_symbols IN SELECT
+			symbol,
+			last_update
+		FROM
+			trading_schema.exchange e
+			INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
+		WHERE
+			e.enabled = 'Y'
+		AND
+			s.category  IS NULL
+		ORDER BY
+			s.symbol
+		LOOP
+
+		-- Call trading_schema.pCategoriseSymbol
+		SELECT pCategoriseSymbol::text INTO v_looped FROM trading_schema.pCategoriseSymbol(v_symbols.symbol::text, v_symbols.last_update::timestamp without time zone);
+	END LOOP;
+	-- DONE
+END;
+$$ LANGUAGE plpgsql;
