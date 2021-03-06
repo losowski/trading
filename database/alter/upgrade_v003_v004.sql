@@ -96,7 +96,7 @@ BEGIN
 		LOOP
 
 		-- Call trading_schema.pCategoriseSymbol
-		SELECT trading_schema.pCategoriseSymbol(vs.symbol, vs.last_update);
+		SELECT * FROM trading_schema.pCategoriseSymbol(v_symbols.symbol, v_symbols.last_update);
 		-- Commit the change
 		COMMIT;
 	END LOOP;
