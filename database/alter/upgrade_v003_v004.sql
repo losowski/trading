@@ -78,10 +78,10 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION trading_schema.pCategoriseActiveSymbols(
 	) RETURNS void AS $$
 DECLARE
-	v_symbols	refcursor;
+	v_symbols	RECORD;
 BEGIN
-	-- Create cursor
-	OPEN v_symbols FOR SELECT
+	-- Iterate over query
+	FOR v_symbols IN SELECT
 			symbol,
 			last_update
 		FROM
@@ -93,16 +93,13 @@ BEGIN
 			s.category  IS NULL
 		ORDER BY
 			s.symbol
-		;
-	-- Iterate over cursor
-	FOR vs IN v_symbols LOOP
+		LOOP
+
 		-- Call trading_schema.pCategoriseSymbol
 		SELECT trading_schema.pCategoriseSymbol(vs.symbol, vs.last_update);
 		-- Commit the change
 		COMMIT;
-	END LOOP
-	-- Close cursor
-	CLOSE v_symbols;
+	END LOOP;
 	-- DONE
 END;
 $$ LANGUAGE plpgsql;
