@@ -81,6 +81,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pCategoriseActiveSymbols(
 	) RETURNS void AS $$
 DECLARE
 	v_symbols	RECORD;
+	v_looped	text;
 BEGIN
 	-- Iterate over query
 	FOR v_symbols IN SELECT
@@ -98,12 +99,11 @@ BEGIN
 		LOOP
 
 		-- Call trading_schema.pCategoriseSymbol
-		SELECT * FROM trading_schema.pCategoriseSymbol(v_symbols.symbol::text, v_symbols.last_update::timestamp without time zone);
-		-- Commit the change
-		COMMIT;
+		SELECT pCategoriseSymbol::text INTO v_looped FROM trading_schema.pCategoriseSymbol(v_symbols.symbol::text, v_symbols.last_update::timestamp without time zone);
 	END LOOP;
 	-- DONE
 END;
 $$ LANGUAGE plpgsql;
 
 -- Running the procedure
+SELECT * FROM trading_schema.pCategoriseActiveSymbols();
