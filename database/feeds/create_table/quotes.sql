@@ -183,6 +183,8 @@ $$ LANGUAGE plpgsql;
 
 -- Process all symbols
 CREATE OR REPLACE FUNCTION trading_schema.pCategoriseActiveSymbols(
+	p_category			trading_schema.symbol.category%TYPE,
+	p_timeperiod		varchar(10) default '180 days'
 	) RETURNS void AS $$
 DECLARE
 	v_symbols	RECORD;
@@ -198,13 +200,13 @@ BEGIN
 		WHERE
 			e.enabled = 'Y'
 		AND
-			s.category  IS NULL
+			(s.category IS NULL OR s.category = p_category)
 		ORDER BY
 			s.symbol
 		LOOP
 
 		-- Call trading_schema.pCategoriseSymbol
-		SELECT pCategoriseSymbol::text INTO v_looped FROM trading_schema.pCategoriseSymbol(v_symbols.symbol::text, v_symbols.last_update::timestamp without time zone);
+		SELECT pCategoriseSymbol::text INTO v_looped FROM trading_schema.pCategoriseSymbol(v_symbols.symbol::text, v_symbols.last_update::timestamp without time zone, p_timeperiod);
 	END LOOP;
 	-- DONE
 END;
