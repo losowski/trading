@@ -7,6 +7,7 @@ import time
 import collections
 import logging
 import sys
+import traceback
 
 import psycopg2
 
@@ -98,10 +99,12 @@ class StockBase:
 
 
 	#Disable problem symbols
-	def setSymbolDisabled(self, symbol, state):
+	def setSymbolDisabled(self, symbol, state ='-'):
+		self.logger.warn("Disable %s (%s)", symbol, state)
 		query = self.database.get_query()
 		data_parameters = collections.OrderedDict()
 		data_parameters['symbol']			= symbol
+		data_parameters['enable']			= state
 		data_list = list(data_parameters.values())
 		query.callproc("trading_schema.pDisableSymbol", data_list)
 		update_symbols = query.fetchall()
@@ -132,9 +135,9 @@ class StockBase:
 			#Check if we are more than 1 day (Monday-Friday)
 			#TODO: Implement check for if we are more than 1 day monday-friday
 			if ('Y' == update):
-				#	Get the Stock data for that range
-				dataRows = self.getHistoricalData(symbol,lastUpdate, self.todayDate, update)
 				try:
+					#	Get the Stock data for that range
+					dataRows = self.getHistoricalData(symbol,lastUpdate, self.todayDate, update)
 					#	Insert the data
 					insertQuery = self.database.get_query()
 					self.insertQuote(insertQuery, symbol, dataRows)
@@ -152,6 +155,13 @@ class StockBase:
 						self.logger.error("PGCODE: %s", e.pgcode)
 						self.logger.error("PGERROR: %s", e.pgerror)
 						sys.exit()
+				except UnboundLocalError as e:
+					self.logger.error("UnboundLocalError: %s", e)
+					self.setSymbolDisabled(symbol, '-')
+				except:
+					self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
+					self.logger.critical("Traceback: %s", traceback.format_exc())
+					self.setSymbolDisabled(symbol, '?')
 				# Sleep to stop Yahoo kicking us
 				time.sleep(2)
 

@@ -108,12 +108,13 @@ ALTER FUNCTION trading_schema.pInsSymbol OWNER TO trading;
 
 -- Disable Symbol
 CREATE OR REPLACE FUNCTION trading_schema.pDisableSymbol(
-	p_name		trading_schema.symbol.name%TYPE
+	p_name		trading_schema.symbol.name%TYPE,
+	p_setting		trading_schema.symbol.enabled%TYPE default '-'
 	) RETURNS integer AS $$
 DECLARE
 	changed integer := 0;
 BEGIN
-	UPDATE trading_schema.symbol SET enabled = 'N' WHERE symbol = p_name;
+	UPDATE trading_schema.symbol SET enabled = p_setting WHERE symbol = p_name;
 
 	GET DIAGNOSTICS changed = ROW_COUNT;
 
