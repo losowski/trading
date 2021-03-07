@@ -99,7 +99,7 @@ class StockBase:
 
 
 	#Disable problem symbols
-	def setSymbolDisabled(self, symbol, state):
+	def setSymbolDisabled(self, symbol, state ='-'):
 		query = self.database.get_query()
 		data_parameters = collections.OrderedDict()
 		data_parameters['symbol']			= symbol
@@ -155,10 +155,11 @@ class StockBase:
 						sys.exit()
 				except UnboundLocalError as e:
 					self.logger.error("UnboundLocalError: %s", e)
-					#TODO: Set symbol to "-" to represent pending
+					self.setSymbolDisabled(symbol, '-')
 				except:
 					self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
 					self.logger.critical("Traceback: %s", traceback.format_exc())
+					self.setSymbolDisabled(symbol, '?')
 				# Sleep to stop Yahoo kicking us
 				time.sleep(2)
 
