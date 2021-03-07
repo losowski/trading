@@ -62,8 +62,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Running the procedure
-SELECT * FROM trading_schema.pCategoriseActiveSymbols('0'::smallint);
-SELECT * FROM trading_schema.pCategoriseActiveSymbols(1);
-SELECT * FROM trading_schema.pCategoriseActiveSymbols(2);
-SELECT * FROM trading_schema.pCategoriseActiveSymbols(3);
-SELECT * FROM trading_schema.pCategoriseActiveSymbols(4);
+SELECT * FROM trading_schema.pCategoriseActiveSymbols(0::smallint);
+SELECT * FROM trading_schema.pCategoriseActiveSymbols(1::smallint);
+SELECT * FROM trading_schema.pCategoriseActiveSymbols(2::smallint);
+SELECT * FROM trading_schema.pCategoriseActiveSymbols(3::smallint);
+SELECT * FROM trading_schema.pCategoriseActiveSymbols(4::smallint);
