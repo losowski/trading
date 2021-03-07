@@ -100,9 +100,11 @@ class StockBase:
 
 	#Disable problem symbols
 	def setSymbolDisabled(self, symbol, state ='-'):
+		self.logger.warn("Disable %s (%s)", symbol, state)
 		query = self.database.get_query()
 		data_parameters = collections.OrderedDict()
 		data_parameters['symbol']			= symbol
+		data_parameters['enable']			= state
 		data_list = list(data_parameters.values())
 		query.callproc("trading_schema.pDisableSymbol", data_list)
 		update_symbols = query.fetchall()
