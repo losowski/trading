@@ -1,0 +1,8 @@
+FROM debian
+LABEL "version"="0.1"
+LABEL "Description"="Trading Base image"
+
+#INSTALLING STUFF
+RUN	apt-get update && \
+	apt-get install -y --no-install-recommends python3-pip python-psycopg2 python3-psycopg2 libzmq5 libzmq3-dev libczmq-dev python3-protobuf protobuf-compiler
+RUN pip3 install --timeout=1200 --upgrade yahoo-historical pyzmq pandas
