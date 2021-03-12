@@ -63,7 +63,7 @@ datestamp timestamp without time zone NOT NULL,
   closed_datestamp timestamp without time zone,
   cost numeric(6,2),
 
--- INSERT transaction
+-- INSERT Open transaction
 CREATE OR REPLACE FUNCTION trading_schema.pInsTransaction(
 	p_tx_type				trading_schema.transaction.tx_type%TYPE,
 	p_open_cost				trading_schema.transaction.open_cost%TYPE,
@@ -112,4 +112,47 @@ $$ LANGUAGE plpgsql;
 -- Ownership
 ALTER FUNCTION trading_schema.pInsTransaction OWNER TO trading;
 
--- TODO: Close Transaction
+
+-- Close Transaction
+CREATE OR REPLACE FUNCTION trading_schema.pCloseTransaction(
+	p_id					trading_schema.transaction.id%TYPE,
+	p_close_cost			trading_schema.transaction.close_cost%TYPE,
+	p_close_datestamp		trading_schema.transaction.close_datestamp%TYPE default NULL
+	) RETURNS integer AS $$
+DECLARE
+	v_datestamp			trading_schema.transaction.datestamp%TYPE;
+	inserted_id integer := 0;
+BEGIN
+	-- If datestamp is NULL, replace with localtimestamp
+	IF p_close_datestamp IS NULL THEN
+		SELECT
+			localtimestamp
+		INTO
+			v_datestamp
+			;
+	ELSE
+		v_datestamp = p_close_datestamp;
+	END IF;
+	-- Add a select for update if needed
+	-- Perform the Update
+	UPDATE
+	trading_schema.transaction
+	SET
+		close_cost=p_close_cost
+		close_datestamp=v_datestamp
+	WHERE
+		id = p_id;
+	-- Get the tansactionID that was inserted
+	SELECT
+		*
+	INTO
+		inserted_id
+	FROM
+		LASTVAL();
+
+	RETURN inserted_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Ownership
+ALTER FUNCTION trading_schema.pCloseTransaction OWNER TO trading;
