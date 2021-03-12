@@ -1,57 +1,57 @@
--- Table: trading_schema.fxsymbols
-CREATE SEQUENCE trading_schema.fxsymbols_id_seq
+-- Table: trading_schema.fxsymbol
+CREATE SEQUENCE trading_schema.fxsymbol_id_seq
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
-ALTER TABLE trading_schema.fxsymbols_id_seq
+ALTER TABLE trading_schema.fxsymbol_id_seq
   OWNER TO trading;
 
-CREATE TABLE trading_schema.fxsymbols
+CREATE TABLE trading_schema.fxsymbol
 (
-  id bigint NOT NULL DEFAULT nextval('trading_schema.fxsymbols_id_seq'::regclass),
-  name text NOT NULL,
+  id bigint NOT NULL DEFAULT nextval('trading_schema.fxsymbol_id_seq'::regclass),
+  code text NOT NULL,
   enabled character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Y'::bpchar,
-  CONSTRAINT pk_fxsymbols PRIMARY KEY (id),
-  CONSTRAINT ck_fxsymbols_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar])) NOT VALID
+  CONSTRAINT pk_fxsymbol PRIMARY KEY (id),
+  CONSTRAINT ck_fxsymbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar])) NOT VALID
 )
 WITH (
   OIDS=FALSE
 );
 -- Ownership
-ALTER TABLE trading_schema.fxsymbols
+ALTER TABLE trading_schema.fxsymbol
   OWNER TO trading;
 
--- Index: trading_schema.idx_fxsymbols_id
-CREATE INDEX idx_fxsymbols_id
-  ON trading_schema.fxsymbols
+-- Index: trading_schema.idx_fxsymbol_id
+CREATE INDEX idx_fxsymbol_id
+  ON trading_schema.fxsymbol
   USING btree
   (id);
 
--- Index: trading_schema.idx_fxsymbols_name
-CREATE UNIQUE INDEX idx_fxsymbols_name
-  ON trading_schema.fxsymbols
+-- Index: trading_schema.idx_fxsymbol_code
+CREATE UNIQUE INDEX idx_fxsymbol_code
+  ON trading_schema.fxsymbol
   USING btree
-  (name COLLATE pg_catalog."default");
+  (code COLLATE pg_catalog."default");
 
 
 -- Stored Procedures --
 -- INSERT
-CREATE OR REPLACE FUNCTION trading_schema.pInsFxSymbols(
-	p_fxsymbols	trading_schema.fxsymbols.name%TYPE
+CREATE OR REPLACE FUNCTION trading_schema.pInsFxSymbol(
+	p_fxsymbol	trading_schema.fxsymbol.code%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	inserted_id integer := 0;
 BEGIN
 	INSERT INTO
-	trading_schema.fxsymbols
+	trading_schema.fxsymbol
 		(
-			name
+			code
 		)
 	VALUES
 		(
-			p_fxsymbols
+			p_fxsymbol
 		);
 
 	SELECT
@@ -66,16 +66,16 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Ownership
-ALTER FUNCTION trading_schema.pInsFxSymbols OWNER TO trading;
+ALTER FUNCTION trading_schema.pInsFxSymbol OWNER TO trading;
 
--- Disable FxSymbols
-CREATE OR REPLACE FUNCTION trading_schema.pDisableFxSymbols(
-	p_fxsymbols	trading_schema.fxsymbols.name%TYPE
+-- Disable FxSymbol
+CREATE OR REPLACE FUNCTION trading_schema.pDisableFxSymbol(
+	p_fxsymbol	trading_schema.fxsymbol.code%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	changed integer := 0;
 BEGIN
-	UPDATE trading_schema.fxsymbols SET enabled = 'N' WHERE name = p_fxsymbols;
+	UPDATE trading_schema.fxsymbol SET enabled = 'N' WHERE code = p_fxsymbol;
 
 	GET DIAGNOSTICS changed = ROW_COUNT;
 
@@ -84,16 +84,16 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Ownership
-ALTER FUNCTION trading_schema.pDisableFxSymbols OWNER TO trading;
+ALTER FUNCTION trading_schema.pDisableFxSymbol OWNER TO trading;
 
--- Enable FxSymbols
-CREATE OR REPLACE FUNCTION trading_schema.pEnableFxSymbols(
-	p_fxsymbols	trading_schema.fxsymbols.name%TYPE
+-- Enable FxSymbol
+CREATE OR REPLACE FUNCTION trading_schema.pEnableFxSymbol(
+	p_fxsymbol	trading_schema.fxsymbol.code%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	changed integer := 0;
 BEGIN
-	UPDATE trading_schema.fxsymbols SET enabled = 'Y' WHERE name = p_fxsymbols;
+	UPDATE trading_schema.fxsymbol SET enabled = 'Y' WHERE code = p_fxsymbol;
 
 	GET DIAGNOSTICS changed = ROW_COUNT;
 
@@ -102,4 +102,4 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Ownership
-ALTER FUNCTION trading_schema.pEnableFxSymbols OWNER TO trading;
+ALTER FUNCTION trading_schema.pEnableFxSymbol OWNER TO trading;

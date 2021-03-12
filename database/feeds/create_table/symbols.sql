@@ -30,8 +30,8 @@ WITH (
 ALTER TABLE trading_schema.symbol
   OWNER TO trading;
 
--- Index: trading_schema.fki_symbol_exchange_id
-CREATE INDEX fki_symbol_exchange_id
+-- Index: trading_schema.idx_symbol_exchange_id
+CREATE INDEX idx_symbol_exchange_id
   ON trading_schema.symbol
   USING btree
   (exchange_id);
