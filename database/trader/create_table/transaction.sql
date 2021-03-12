@@ -71,7 +71,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsTransaction(
 	) RETURNS integer AS $$
 DECLARE
 	v_datestamp			trading_schema.transaction.datestamp%TYPE;
-	inserted_id integer := 0;
+	inserted_id			integer := 0;
 BEGIN
 	-- If datestamp is NULL, replace with localtimestamp
 	IF p_open_datestamp IS NULL THEN
@@ -121,7 +121,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pCloseTransaction(
 	) RETURNS integer AS $$
 DECLARE
 	v_datestamp			trading_schema.transaction.datestamp%TYPE;
-	inserted_id integer := 0;
+	inserted_id			integer := 0;
 BEGIN
 	-- If datestamp is NULL, replace with localtimestamp
 	IF p_close_datestamp IS NULL THEN
