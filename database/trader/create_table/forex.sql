@@ -15,7 +15,7 @@ CREATE TABLE trading_schema.forex
   transaction_id bigint NOT NULL,
   fxsymbol_from bigint NOT NULL,
   fxsymbol_to bigint NOT NULL,
-  exchange_rate numeric NOT NULL
+  exchange_rate numeric NOT NULL,
   quantity integer NOT NULL,
   CONSTRAINT pk_forex_id PRIMARY KEY (id),
   CONSTRAINT fk_forex_transaction_id FOREIGN KEY (transaction_id)

@@ -11,13 +11,11 @@ ALTER TABLE trading_schema.transaction_id_seq
 CREATE TABLE trading_schema.transaction
 (
   id bigint NOT NULL DEFAULT nextval('trading_schema.transaction_id_seq'::regclass),
-  datestamp timestamp without time zone NOT NULL,
   tx_type character(1) NOT NULL,
-  cost numeric(6,2) NOT NULL,
-  current_price numeric NOT NULL,
-  prediction numeric,
+  open_datestamp timestamp without time zone NOT NULL,
+  open_cost numeric(6,2) NOT NULL,
   closed_datestamp timestamp without time zone,
-  cost numeric(6,2),
+  close_cost numeric(6,2),
   CONSTRAINT pk_transaction PRIMARY KEY (id),
   CONSTRAINT ck_transaction_enabled CHECK (enabled = ANY (ARRAY['O'::bpchar, 'S'::bpchar, 'F'::bpchar])) NOT VALID
 )
@@ -34,11 +32,11 @@ CREATE INDEX idx_transaction_id
   USING btree
   (id);
 
--- Index: trading_schema.idx_transaction_datestamp
-CREATE UNIQUE INDEX idx_transaction_datestamp
+-- Index: trading_schema.idx_transaction_open_datestamp
+CREATE UNIQUE INDEX idx_transaction_open_datestamp
   ON trading_schema.transaction
   USING btree
-  (datestamp COLLATE pg_catalog."default");
+  (open_datestamp COLLATE pg_catalog."default");
 
 
 -- Index: trading_schema.idx_transaction_tx_type
@@ -62,30 +60,44 @@ datestamp timestamp without time zone NOT NULL,
   cost numeric(6,2) NOT NULL,
   current_price numeric NOT NULL,
 
-  prediction numeric,
   closed_datestamp timestamp without time zone,
   cost numeric(6,2),
 
--- INSERT
+-- INSERT transaction
 CREATE OR REPLACE FUNCTION trading_schema.pInsTransaction(
-	p_tx_type			trading_schema.transaction.tx_type%TYPE,
-	p_cost				trading_schema.transaction.cost%TYPE,
-	p_current_price		trading_schema.transaction.current_price%TYPE,
-	p_datestamp			trading_schema.transaction.datestamp%TYPE default NULL
+	p_tx_type				trading_schema.transaction.tx_type%TYPE,
+	p_open_cost				trading_schema.transaction.open_cost%TYPE,
+	p_open_datestamp		trading_schema.transaction.open_datestamp%TYPE default NULL
 	) RETURNS integer AS $$
 DECLARE
+	v_datestamp			trading_schema.transaction.datestamp%TYPE;
 	inserted_id integer := 0;
 BEGIN
+	-- If datestamp is NULL, replace with localtimestamp
+	IF p_open_datestamp IS NULL THEN
+		SELECT
+			localtimestamp
+		INTO
+			v_datestamp
+			;
+	ELSE
+		v_datestamp = p_open_datestamp;
+	END IF;
+	-- Perform the insert
 	INSERT INTO
 	trading_schema.transaction
 		(
-			name
+			tx_type,
+			open_cost,
+			open_datestamp
 		)
 	VALUES
 		(
-			p_transaction
+			p_tx_type,
+			p_open_cost,
+			v_datestamp
 		);
-
+	-- Get the tansactionID that was inserted
 	SELECT
 		*
 	INTO
@@ -100,5 +112,4 @@ $$ LANGUAGE plpgsql;
 -- Ownership
 ALTER FUNCTION trading_schema.pInsTransaction OWNER TO trading;
 
--- TODO: INSERT prediction
 -- TODO: Close Transaction

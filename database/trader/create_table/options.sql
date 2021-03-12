@@ -14,10 +14,11 @@ CREATE TABLE trading_schema.option
   id bigint NOT NULL DEFAULT nextval('trading_schema.option_id_seq'::regclass),
   transaction_id bigint NOT NULL,
   symbol_id bigint NOT NULL,
-  strike numeric(6,2) NOT NULL
+  stock_price numeric NOT NULL,
+  strike numeric(6,2) NOT NULL,
   expiry timestamp without time zone NOT NULL,
   option_type character(1) NOT NULL,
-  cost numeric(6,2) NOT NULL,
+  option_cost numeric(6,2) NOT NULL,
   quantity integer NOT NULL,
   CONSTRAINT pk_option_id PRIMARY KEY (id),
   CONSTRAINT fk_option_transaction_id FOREIGN KEY (transaction_id)
