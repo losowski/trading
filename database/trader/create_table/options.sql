@@ -14,11 +14,11 @@ CREATE TABLE trading_schema.options
   id bigint NOT NULL DEFAULT nextval('trading_schema.options_id_seq'::regclass),
   transaction_id bigint NOT NULL,
   symbol_id bigint NOT NULL,
-  strike numeric (6,2) NOT NULL
+  strike numeric(6,2) NOT NULL
   expiry timestamp without time zone NOT NULL,
   option_type character(1) NOT NULL,
   cost numeric(6,2) NOT NULL,
-  quantity int NOT NULL,
+  quantity integer NOT NULL,
   CONSTRAINT pk_options_id PRIMARY KEY (id),
   CONSTRAINT fk_options_transaction_id FOREIGN KEY (transaction_id)
       REFERENCES trading_schema.transaction (id) MATCH SIMPLE
@@ -47,7 +47,7 @@ CREATE INDEX idx_transaction_id
 CREATE INDEX idx_symbol_id
   ON trading_schema.options
   USING btree
-  (symbol_id NULLS);
+  (symbol_id);
 
 -- Index: trading_schema.idx_expiry
 CREATE INDEX idx_options_expiry
