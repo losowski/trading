@@ -57,9 +57,21 @@ CREATE UNIQUE INDEX idx_transaction_closed_datestamp
 
 
 -- Stored Procedures --
+datestamp timestamp without time zone NOT NULL,
+  tx_type character(1) NOT NULL,
+  cost numeric(6,2) NOT NULL,
+  current_price numeric NOT NULL,
+
+  prediction numeric,
+  closed_datestamp timestamp without time zone,
+  cost numeric(6,2),
+
 -- INSERT
 CREATE OR REPLACE FUNCTION trading_schema.pInsTransaction(
-	p_transaction	trading_schema.transaction.name%TYPE
+	p_tx_type			trading_schema.transaction.tx_type%TYPE,
+	p_cost				trading_schema.transaction.cost%TYPE,
+	p_current_price		trading_schema.transaction.current_price%TYPE,
+	p_datestamp			trading_schema.transaction.datestamp%TYPE default NULL
 	) RETURNS integer AS $$
 DECLARE
 	inserted_id integer := 0;
@@ -87,3 +99,6 @@ $$ LANGUAGE plpgsql;
 
 -- Ownership
 ALTER FUNCTION trading_schema.pInsTransaction OWNER TO trading;
+
+-- TODO: INSERT prediction
+-- TODO: Close Transaction

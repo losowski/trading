@@ -54,3 +54,5 @@ CREATE INDEX idx_option_expiry
   ON trading_schema.option
   USING btree
   (expiry);
+
+-- TODO: INSERT option
