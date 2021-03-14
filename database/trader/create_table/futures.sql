@@ -39,7 +39,7 @@ ALTER TABLE trading_schema.future
 
 
 -- Index: trading_schema.idx_future_transaction_id
-CREATE INDEX idx_future_transaction_id
+CREATE UNIQUE INDEX idx_future_transaction_id
   ON trading_schema.future
   USING btree
   (transaction_id);
