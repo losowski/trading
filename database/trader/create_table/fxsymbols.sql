@@ -24,13 +24,13 @@ ALTER TABLE trading_schema.fxsymbol
   OWNER TO trading;
 
 -- Index: trading_schema.idx_fxsymbol_id
-CREATE INDEX idx_fxsymbol_id
+CREATE UNIQUE INDEX idx_fxsymbol_id
   ON trading_schema.fxsymbol
   USING btree
   (id);
 
 -- Index: trading_schema.idx_fxsymbol_code
-CREATE UNIQUE INDEX idx_fxsymbol_code
+CREATE INDEX idx_fxsymbol_code
   ON trading_schema.fxsymbol
   USING btree
   (code COLLATE pg_catalog."default");
