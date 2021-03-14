@@ -20,9 +20,16 @@ echo "set schema 'trading_schema';" >> create_tradedb.sql
 echo "-- SCRIPT END" >> create_tradedb.sql
 
 #Build schema
+# Feeds
 (
 	cd feeds
 	sh create.sh
 )
-
 cat feeds/feeds.sql >> create_tradedb.sql
+
+# Trade tracking
+(
+	cd trader
+	sh create.sh
+)
+cat feeds/trader.sql >> create_tradedb.sql
