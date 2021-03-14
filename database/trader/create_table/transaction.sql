@@ -109,29 +109,29 @@ ALTER FUNCTION trading_schema.pInsTransaction OWNER TO trading;
 CREATE OR REPLACE FUNCTION trading_schema.pCloseTransaction(
 	p_id					trading_schema.transaction.id%TYPE,
 	p_close_cost			trading_schema.transaction.close_cost%TYPE,
-	p_close_datestamp		trading_schema.transaction.close_datestamp%TYPE default NULL
+	p_closed_datestamp		trading_schema.transaction.closed_datestamp%TYPE default NULL
 	) RETURNS integer AS $$
 DECLARE
-	v_datestamp			trading_schema.transaction.close_datestamp%TYPE;
+	v_datestamp			trading_schema.transaction.closed_datestamp%TYPE;
 	inserted_id			integer := 0;
 BEGIN
 	-- If datestamp is NULL, replace with localtimestamp
-	IF p_close_datestamp IS NULL THEN
+	IF p_closed_datestamp IS NULL THEN
 		SELECT
 			localtimestamp
 		INTO
 			v_datestamp
 			;
 	ELSE
-		v_datestamp = p_close_datestamp;
+		v_datestamp = p_closed_datestamp;
 	END IF;
 	-- Add a select for update if needed
 	-- Perform the Update
 	UPDATE
 	trading_schema.transaction
 	SET
-		close_cost=p_close_cost
-		close_datestamp=v_datestamp
+		close_cost = p_close_cost,
+		closed_datestamp = v_datestamp
 	WHERE
 		id = p_id;
 	-- Get the tansactionID that was inserted
