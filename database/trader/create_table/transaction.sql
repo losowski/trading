@@ -27,27 +27,27 @@ ALTER TABLE trading_schema.transaction
   OWNER TO trading;
 
 -- Index: trading_schema.idx_transaction_id
-CREATE INDEX idx_transaction_id
+CREATE UNIQUE INDEX idx_transaction_id
   ON trading_schema.transaction
   USING btree
   (id);
 
 -- Index: trading_schema.idx_transaction_open_datestamp
-CREATE UNIQUE INDEX idx_transaction_open_datestamp
+CREATE INDEX idx_transaction_open_datestamp
   ON trading_schema.transaction
   USING btree
   (open_datestamp);
 
 
 -- Index: trading_schema.idx_transaction_tx_type
-CREATE UNIQUE INDEX idx_transaction_tx_type
+CREATE INDEX idx_transaction_tx_type
   ON trading_schema.transaction
   USING btree
   (tx_type COLLATE pg_catalog."default");
 
 
 -- Index: trading_schema.idx_transaction_closed_datestamp
-CREATE UNIQUE INDEX idx_transaction_closed_datestamp
+CREATE INDEX idx_transaction_closed_datestamp
   ON trading_schema.transaction
   USING btree
   (closed_datestamp);
