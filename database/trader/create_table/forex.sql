@@ -38,7 +38,7 @@ ALTER TABLE trading_schema.forex
 
 
 -- Index: trading_schema.idx_forex_transaction_id
-CREATE INDEX idx_forex_transaction_id
+CREATE UNIQUE INDEX idx_forex_transaction_id
   ON trading_schema.forex
   USING btree
   (transaction_id);
