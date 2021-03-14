@@ -46,7 +46,7 @@ CREATE INDEX idx_transaction_tx_type
   (tx_type COLLATE pg_catalog."default");
 
 
--- Index: trading_schema.idx_transaction_closed_datestamp
+-- Index trading_schema.idx_transaction_closed_datestamp
 CREATE INDEX idx_transaction_closed_datestamp
   ON trading_schema.transaction
   USING btree
@@ -55,14 +55,6 @@ CREATE INDEX idx_transaction_closed_datestamp
 
 
 -- Stored Procedures --
-datestamp timestamp without time zone NOT NULL,
-  tx_type character(1) NOT NULL,
-  cost numeric(6,2) NOT NULL,
-  current_price numeric NOT NULL,
-
-  closed_datestamp timestamp without time zone,
-  cost numeric(6,2),
-
 -- INSERT Open transaction
 CREATE OR REPLACE FUNCTION trading_schema.pInsTransaction(
 	p_tx_type				trading_schema.transaction.tx_type%TYPE,
@@ -70,7 +62,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsTransaction(
 	p_open_datestamp		trading_schema.transaction.open_datestamp%TYPE default NULL
 	) RETURNS integer AS $$
 DECLARE
-	v_datestamp			trading_schema.transaction.datestamp%TYPE;
+	v_datestamp			trading_schema.transaction.open_datestamp%TYPE;
 	inserted_id			integer := 0;
 BEGIN
 	-- If datestamp is NULL, replace with localtimestamp
@@ -120,7 +112,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pCloseTransaction(
 	p_close_datestamp		trading_schema.transaction.close_datestamp%TYPE default NULL
 	) RETURNS integer AS $$
 DECLARE
-	v_datestamp			trading_schema.transaction.datestamp%TYPE;
+	v_datestamp			trading_schema.transaction.close_datestamp%TYPE;
 	inserted_id			integer := 0;
 BEGIN
 	-- If datestamp is NULL, replace with localtimestamp
