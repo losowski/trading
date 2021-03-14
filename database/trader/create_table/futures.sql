@@ -59,7 +59,7 @@ CREATE INDEX idx_future_expiry
 
 -- INSERT future
 CREATE OR REPLACE FUNCTION trading_schema.pInsfuture(
-	p_transaction_id			trading_schema.future.tx_type%TYPE,
+	p_transaction_id			trading_schema.future.transaction_id%TYPE,
 	p_symbol					trading_schema.symbol.symbol%TYPE,
 	p_price						trading_schema.future.price%TYPE,
 	p_strike					trading_schema.future.price%TYPE,
@@ -76,7 +76,7 @@ BEGIN
 	SELECT
 		id
 	INTO
-		symbol_id
+		v_symbol_id
 	FROM
 		trading_schema.symbol
 	WHERE
