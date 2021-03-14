@@ -17,7 +17,7 @@ CREATE TABLE trading_schema.transaction
   closed_datestamp timestamp without time zone,
   close_cost numeric(6,2),
   CONSTRAINT pk_transaction PRIMARY KEY (id),
-  CONSTRAINT ck_transaction_enabled CHECK (enabled = ANY (ARRAY['O'::bpchar, 'S'::bpchar, 'F'::bpchar])) NOT VALID
+  CONSTRAINT ck_transaction_tx_type CHECK (tx_type = ANY (ARRAY['O'::bpchar, 'S'::bpchar, 'F'::bpchar])) NOT VALID
 )
 WITH (
   OIDS=FALSE
@@ -36,7 +36,7 @@ CREATE INDEX idx_transaction_id
 CREATE UNIQUE INDEX idx_transaction_open_datestamp
   ON trading_schema.transaction
   USING btree
-  (open_datestamp COLLATE pg_catalog."default");
+  (open_datestamp);
 
 
 -- Index: trading_schema.idx_transaction_tx_type
@@ -50,7 +50,7 @@ CREATE UNIQUE INDEX idx_transaction_tx_type
 CREATE UNIQUE INDEX idx_transaction_closed_datestamp
   ON trading_schema.transaction
   USING btree
-  (closed_datestamp COLLATE pg_catalog."default");
+  (closed_datestamp);
 
 
 
