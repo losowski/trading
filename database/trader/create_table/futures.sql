@@ -27,9 +27,9 @@ CREATE TABLE trading_schema.future
   CONSTRAINT fk_future_symbol_id FOREIGN KEY (symbol_id)
       REFERENCES trading_schema.symbol (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT ck_future_future_type CHECK (enabled = ANY (ARRAY['C'::bpchar, 'P'::bpchar])) NOT VALID,
+  CONSTRAINT ck_future_future_type CHECK (future_type = ANY (ARRAY['C'::bpchar, 'P'::bpchar])) NOT VALID,
   CONSTRAINT ck_future_quantity CHECK (quantity > 0) NOT VALID,
-  CONSTRAINT ck_future_cost CHECK (cost != 0) NOT VALID
+  CONSTRAINT ck_future_cost CHECK (future_cost != 0) NOT VALID
 )
 WITH (
   OIDS=FALSE
