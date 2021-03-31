@@ -21,7 +21,7 @@ CREATE TABLE trading_schema.earnings
   CONSTRAINT fk_earnings_symbol_id FOREIGN KEY (symbol_id)
       REFERENCES trading_schema.symbol (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT uc_earnings_1 UNIQUE (symbol_id, year, quarter),
+  CONSTRAINT uc_earnings_1 UNIQUE (symbol_id, datestamp, report_type),
   CONSTRAINT ck_earnings_report_type CHECK (report_type = ANY (ARRAY['Q'::bpchar, 'Y'::bpchar])) NOT VALID
 )
 WITH (
