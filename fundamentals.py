@@ -5,6 +5,14 @@ Import the Fundamentals from Yahoo Finance
 #import
 import logging
 import argparse
+import os
+import sys
+
+# Import the yahoo_fundamentals library
+sys.path.append(os.path.join(sys.path[0], 'python', 'yahoo_fundamentals', 'python'))
+
+# Output the current paths
+print ("PYTHON_PATH: {0}".format(sys.path))
 
 # Yahoo feed data
 from python.fundamentals import yahoo
