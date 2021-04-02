@@ -20,7 +20,7 @@ from python.database import db_connection
 import financials
 
 class RequestFinancials(request_base.RequestBase):
-		def __init__(self):
+	def __init__(self):
 		super(RequestFinancials, self).__init__()
 		self.logger		= logging.getLogger('RequestFinancials')
 
