@@ -2,13 +2,17 @@
 
 import logging
 
-class RequestBase:
+#Import Base
+from python.fundamentals import import_base
+
+
+class RequestBase(import_base.ImportBase):
 	def __init__(self):
+		super(RequestBase, self).__init__()
 		self.logger		= logging.getLogger('RequestBase')
-		pass
 
 	def __del__(self):
-		pass
+		super(RequestBase, self).__del__()
 
 	# Function template for identifying symbols to update
 	def getSymbolsToUpdate(self):

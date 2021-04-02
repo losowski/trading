@@ -16,10 +16,8 @@ from python.fundamentals import import_base
 #Database
 from python.database import db_connection
 
-
-# Fundamentals
-import financials
-import statistics
+# Financials
+from python.fundamentals import request_financials
 
 class Yahoo (import_base.ImportBase):
 	def __init__(self):
