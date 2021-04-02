@@ -15,6 +15,7 @@ CREATE TABLE trading_schema.earnings_data
   symbol_id bigint NOT NULL,
   datestamp timestamp without time zone NOT NULL,
   report_type character(1) NOT NULL,
+  enabled character(1) NOT NULL default 'Y'::bpchar,
   -- Data
   earnings_per_share numeric,
   total_revenue numeric,
@@ -32,7 +33,8 @@ CREATE TABLE trading_schema.earnings_data
       REFERENCES trading_schema.symbol (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT uc_earnings_data_1 UNIQUE (symbol_id, datestamp, report_type),
-  CONSTRAINT ck_earnings_data_report_type CHECK (report_type = ANY (ARRAY['Q'::bpchar, 'Y'::bpchar])) NOT VALID
+  CONSTRAINT ck_earnings_data_report_type CHECK (report_type = ANY (ARRAY['Q'::bpchar, 'Y'::bpchar])) NOT VALID,
+  CONSTRAINT ck_symbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar, '-'::bpchar, '?'    ::bpchar])) NOT VALID
 )
 WITH (
   OIDS=FALSE
@@ -40,19 +42,33 @@ WITH (
 ALTER TABLE trading_schema.earnings_data
   OWNER TO trading;
 
+
+-- Index: trading_schema.idx_earnings_data_id
 CREATE UNIQUE INDEX idx_earnings_data_id
   ON trading_schema.earnings_data
   USING btree
   (id);
 
-CREATE INDEX idx_datestamp_type
+
+-- Index: trading_schema.idx_earnings_data_datestamp_report_type
+CREATE INDEX idx_earnings_data_datestamp_report_type
   ON trading_schema.earnings_data
   USING btree
   (datestamp, report_type);
 
-CREATE INDEX idx_symbol_datestamp_report_type
+
+-- Index: trading_schema.idx_earnings_data_symbol_datestamp_report_type
+CREATE INDEX idx_earnings_data_symbol_datestamp_report_type
   ON trading_schema.earnings_data
   USING btree
   (symbol_id, datestamp, report_type);
+
+
+-- Index: trading_schema.idx_earnings_data_enabled
+CREATE INDEX idx_earnings_data_enabled
+  ON trading_schema.earnings_data
+  USING btree
+  (enabled COLLATE pg_catalog."default");
+
 
 -- Stored Procedures --
