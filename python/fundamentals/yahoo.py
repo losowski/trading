@@ -4,6 +4,7 @@ import datetime
 import time
 import collections
 import logging
+import os
 import sys
 import traceback
 
@@ -16,13 +17,15 @@ from python.fundamentals import import_base
 from python.database import db_connection
 
 # Import the yahoo_fundamentals library
-sys.path.append(sys.path[0] + '/python/yahoo_fundamentals')
-print ("BASE_PREFIX: {0}".format(sys.base_prefix))
+sys.path.append(os.path.join(sys.path[0], 'python', 'yahoo_fundamentals', 'python'))
+sys.path.append(os.path.join(sys.path[0], 'python', 'yahoo_fundamentals'))
+sys.path.append(os.path.join(sys.path[0], 'python', 'yahoo_fundamentals', 'python','common'))
 print ("PYTHON_PATH: {0}".format(sys.path))
 
 # Fundamentals
-from python.yahoo_fundamentals.python.financials import financials
-from python.yahoo_fundamentals.python.statistics import statistics
+#from python.financials import financials
+#from python.yahoo_fundamentals.python.financials import financials
+#from python.yahoo_fundamentals.python.statistics import statistics
 
 
 
@@ -41,7 +44,7 @@ class Yahoo (import_base.ImportBase):
 
 
 	# Run the assigned task
-	def run(self):
+	def run(self, ignore):
 		super(Yahoo, self).run()
 
 
