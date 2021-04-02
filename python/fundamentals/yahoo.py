@@ -38,7 +38,8 @@ class Yahoo (import_base.ImportBase):
 	# Run the assigned task
 	def run(self, ignore):
 		super(Yahoo, self).run()
-
+		# Get symbols to update
+		# For each symbol perform the requests
 
 	# Shutdown
 	def shutdown(self):
