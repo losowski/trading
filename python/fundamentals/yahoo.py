@@ -15,6 +15,11 @@ from python.fundamentals import import_base
 #Database
 from python.database import db_connection
 
+# Import the yahoo_fundamentals library
+sys.path.append(sys.path[0] + '/python/yahoo_fundamentals')
+print ("BASE_PREFIX: {0}".format(sys.base_prefix))
+print ("PYTHON_PATH: {0}".format(sys.path))
+
 # Fundamentals
 from python.yahoo_fundamentals.python.financials import financials
 from python.yahoo_fundamentals.python.statistics import statistics
