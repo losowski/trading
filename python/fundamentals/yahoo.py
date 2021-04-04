@@ -23,7 +23,7 @@ class Yahoo (import_base.ImportBase):
 	def __init__(self):
 		super(Yahoo, self).__init__()
 		self.logger			=	logging.getLogger("Yahoo")
-		self.financials		=	None
+		self.financials		=	request_financials.RequestFinancials()
 
 
 	def __del__(self):
@@ -33,7 +33,7 @@ class Yahoo (import_base.ImportBase):
 	def initialise(self):
 		super(Yahoo, self).initialise()
 		#Setup Financials
-		self.financials  = request_financials.RequestFinancials()
+		self.financials.initialise()
 
 
 	# Run the assigned task

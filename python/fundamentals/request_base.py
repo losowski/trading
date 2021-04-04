@@ -19,12 +19,23 @@ class RequestBase(import_base.ImportBase):
 	def __del__(self):
 		super(RequestBase, self).__del__()
 
+	#Run the scripts
+	def run(self):
+		super(RequestBase, self).run()
+		symbolsToUpdate = self.getSymbolsToUpdate()
+		for symbol in symbolsToUpdate:
+			req = self.initRequest(symbol = symbol[0])
+
+
 	# Initialise the request Object
 	def initRequest(self, **kwargs):
+		className = self.requestObj.__class__
+		self.logger.info("Init request %s: Params(%s)", className, kwargs)
 		req = self.requestObj(**kwargs)
 		req.request()
 		req.parse()
 		return req
+
 
 	# Function template for identifying symbols to update
 	# returns a list
@@ -38,6 +49,8 @@ class RequestBase(import_base.ImportBase):
 		symbolsForUpdateQ.execute(query)
 		updateSymbols = symbolsForUpdateQ.fetchall()
 		return updateSymbols
+
+
 
 
 	# Make request
