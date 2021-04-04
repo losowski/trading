@@ -42,18 +42,6 @@ class RequestFinancials(request_base.RequestBase):
 	def __del__(self):
 		super(RequestFinancials, self).__del__()
 
-
-	# Function template for identifying symbols to update
-	def getSymbolsToUpdate(self):
-		super(RequestFinancials, self).getSymbolsToUpdate()
-		symbolsForUpdateQ = self.database.get_query()
-		#dataDict = dict()
-		#self.logger.debug("Query Parameters %s", dataDict)
-		query = self.FinancialsForUpdateSQL
-		self.logger.info("Query: %s", query)
-		symbolsForUpdateQ.execute(query)
-
-
 	# Make request
 	def makeRequest(self, symbol, timeBegin = None, timeEnd = None):
 		super(RequestFinancials, self).makeRequest(symbol, timeBegin, timeEnd)

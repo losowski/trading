@@ -7,6 +7,10 @@ from python.fundamentals import import_base
 
 
 class RequestBase(import_base.ImportBase):
+
+	#Query to identify and get the list of SYMBOLs to update
+	FinancialsForUpdateSQL = None
+
 	def __init__(self, requestInit):
 		super(RequestBase, self).__init__()
 		self.logger		= logging.getLogger('RequestBase')
@@ -26,7 +30,14 @@ class RequestBase(import_base.ImportBase):
 	# returns a list
 	def getSymbolsToUpdate(self):
 		self.logger.info("Getting Symbols to update")
-		return list()
+		symbolsForUpdateQ = self.database.get_query()
+		#dataDict = dict()
+		#self.logger.debug("Query Parameters %s", dataDict)
+		query = self.FinancialsForUpdateSQL
+		self.logger.info("Query: %s", query)
+		symbolsForUpdateQ.execute(query)
+		updateSymbols = symbolsForUpdateQ.fetchall()
+		return updateSymbols
 
 
 	# Make request
