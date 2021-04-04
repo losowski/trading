@@ -14,7 +14,7 @@ CREATE TABLE trading_schema.earnings_data
   id bigint NOT NULL DEFAULT nextval('trading_schema.earnings_data_id_seq'::regclass),
   symbol_id bigint NOT NULL,
   datestamp timestamp without time zone NOT NULL,
-  report_type character(1) NOT NULL,
+  report_type character(1) NOT NULL default 'Q'::bpchar,
   enabled character(1) NOT NULL default 'Y'::bpchar,
   -- Data
   earnings_per_share numeric,

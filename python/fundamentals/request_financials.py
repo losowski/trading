@@ -20,8 +20,23 @@ from python.database import db_connection
 import financials
 
 class RequestFinancials(request_base.RequestBase):
+
+	FinancialsForUpdateSQL = """
+	SELECT
+		s.symbol
+	FROM
+		trading_schema.exchange e
+		INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
+		LEFT JOIN trading_schema.earnings_data ed ON (s.id = ed.symbol_id AND ed.report_type='Q' AND (datestamp IS NULL OR datestamp <= localtimestamp - INTERVAL '89 DAY'))
+	WHERE
+		e.enabled = 'Y'
+	ORDER BY
+		s.symbol
+	;
+	"""
+
 	def __init__(self):
-		super(RequestFinancials, self).__init__()
+		super(RequestFinancials, self).__init__(financials.Financials)
 		self.logger		= logging.getLogger('RequestFinancials')
 
 	def __del__(self):
@@ -31,6 +46,12 @@ class RequestFinancials(request_base.RequestBase):
 	# Function template for identifying symbols to update
 	def getSymbolsToUpdate(self):
 		super(RequestFinancials, self).getSymbolsToUpdate()
+		symbolsForUpdateQ = self.database.get_query()
+		#dataDict = dict()
+		#self.logger.debug("Query Parameters %s", dataDict)
+		query = self.FinancialsForUpdateSQL
+		self.logger.info("Query: %s", query)
+		symbolsForUpdateQ.execute(query)
 
 
 	# Make request
