@@ -1,6 +1,6 @@
 CREATE TABLE trading_schema.earnings_calcs
 (
-  earnings_data_id bigint NOT NULL DEFAULT,
+  earnings_data_id bigint NOT NULL,
   -- Data
   profit_margin numeric,
   valuation numeric,
