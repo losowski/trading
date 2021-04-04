@@ -10,6 +10,8 @@ import sys
 
 # Import the yahoo_fundamentals library
 sys.path.append(os.path.join(sys.path[0], 'python', 'yahoo_fundamentals', 'python'))
+sys.path.append(os.path.join(sys.path[0], 'python', 'yahoo_fundamentals', 'python','financials'))
+sys.path.append(os.path.join(sys.path[0], 'python', 'yahoo_fundamentals', 'python','common'))
 
 # Output the current paths
 print ("PYTHON_PATH: {0}".format(sys.path))
