@@ -11,7 +11,7 @@ from python.historical import yahoo
 
 def main():
 	blurb = "Quote Importer"
-	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',level=logging.INFO)
+	logging.basicConfig(format='%(asctime)s\t%(name)-16s\t%(funcName)-16s\t[%(levelname)-8s] %(message)s',level=logging.INFO)
 	logger	=	logging.getLogger('main')
 	logger.warning(blurb)
 	#Parse the arguments
