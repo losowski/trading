@@ -25,12 +25,13 @@ class RequestBase(import_base.ImportBase):
 		symbolsToUpdate = self.getSymbolsToUpdate()
 		for symbol in symbolsToUpdate:
 			req = self.initRequest(symbol = symbol[0])
+			#Get the data from the request and build args for the stored procedure
 
 
 	# Initialise the request Object
 	def initRequest(self, **kwargs):
-		className = self.requestObj.__class__
-		self.logger.info("Init request %s: Params(%s)", className, kwargs)
+		className = self.requestObj.__name__
+		self.logger.info("Request \"%s\" (%s)", className, kwargs)
 		req = self.requestObj(**kwargs)
 		req.request()
 		req.parse()
