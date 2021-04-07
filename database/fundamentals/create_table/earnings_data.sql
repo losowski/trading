@@ -83,28 +83,63 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningData(
 	p_return_on_equity				trading_schema.earnings_data.return_on_equity%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	inserted_id integer := 0;
-	symbol_id trading_schema.symbol.id%TYPE := NULL;
+	v_inserted_id integer := 0;
+	v_symbol_id trading_schema.symbol.id%TYPE := NULL;
 BEGIN
 	-- Get the symbol id
 	SELECT
 		id
 	INTO
-		symbol_id
+		v_symbol_id
 	FROM
 		trading_schema.symbol
 	WHERE
 		symbol = p_symbol
 	;
-	-- Inser the details
+	-- Insert the details
+	INSERT INTO
+	trading_schema.quote
+		(
+			symbol_id,
+			datestamp,
+			report_type,
+			earnings_per_share,
+			total_revenue,
+			cost_of_revenue,
+			gross_profit,
+			total_assets,
+			total_liabilities,
+			total_income_available_shares,
+			common_stock,
+			retained_earnings,
+			total_stockholder_equity,
+			return_on_equity
+		)
+	VALUES
+		(
+			v_symbol_id,
+			p_datestamp,
+			p_report_type,
+			p_earnings_per_share,
+			p_total_revenue,
+			p_cost_of_revenue,
+			p_gross_profit,
+			p_total_assets,
+			p_total_liabilities,
+			p_total_income_available_shares,
+			p_common_stock,
+			p_retained_earnings,
+			p_total_stockholder_equity,
+			p_return_on_equity
+		);
 	-- Get the inserted index
 	SELECT
 		*
 	INTO
-		inserted_id
+		v_inserted_id
 	FROM
 	-- DONE
-	RETURN inserted_id;
+	RETURN v_inserted_id;
 END;
 $$ LANGUAGE plpgsql;
 

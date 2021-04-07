@@ -56,14 +56,14 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
 	p_volume				trading_schema.quote.volume%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	inserted_id integer := 0;
-	symbol_id trading_schema.symbol.id%TYPE := NULL;
+	v_inserted_id integer := 0;
+	v_symbol_id trading_schema.symbol.id%TYPE := NULL;
 BEGIN
 	-- Get the symbol id
 	SELECT
 		id
 	INTO
-		symbol_id
+		v_symbol_id
 	FROM
 		trading_schema.symbol
 	WHERE
@@ -84,7 +84,7 @@ BEGIN
 		)
 	VALUES
 		(
-			symbol_id,
+			v_symbol_id,
 			p_date,
 			p_open_price,
 			p_high_price,
@@ -100,11 +100,11 @@ BEGIN
 	SELECT
 		*
 	INTO
-		inserted_id
+		v_inserted_id
 	FROM
 		LASTVAL();
 
-	RETURN inserted_id;
+	RETURN v_inserted_id;
 END;
 $$ LANGUAGE plpgsql;
 
