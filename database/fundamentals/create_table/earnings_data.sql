@@ -83,8 +83,8 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningData(
 	p_return_on_equity				trading_schema.earnings_data.return_on_equity%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	v_inserted_id integer := 0;
-	v_symbol_id trading_schema.symbol.id%TYPE := NULL;
+	v_inserted_id	integer := 0;
+	v_symbol_id		trading_schema.symbol.id%TYPE := NULL;
 BEGIN
 	-- Get the symbol id
 	SELECT
@@ -131,7 +131,26 @@ BEGIN
 			p_retained_earnings,
 			p_total_stockholder_equity,
 			p_return_on_equity
-		);
+		)
+		ON CONFLICT ON CONSTRAINT uc_earnings_data_1 DO UPDATE SET
+				earnings_per_share				=	p_earnings_per_share,
+				total_revenue					=	p_total_revenue,
+				cost_of_revenue					=	p_cost_of_revenue,
+				gross_profit					=	p_gross_profit,
+				total_assets					=	p_total_assets,
+				total_liabilities				=	p_total_liabilities,
+				total_income_available_shares	=	p_total_income_available_shares,
+				common_stock					=	p_common_stock,
+				retained_earnings				=	p_retained_earnings,
+				total_stockholder_equity		=	p_total_stockholder_equity,
+				return_on_equity				=	p_return_on_equity
+			WHERE
+				symbol_id	=	v_symbol_id
+			AND
+				datestamp	=	p_datestamp
+			AND
+				report_type	=	p_report_type
+		;
 	-- Get the inserted index
 	SELECT
 		*
