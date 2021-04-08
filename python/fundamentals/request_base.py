@@ -1,6 +1,7 @@
 # Request base
 
 import logging
+import collections
 
 #Import Base
 from python.fundamentals import import_base
@@ -26,6 +27,8 @@ class RequestBase(import_base.ImportBase):
 		for symbol in symbolsToUpdate:
 			req = self.initRequest(symbol = symbol[0])
 			#Get the data from the request and build args for the stored procedure
+			# Build args for stored procedure using a map
+			args = self.buildStoredProceduceArgs(req)
 
 
 	# Initialise the request Object
@@ -51,6 +54,14 @@ class RequestBase(import_base.ImportBase):
 		updateSymbols = symbolsForUpdateQ.fetchall()
 		return updateSymbols
 
+
+	# Build the arguments for the stored request
+	def buildStoredProceduceArgs(self,requestObject):
+		argsArray = list()
+		#for k,v in self.requestKeys:
+			# get the data
+		#	pass
+		#	argsArray = collections.OrderedDict()
 
 
 
