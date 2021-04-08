@@ -12,6 +12,11 @@ class RequestBase(import_base.ImportBase):
 	#Query to identify and get the list of SYMBOLs to update
 	FinancialsForUpdateSQL = None
 
+	# Map of Request keys
+	# (reportType) : dict(psqlParameter : Key)
+	RequestKeyDict = dict()
+
+
 	def __init__(self, requestInit):
 		super(RequestBase, self).__init__()
 		self.logger		= logging.getLogger('RequestBase')

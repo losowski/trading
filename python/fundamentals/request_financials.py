@@ -36,6 +36,39 @@ class RequestFinancials(request_base.RequestBase):
 	;
 	"""
 
+	# Keys
+	RequestKeyDict = {
+		'Q':	{
+					"p_datestamp"						:	"",
+					"p_earnings_per_share"				:	"",
+					"p_total_revenue"					:	"",
+					"p_cost_of_revenue"					:	"",
+					"p_gross_profit"					:	"",
+					"p_total_assets"					:	"",
+					"p_total_liabilities"				:	"",
+					"p_total_income_available_shares"	:	"",
+					"p_common_stock"					:	"",
+					"p_retained_earnings"				:	"",
+					"p_total_stockholder_equity"		:	"",
+					"p_return_on_equity"				:	"",
+				}, # Q
+		'Y':	{
+					"p_datestamp"						:	"",
+					"p_earnings_per_share"				:	"",
+					"p_total_revenue"					:	"",
+					"p_cost_of_revenue"					:	"",
+					"p_gross_profit"					:	"",
+					"p_total_assets"					:	"",
+					"p_total_liabilities"				:	"",
+					"p_total_income_available_shares"	:	"",
+					"p_common_stock"					:	"",
+					"p_retained_earnings"				:	"",
+					"p_total_stockholder_equity"		:	"",
+					"p_return_on_equity"				:	"",
+				}, # Y
+	} # RequestKeyDict
+
+
 	def __init__(self):
 		super(RequestFinancials, self).__init__(financials.Financials)
 		self.logger		= logging.getLogger('RequestFinancials')
