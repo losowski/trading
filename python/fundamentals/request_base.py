@@ -16,6 +16,9 @@ class RequestBase(import_base.ImportBase):
 	# (reportType) : dict(psqlParameter : Key)
 	RequestKeyDict = dict()
 
+	# Stored procedure
+	InsertStoredProcedure = None
+
 
 	def __init__(self, requestInit):
 		super(RequestBase, self).__init__()
@@ -32,8 +35,8 @@ class RequestBase(import_base.ImportBase):
 		for symbol in symbolsToUpdate:
 			req = self.initRequest(symbol = symbol[0])
 			#Get the data from the request and build args for the stored procedure
-			# Build args for stored procedure using a map
-			args = self.buildStoredProceduceArgs(req)
+			# Build args for stored procedure using a map and run
+			self.runStoredProcedure(req, symbol[0])
 
 
 	# Initialise the request Object
@@ -61,13 +64,15 @@ class RequestBase(import_base.ImportBase):
 
 
 	# Build the arguments for the stored request
-	def buildStoredProceduceArgs(self,requestObject):
-		argsArray = list()
-		#for k,v in self.requestKeys:
-			# get the data
-		#	pass
-		#	argsArray = collections.OrderedDict()
-
+	def runStoredProcedure(self,requestObject, symbol):
+		for reportType, paramMap in self.RequestKeyDict.items():
+			self.logger.debug("Param: %s: (%s)", reportType, paramMap)
+			# Build in the basics
+			paramDict = collections.OrderedDict()
+			paramDict['p_symbol'] = symbol
+			paramDict['report_type'] = paramMap
+			#TODO: Get details from the request
+			#TODO: Run the stored procedure
 
 
 	# Make request

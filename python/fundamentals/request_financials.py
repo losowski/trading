@@ -69,6 +69,10 @@ class RequestFinancials(request_base.RequestBase):
 	} # RequestKeyDict
 
 
+    # Stored procedure
+	InsertStoredProcedure = "trading_schema.pInsertEarningDataList"
+
+
 	def __init__(self):
 		super(RequestFinancials, self).__init__(financials.Financials)
 		self.logger		= logging.getLogger('RequestFinancials')
