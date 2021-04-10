@@ -65,14 +65,20 @@ class RequestBase(import_base.ImportBase):
 
 	# Build the arguments for the stored request
 	def runStoredProcedure(self,requestObject, symbol):
+		query = self.database.get_query()
 		for reportType, paramMap in self.RequestKeyDict.items():
 			self.logger.debug("Param: %s: (%s)", reportType, paramMap)
 			# Build in the basics
-			paramDict = collections.OrderedDict()
-			paramDict['p_symbol'] = symbol
-			paramDict['report_type'] = paramMap
-			#TODO: Get details from the request
+			data_parameters = collections.OrderedDict()
+			data_parameters['p_symbol'] = symbol
+			data_parameters['report_type'] = reportType
+			# Fill in the data using the key map to populate it
+			for params, jsonKey in paramMap.items():
+				data_parameters[params] = requestObject[jsonKey]
+			self.logger.debug("%s Params: %s", self.InsertStoredProcedure, data_parameters)
 			#TODO: Run the stored procedure
+			data_list = list(data_parameters.values())
+			query.callproc(self.InsertStoredProcedure, data_list)
 
 
 	# Make request
