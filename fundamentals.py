@@ -14,7 +14,7 @@ from python.yahoo_fundamentals.python.financials import financials
 
 def main():
 	blurb = "Fundamentals Importer"
-	logging.basicConfig(format='%(asctime)s\t%(name)-16s\t%(funcName)-16s\t[%(levelname)-8s] %(message)s',level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s\t%(name)-16s\t%(funcName)-16s\t[%(levelname)-8s] %(message)s',level=logging.INFO)
 	logger	=	logging.getLogger('main')
 	logger.warning(blurb)
 	#Parse the arguments

@@ -75,7 +75,7 @@ class RequestBase(import_base.ImportBase):
 			# Fill in the data using the key map to populate it
 			for params, jsonKey in paramMap.items():
 				data_parameters[params] = requestObject[jsonKey]
-			self.logger.debug("%s Params: %s", self.InsertStoredProcedure, data_parameters)
+			self.logger.info("%s Params: %s", self.InsertStoredProcedure, data_parameters)
 			#TODO: Run the stored procedure
 			data_list = list(data_parameters.values())
 			query.callproc(self.InsertStoredProcedure, data_list)

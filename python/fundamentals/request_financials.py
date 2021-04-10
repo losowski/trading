@@ -39,33 +39,33 @@ class RequestFinancials(request_base.RequestBase):
 	# Keys
 	RequestKeyDict = {
 		'Q':	{
-					"p_datestamp"						:	"",
+					"p_datestamp"						:	"Quarterly.endDate",
 					"p_earnings_per_share"				:	"",
-					"p_total_revenue"					:	"",
-					"p_cost_of_revenue"					:	"",
-					"p_gross_profit"					:	"",
-					"p_total_assets"					:	"",
-					"p_total_liabilities"				:	"",
-					"p_total_income_available_shares"	:	"",
-					"p_common_stock"					:	"",
-					"p_retained_earnings"				:	"",
-					"p_total_stockholder_equity"		:	"",
+					"p_total_revenue"					:	"Quarterly.incomeBeforeTax",
+					"p_cost_of_revenue"					:	"Quarterly.costOfRevenue",
+					"p_gross_profit"					:	"Quarterly.grossProfit",
+					"p_total_assets"					:	"Quarterly.totalAssets",
+					"p_total_liabilities"				:	"Quarterly.totalLiab",
+					"p_total_income_available_shares"	:	"Quarterly.netIncomeApplicableToCommonShares",
+					"p_common_stock"					:	"Quarterly.commonStock",
+					"p_retained_earnings"				:	"Quarterly.retainedEarnings",
+					"p_total_stockholder_equity"		:	"Quarterly.totalStockholderEquity",
 					"p_return_on_equity"				:	"",
 				}, # Q
-		'Y':	{
-					"p_datestamp"						:	"",
-					"p_earnings_per_share"				:	"",
-					"p_total_revenue"					:	"",
-					"p_cost_of_revenue"					:	"",
-					"p_gross_profit"					:	"",
-					"p_total_assets"					:	"",
-					"p_total_liabilities"				:	"",
-					"p_total_income_available_shares"	:	"",
-					"p_common_stock"					:	"",
-					"p_retained_earnings"				:	"",
-					"p_total_stockholder_equity"		:	"",
-					"p_return_on_equity"				:	"",
-				}, # Y
+		#'Y':	{
+		#			"p_datestamp"						:	"",
+		#			"p_earnings_per_share"				:	"",
+		#			"p_total_revenue"					:	"",
+		#			"p_cost_of_revenue"					:	"",
+		#			"p_gross_profit"					:	"",
+		#			"p_total_assets"					:	"",
+		#			"p_total_liabilities"				:	"",
+		#			"p_total_income_available_shares"	:	"",
+		#			"p_common_stock"					:	"",
+		#			"p_retained_earnings"				:	"",
+		#			"p_total_stockholder_equity"		:	"",
+		#			"p_return_on_equity"				:	"",
+		#		}, # Y
 	} # RequestKeyDict
 
 
