@@ -10,7 +10,6 @@ import sys
 
 # Yahoo feed data
 from python.fundamentals import yahoo
-from python.yahoo_fundamentals.python.financials import financials
 
 def main():
 	blurb = "Fundamentals Importer"

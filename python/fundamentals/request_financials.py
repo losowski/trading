@@ -18,7 +18,7 @@ from python.database import db_connection
 
 # Fundamentals
 #from python.yahoo_fundamentals.python.financials import financials
-from ..yahoo_fundamentals.python.financials import financials
+from ..yahoo_fundamentals.yfundamentals import fundamentals as yfun
 
 class RequestFinancials(request_base.RequestBase):
 
@@ -74,7 +74,7 @@ class RequestFinancials(request_base.RequestBase):
 
 
 	def __init__(self):
-		super(RequestFinancials, self).__init__(financials.Financials)
+		super(RequestFinancials, self).__init__(yfun.Fundamentals)
 		self.logger		= logging.getLogger('RequestFinancials')
 
 	def __del__(self):
