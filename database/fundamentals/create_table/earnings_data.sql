@@ -13,7 +13,7 @@ CREATE TABLE trading_schema.earnings_data
 (
   id bigint NOT NULL DEFAULT nextval('trading_schema.earnings_data_id_seq'::regclass),
   symbol_id bigint NOT NULL,
-  datestamp timestamp without time zone NOT NULL,
+  datestamp date NOT NULL,
   report_type character(1) NOT NULL default 'Q'::bpchar,
   -- Data
   earnings_per_share numeric,
@@ -168,7 +168,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_length						numeric(12)
 	--
-	p_datestamp						timestamp without time zone[],
+	p_datestamp						date[],
 	p_report_type					character(1)[],
 	p_earnings_per_share			numeric[],
 	p_total_revenue					numeric[],
