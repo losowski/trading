@@ -50,7 +50,6 @@ class RequestFinancials(request_base.RequestBase):
 					"p_common_stock"					:	"Quarterly.commonStock",
 					"p_retained_earnings"				:	"Quarterly.retainedEarnings",
 					"p_total_stockholder_equity"		:	"Quarterly.totalStockholderEquity",
-					#"p_return_on_equity"				:	"",
 				}, # Q
 		#'Y':	{
 		#			"p_datestamp"						:	"",
@@ -64,7 +63,6 @@ class RequestFinancials(request_base.RequestBase):
 		#			"p_common_stock"					:	"",
 		#			"p_retained_earnings"				:	"",
 		#			"p_total_stockholder_equity"		:	"",
-		#			"p_return_on_equity"				:	"",
 		#		}, # Y
 	} # RequestKeyDict
 
