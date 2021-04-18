@@ -18,7 +18,7 @@ from python.database import db_connection
 
 # Fundamentals
 #from python.yahoo_fundamentals.python.financials import financials
-from ..yahoo_fundamentals.yfundamentals import fundamentals as yfun
+from ..yahoo_fundamentals.python.yfundamentals import fundamentals as yfun
 
 class RequestFinancials(request_base.RequestBase):
 
