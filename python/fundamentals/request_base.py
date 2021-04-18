@@ -42,10 +42,8 @@ class RequestBase(import_base.ImportBase):
 	# Initialise the request Object
 	def initRequest(self, **kwargs):
 		className = self.requestObj.__name__
-		self.logger.info("Request \"%s\" (%s)", className, kwargs)
+		self.logger.info("Constructing: Request \"%s\" (%s)", className, kwargs)
 		req = self.requestObj(**kwargs)
-		req.request()
-		req.parse()
 		return req
 
 
