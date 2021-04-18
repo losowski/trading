@@ -69,9 +69,11 @@ class RequestBase(import_base.ImportBase):
 			# Build in the basics
 			data_parameters = collections.OrderedDict()
 			data_parameters['p_symbol'] = symbol
-			data_parameters['report_type'] = reportType
+			data_parameters['p_length'] = 4 # Magic number
+			data_parameters['p_report_type'] = reportType
 			# Fill in the data using the key map to populate it
 			for params, jsonKey in paramMap.items():
+				self.logger.info("Param: %s : %s",params, jsonKey)
 				data_parameters[params] = requestObject[jsonKey]
 			self.logger.info("%s Params: %s", self.InsertStoredProcedure, data_parameters)
 			#TODO: Run the stored procedure

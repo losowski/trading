@@ -40,7 +40,7 @@ class RequestFinancials(request_base.RequestBase):
 	RequestKeyDict = {
 		'Q':	{
 					"p_datestamp"						:	"Quarterly.endDate",
-					"p_earnings_per_share"				:	"",
+					"p_earnings_per_share"				:	"Quarterly.BasicEPS",
 					"p_total_revenue"					:	"Quarterly.incomeBeforeTax",
 					"p_cost_of_revenue"					:	"Quarterly.costOfRevenue",
 					"p_gross_profit"					:	"Quarterly.grossProfit",
@@ -50,7 +50,7 @@ class RequestFinancials(request_base.RequestBase):
 					"p_common_stock"					:	"Quarterly.commonStock",
 					"p_retained_earnings"				:	"Quarterly.retainedEarnings",
 					"p_total_stockholder_equity"		:	"Quarterly.totalStockholderEquity",
-					"p_return_on_equity"				:	"",
+					#"p_return_on_equity"				:	"",
 				}, # Q
 		#'Y':	{
 		#			"p_datestamp"						:	"",
