@@ -26,10 +26,12 @@ def main():
 	#Process
 	feeds = yahoo.Yahoo()
 	feeds.initialise()
-	if args.symbol is not None:
-		feeds.runSymbol(True, args.symbol)
-	else:
-		feeds.run(True)
+	#TODO: Handle single symbol update
+	#if args.symbol is not None:
+	#	feeds.runSymbol(True, args.symbol)
+	#else:
+	#	feeds.run(True)
+	feeds.run(True)
 	feeds.shutdown()
 	print("Exiting...")
 
