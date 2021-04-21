@@ -166,7 +166,7 @@ $$ LANGUAGE plpgsql;
 -- Procedure to Categorise a single symbol LIST
 CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
-	p_length						numeric(12)
+	p_length						numeric(12),
 	--
 	p_datestamp						date[],
 	p_report_type					character(1)[],
@@ -184,9 +184,10 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 	) RETURNS void AS $$
 DECLARE
 	v_looped		text;
+	v_iterator		RECORD;
 BEGIN
 	-- Call the trading_schema.pInsertEarningData for each entry
-	FOR i IN (SELECT * FROM int4range(0,p_length)) LOOP
+	FOR v_iterator IN (SELECT * FROM generate_series(0,p_length)) LOOP
 		SELECT
 			trading_schema.pInsertEarningData::text
 		INTO
@@ -194,19 +195,19 @@ BEGIN
 		FROM
 		trading_schema.pInsertEarningData(
 			p_symbol,
-			p_datestamp[i],
-			p_report_type[i],
-			p_earnings_per_share[i],
-			p_total_revenue[i],
-			p_cost_of_revenue[i],
-			p_gross_profit[i],
-			p_total_assets[i],
-			p_total_liabilities[i],
-			p_total_income_available_shares[i],
-			p_common_stock[i],
-			p_retained_earnings[i],
-			p_total_stockholder_equity[i],
-			p_return_on_equity[i]
+			p_datestamp[v_iterator],
+			p_report_type[v_iterator],
+			p_earnings_per_share[v_iterator],
+			p_total_revenue[v_iterator],
+			p_cost_of_revenue[v_iterator],
+			p_gross_profit[v_iterator],
+			p_total_assets[v_iterator],
+			p_total_liabilities[v_iterator],
+			p_total_income_available_shares[v_iterator],
+			p_common_stock[v_iterator],
+			p_retained_earnings[v_iterator],
+			p_total_stockholder_equity[v_iterator],
+			p_return_on_equity[v_iterator]
 		);
 	END LOOP;
 END;
