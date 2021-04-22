@@ -167,9 +167,9 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
 	p_length						numeric(12),
+	p_report_type					character(1)[],
 	--
 	p_datestamp						date[],
-	p_report_type					character(1)[],
 	p_earnings_per_share			numeric[],
 	p_total_revenue					numeric[],
 	p_cost_of_revenue				numeric[],
@@ -179,8 +179,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 	p_total_income_available_shares	numeric[],
 	p_common_stock					numeric[],
 	p_retained_earnings				numeric[],
-	p_total_stockholder_equity		numeric[],
-	p_return_on_equity				numeric[]
+	p_total_stockholder_equity		numeric[]
 	) RETURNS void AS $$
 DECLARE
 	v_looped		text;
