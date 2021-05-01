@@ -27,7 +27,7 @@ class StockBase:
 				COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', date_trunc('day',s.last_update), '1960-01-01') AS last_update
 			FROM
 				trading_schema.exchange e
-				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y' AND (s.last_update < %(currentdate)s OR s.last_update IS NULL))
+				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled != 'N' AND (s.last_update < %(currentdate)s OR s.last_update IS NULL))
 				LEFT JOIN trading_schema.quote q ON (s.id = q.symbol_id AND (q.datestamp >= s.last_update - INTERVAL '3 days' OR s.last_update IS NULL))
 			WHERE
 				e.enabled = 'Y'
