@@ -157,7 +157,7 @@ class StockBase:
 					if (('25P02' == e.pgcode) or ('42883' == e.pgcode)):
 						self.database.rollback()
 						if (True == ignore):
-							self.setSymbolDisabled(symbol, 'N')
+							self.setSymbolDisabled(symbol, 'P')
 					elif ('25P02' != e.pgcode):
 						self.logger.critical("Irrecoverable error!")
 						self.logger.error("PGCODE: %s", e.pgcode)
