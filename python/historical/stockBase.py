@@ -49,6 +49,7 @@ class StockBase:
 		;
 	"""
 	getSymbolsForUpdate	=	symbolsForUpdateBase.format(where="")
+	getExchangeUpdate		=	symbolsForUpdateBase.format(where="AND e.name = %(exchange)s")
 	getSymbolUpdate		=	symbolsForUpdateBase.format(where="AND s.symbol = %(symbol)s")
 	#TODO: INDEX on s.enabled
 	#TODO: Improve speed (takes an age)
@@ -98,10 +99,10 @@ class StockBase:
 		self.updateQuotes(ignore, None, symbol)
 
 
-	# Perform update of only one symbol
+	# Perform update of only one exchange
 	#	Beware that this does not override the restrictions in place
 	def runExchange(self, ignore, exchange):
-		self.logger.info("Updating particular symbol: %s", symbol)
+		self.logger.info("Updating particular exchange: %s", exchange)
 		self.updateQuotes(ignore, exchange, None)
 
 
@@ -183,11 +184,14 @@ class StockBase:
 		logging.info("Today format: %s", self.todayDate)
 		dataDict = dict()
 		dataDict['currentdate']			=	self.todayDate.isoformat()
-		dataDict['symbol']				=	symbol
+		dataDict['exchange']			=	exchange
 		dataDict['symbol']				=	symbol
 		self.logger.debug("Query Parameters %s", dataDict)
 		self.logger.debug("Symbol: %s", symbol)
-		if (symbol is not None):
+		if (exchange is not None):
+			self.logger.info("Exchange Query")
+			query	=	self.getExchangeUpdate
+		elif (symbol is not None):
 			self.logger.info("Symbol Query")
 			query	=	self.getSymbolUpdate
 		else:
