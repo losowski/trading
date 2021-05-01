@@ -18,6 +18,7 @@ def main():
 	parser = argparse.ArgumentParser(description= blurb)
 	#Specify arguments
 	parser.add_argument('--symbol', dest='symbol', type=str, help="Symbol to update")
+	parser.add_argument('--exchange', dest='exchange', type=str, help="Exchange to update")
 	#Parse the arguments
 	args = parser.parse_args()
 	logger.info("Args: %s", args)
@@ -26,6 +27,8 @@ def main():
 	feeds.initialise()
 	if args.symbol is not None:
 		feeds.runSymbol(True, args.symbol)
+	if args.exchange is not None:
+		feeds.runExchange(True, args.exchange)
 	else:
 		feeds.run(True)
 	feeds.shutdown()
