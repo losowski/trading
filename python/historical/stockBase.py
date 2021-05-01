@@ -87,7 +87,7 @@ class StockBase:
 
 	# Perform updates for all symbols
 	def run(self, ignore):
-		self.updateQuotes(ignore)
+		self.updateQuotes(ignore, None, None)
 		#self.update_key_statistics() # Temporarily disabled
 
 
@@ -95,7 +95,14 @@ class StockBase:
 	#	Beware that this does not override the restrictions in place
 	def runSymbol(self, ignore, symbol):
 		self.logger.info("Updating particular symbol: %s", symbol)
-		self.updateQuotes(ignore, symbol)
+		self.updateQuotes(ignore, None, symbol)
+
+
+	# Perform update of only one symbol
+	#	Beware that this does not override the restrictions in place
+	def runExchange(self, ignore, exchange):
+		self.logger.info("Updating particular symbol: %s", symbol)
+		self.updateQuotes(ignore, exchange, None)
 
 
 	#Disable problem symbols
@@ -126,9 +133,9 @@ class StockBase:
 
 
 	#Generic Function to import data
-	def updateQuotes(self, ignore, symbol=None):
+	def updateQuotes(self, ignore, exchange, symbol):
 		# Get the list of Symbols: (Last update)
-		updateSymbols = self.getSymbolLastUpdate(symbol)
+		updateSymbols = self.getSymbolLastUpdate(exchange, symbol)
 		# For each symbol
 		for symbol, lastUpdate, update in updateSymbols:
 			self.logger.info("Update Check:%s: (%s->%s): %s", symbol, lastUpdate, self.todayDate, update)
@@ -171,11 +178,12 @@ class StockBase:
 
 	# Generic Function to get last updates
 	#TODO: Pass in FRIDAY here so that we get only the symbols not updated on a weekday
-	def getSymbolLastUpdate(self, symbol=None):
+	def getSymbolLastUpdate(self, exchange, symbol):
 		selectQuery = self.database.get_query()
 		logging.info("Today format: %s", self.todayDate)
 		dataDict = dict()
 		dataDict['currentdate']			=	self.todayDate.isoformat()
+		dataDict['symbol']				=	symbol
 		dataDict['symbol']				=	symbol
 		self.logger.debug("Query Parameters %s", dataDict)
 		self.logger.debug("Symbol: %s", symbol)
