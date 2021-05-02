@@ -210,18 +210,18 @@ class StockBase:
 	#Generic insert quote date
 	def rawInsertQuote(self, insertQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
 		data_parameters = collections.OrderedDict()
-		data_parameters['symbol']			= symbol
-		data_parameters['date']				= date
-		data_parameters['open_price']		= openPrice
-		data_parameters['high_price']		= highPrice
-		data_parameters['low_price']		= lowPrice
-		data_parameters['close_price']		= closePrice
-		data_parameters['adj_close_price']	= adjClosePrice
-		data_parameters['volume']			= volume
+		data_parameters['p_symbol']				= symbol.encode('UTF8').decode()
+		data_parameters['p_date']				= date
+		data_parameters['p_open_price']			= openPrice
+		data_parameters['p_high_price']			= highPrice
+		data_parameters['p_low_price']			= lowPrice
+		data_parameters['p_close_price']		= closePrice
+		data_parameters['p_adj_close_price']	= adjClosePrice
+		data_parameters['p_volume']				= volume
 		dataList = list(data_parameters.values())
 		logging.debug("Inserting %s", dataList)
 		#execute the stored procedure
-		insertQuery.callproc(self.insertQuoteData, dataList)
+		insertQuery.callproc(self.insertQuoteData, data_parameters)
 
 
 	# Overridden Quote function
