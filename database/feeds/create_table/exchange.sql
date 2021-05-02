@@ -70,12 +70,12 @@ ALTER FUNCTION trading_schema.pInsExchange OWNER TO trading;
 
 -- Disable Exchange
 CREATE OR REPLACE FUNCTION trading_schema.pDisableExchange(
-	p_exchange	trading_schema.exchange.name%TYPE
+	p_name	trading_schema.exchange.name%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	changed integer := 0;
 BEGIN
-	UPDATE trading_schema.exchange SET enabled = 'N' WHERE name = p_exchange;
+	UPDATE trading_schema.exchange SET enabled = 'N' WHERE name = p_name;
 
 	GET DIAGNOSTICS changed = ROW_COUNT;
 
@@ -88,12 +88,12 @@ ALTER FUNCTION trading_schema.pDisableExchange OWNER TO trading;
 
 -- Enable Exchange
 CREATE OR REPLACE FUNCTION trading_schema.pEnableExchange(
-	p_exchange	trading_schema.exchange.name%TYPE
+	p_name	trading_schema.exchange.name%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	changed integer := 0;
 BEGIN
-	UPDATE trading_schema.exchange SET enabled = 'Y' WHERE name = p_exchange;
+	UPDATE trading_schema.exchange SET enabled = 'Y' WHERE name = p_name;
 
 	GET DIAGNOSTICS changed = ROW_COUNT;
 

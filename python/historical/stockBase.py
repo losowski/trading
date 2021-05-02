@@ -148,6 +148,7 @@ class StockBase:
 					dataRows = self.getHistoricalData(symbol,lastUpdate, self.todayDate, update)
 					#	Insert the data
 					insertQuery = self.database.get_query()
+					psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, insertQuery)
 					self.insertQuote(insertQuery, symbol, dataRows)
 					#commit the data
 					self.database.commit()
@@ -210,7 +211,8 @@ class StockBase:
 	#Generic insert quote date
 	def rawInsertQuote(self, insertQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
 		data_parameters = collections.OrderedDict()
-		data_parameters['p_symbol']				= symbol.encode('UTF8').decode()
+		self.logger.info("symbol: %s (%s) - %s", symbol, type(symbol), repr(symbol))
+		data_parameters['p_symbol']				= symbol
 		data_parameters['p_date']				= date
 		data_parameters['p_open_price']			= openPrice
 		data_parameters['p_high_price']			= highPrice
@@ -221,7 +223,7 @@ class StockBase:
 		dataList = list(data_parameters.values())
 		logging.debug("Inserting %s", dataList)
 		#execute the stored procedure
-		insertQuery.callproc(self.insertQuoteData, data_parameters)
+		insertQuery.callproc(self.insertQuoteData, dataList)
 
 
 	# Overridden Quote function
