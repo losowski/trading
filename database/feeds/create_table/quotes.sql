@@ -95,7 +95,7 @@ BEGIN
 		);
 
 	-- Call the update function
-	UPDATE trading_schema.symbol SET last_update = localtimestamp WHERE id = symbol_id;
+	UPDATE trading_schema.symbol SET last_update = localtimestamp WHERE id = v_symbol_id;
 	-- Get the inserted index
 	SELECT
 		*
