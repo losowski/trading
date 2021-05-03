@@ -27,7 +27,7 @@ class StockBase:
 				COALESCE(date_trunc('day', MAX(q.datestamp)) + INTERVAL '1 days', date_trunc('day',s.last_update), '1960-01-01') AS last_update
 			FROM
 				trading_schema.exchange e
-				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y' AND (s.last_update < %(currentdate)s OR s.last_update IS NULL))
+				INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled != 'N' AND (s.last_update < %(currentdate)s OR s.last_update IS NULL))
 				LEFT JOIN trading_schema.quote q ON (s.id = q.symbol_id AND (q.datestamp >= s.last_update - INTERVAL '3 days' OR s.last_update IS NULL))
 			WHERE
 				e.enabled = 'Y'
@@ -157,7 +157,7 @@ class StockBase:
 					if (('25P02' == e.pgcode) or ('42883' == e.pgcode)):
 						self.database.rollback()
 						if (True == ignore):
-							self.setSymbolDisabled(symbol, 'N')
+							self.setSymbolDisabled(symbol, 'P')
 					elif ('25P02' != e.pgcode):
 						self.logger.critical("Irrecoverable error!")
 						self.logger.error("PGCODE: %s", e.pgcode)
@@ -206,23 +206,22 @@ class StockBase:
 			logging.debug("SYM: %s : %s UPDATE: %s",symbol, last_entry, update)
 		return updateSymbols
 
-
 	#Generic insert quote date
 	def rawInsertQuote(self, insertQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
-		data_parameters = collections.OrderedDict()
-		data_parameters['symbol']			= symbol
-		data_parameters['date']				= date
-		data_parameters['open_price']		= openPrice
-		data_parameters['high_price']		= highPrice
-		data_parameters['low_price']		= lowPrice
-		data_parameters['close_price']		= closePrice
-		data_parameters['adj_close_price']	= adjClosePrice
-		data_parameters['volume']			= volume
-		dataList = list(data_parameters.values())
-		logging.debug("Inserting %s", dataList)
+		#data_parameters = collections.OrderedDict()
+		data_parameters = dict()
+		data_parameters['p_symbol']				= symbol
+		data_parameters['p_date']				= date
+		data_parameters['p_open_price']			= openPrice
+		data_parameters['p_high_price']			= highPrice
+		data_parameters['p_low_price']			= lowPrice
+		data_parameters['p_close_price']		= closePrice
+		data_parameters['p_adj_close_price']	= adjClosePrice
+		data_parameters['p_volume']				= volume
+		#dataList = list(data_parameters.values())
+		logging.debug("Inserting %s", data_parameters)
 		#execute the stored procedure
-		insertQuery.callproc(self.insertQuoteData, dataList)
-
+		insertQuery.callproc(self.insertQuoteData, data_parameters)
 
 	# Overridden Quote function
 	def getHistoricalData(self, symbol, lastUpdate, todayDate, update):

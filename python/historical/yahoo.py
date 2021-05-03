@@ -45,5 +45,7 @@ class Yahoo (stockBase.StockBase):
 		#self.logger.info("Doing nothing - %s", data)
 		#NOTE: We get data in form of pandas.DataFrame
 		for date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume in zip(data.get('Date'), data.get('Open'), data.get('High'), data.get('Low'), data.get('Close'), data.get('Adj Close'), data.get('Volume')):
+			# Convert date into a datetime object
+			dateObj = datetime.datetime.fromisoformat(date)
 			# Calls rawInsertQuote
-			self.rawInsertQuote(dataQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume)
+			self.rawInsertQuote(dataQuery, symbol, dateObj, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume)

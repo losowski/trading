@@ -22,7 +22,7 @@ CREATE TABLE trading_schema.symbol
       REFERENCES trading_schema.exchange (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT uc_symbol UNIQUE (symbol),
-  CONSTRAINT ck_symbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar, '-'::bpchar, '?'::bpchar])) NOT VALID
+  CONSTRAINT ck_symbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar, '-'::bpchar, '?'::bpchar, 'P'::bpchar])) NOT VALID
 )
 WITH (
   OIDS=FALSE
@@ -108,13 +108,13 @@ ALTER FUNCTION trading_schema.pInsSymbol OWNER TO trading;
 
 -- Disable Symbol
 CREATE OR REPLACE FUNCTION trading_schema.pDisableSymbol(
-	p_name		trading_schema.symbol.name%TYPE,
+	p_symbol		trading_schema.symbol.symbol%TYPE,
 	p_setting		trading_schema.symbol.enabled%TYPE default '-'
 	) RETURNS integer AS $$
 DECLARE
 	v_changed integer := 0;
 BEGIN
-	UPDATE trading_schema.symbol SET enabled = p_setting WHERE symbol = p_name;
+	UPDATE trading_schema.symbol SET enabled = p_setting WHERE symbol = p_symbol;
 
 	GET DIAGNOSTICS v_changed = ROW_COUNT;
 
@@ -127,12 +127,12 @@ ALTER FUNCTION trading_schema.pDisableSymbol OWNER TO trading;
 
 -- Enable Symbol
 CREATE OR REPLACE FUNCTION trading_schema.pEnableSymbol(
-	p_name		trading_schema.symbol.name%TYPE
+	p_symbol		trading_schema.symbol.symbol%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	v_changed integer := 0;
 BEGIN
-	UPDATE trading_schema.symbol SET enabled = 'Y' WHERE symbol = p_name;
+	UPDATE trading_schema.symbol SET enabled = 'Y' WHERE symbol = p_symbol;
 
 	GET DIAGNOSTICS v_changed = ROW_COUNT;
 
