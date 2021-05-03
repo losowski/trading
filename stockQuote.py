@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 -u
 '''
 Import the Stock Data from Yahoo Finance
 '''
@@ -11,7 +11,7 @@ from python.historical import yahoo
 
 def main():
 	blurb = "Quote Importer"
-	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',level=logging.INFO)
+	logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',level=logging.DEBUG)
 	logger	=	logging.getLogger('main')
 	logger.warning(blurb)
 	#Parse the arguments

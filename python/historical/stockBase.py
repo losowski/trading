@@ -212,7 +212,8 @@ class StockBase:
 
 	#Generic insert quote date
 	def rawInsertQuote(self, insertQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
-		data_parameters = collections.OrderedDict()
+		#data_parameters = collections.OrderedDict()
+		data_parameters = dict()	
 		self.logger.info("symbol: %s (%s) - %s", symbol, type(symbol), repr(symbol))
 		data_parameters['p_symbol']				= symbol
 		data_parameters['p_date']				= date
@@ -222,11 +223,15 @@ class StockBase:
 		data_parameters['p_close_price']		= closePrice
 		data_parameters['p_adj_close_price']	= adjClosePrice
 		data_parameters['p_volume']				= volume
-		dataList = list(data_parameters.values())
-		logging.debug("Inserting %s", dataList)
+		#dataList = list(data_parameters.values())
+		logging.debug("Inserting %s", data_parameters)
 		#execute the stored procedure
-		insertQuery.callproc(self.insertQuoteData, dataList)
-
+		#insertQuery.callproc(self.insertQuoteData, data_parameters)
+		# Workaround for callproc not working
+		insertQuoteDataSQL = "SELECT * FROM trading_schema.pInsQuote('{p_symbol}'::text, '{p_date}'::timestamp without time zone, {p_open_price}, {p_high_price}, {p_low_price}, {p_close_price}, {p_adj_close_price}, {p_volume});"
+		sql = insertQuoteDataSQL.format(**data_parameters)
+		logging.debug("SQL %s", sql)
+		insertQuery.execute(sql)
 
 	# Overridden Quote function
 	def getHistoricalData(self, symbol, lastUpdate, todayDate, update):
