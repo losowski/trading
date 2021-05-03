@@ -14,7 +14,7 @@ CREATE TABLE trading_schema.quote
   id bigint NOT NULL DEFAULT nextval('trading_schema.quote_id_seq'::regclass),
   symbol_id bigint,
   datestamp timestamp without time zone NOT NULL,
-  volume bigint NOT NULL,
+  volume numeric(12,0) NOT NULL,
   adjusted_close_price numeric NOT NULL,
   open_price numeric NOT NULL,
   close_price numeric NOT NULL,
