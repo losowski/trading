@@ -9,6 +9,8 @@ import logging
 import sys
 import traceback
 
+import pkg_resources
+pkg_resources.require("psycopg2==2.9.dev0")
 import psycopg2
 
 #Database
