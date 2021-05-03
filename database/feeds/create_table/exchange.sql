@@ -42,7 +42,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsExchange(
 	p_exchange	trading_schema.exchange.name%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	inserted_id integer := 0;
+	v_inserted_id integer := 0;
 BEGIN
 	INSERT INTO
 	trading_schema.exchange
@@ -57,11 +57,11 @@ BEGIN
 	SELECT
 		*
 	INTO
-		inserted_id
+		v_inserted_id
 	FROM
 		LASTVAL();
 
-	RETURN inserted_id;
+	RETURN v_inserted_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -73,13 +73,13 @@ CREATE OR REPLACE FUNCTION trading_schema.pDisableExchange(
 	p_exchange	trading_schema.exchange.name%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	changed integer := 0;
+	v_changed integer := 0;
 BEGIN
 	UPDATE trading_schema.exchange SET enabled = 'N' WHERE name = p_exchange;
 
-	GET DIAGNOSTICS changed = ROW_COUNT;
+	GET DIAGNOSTICS v_changed = ROW_COUNT;
 
-	RETURN changed;
+	RETURN v_changed;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -91,13 +91,13 @@ CREATE OR REPLACE FUNCTION trading_schema.pEnableExchange(
 	p_exchange	trading_schema.exchange.name%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	changed integer := 0;
+	v_changed integer := 0;
 BEGIN
 	UPDATE trading_schema.exchange SET enabled = 'Y' WHERE name = p_exchange;
 
-	GET DIAGNOSTICS changed = ROW_COUNT;
+	GET DIAGNOSTICS v_changed = ROW_COUNT;
 
-	RETURN changed;
+	RETURN v_changed;
 END;
 $$ LANGUAGE plpgsql;
 

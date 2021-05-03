@@ -22,7 +22,7 @@ CREATE TABLE trading_schema.symbol
       REFERENCES trading_schema.exchange (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT uc_symbol UNIQUE (symbol),
-  CONSTRAINT ck_symbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar, '-'::bpchar, '?'::bpchar])) NOT VALID
+  CONSTRAINT ck_symbol_enabled CHECK (enabled = ANY (ARRAY['Y'::bpchar, 'N'::bpchar, '-'::bpchar, '?'::bpchar, 'P'::bpchar])) NOT VALID
 )
 WITH (
   OIDS=FALSE
@@ -74,14 +74,14 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsSymbol(
 	p_symbol	trading_schema.symbol.symbol%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	ex_id trading_schema.symbol.exchange_id%TYPE := NULL;
-	inserted_id integer := 0;
+	v_ex_id trading_schema.symbol.exchange_id%TYPE := NULL;
+	v_inserted_id integer := 0;
 BEGIN
 	-- Get Exchange ID
 	SELECT
 		id
 	INTO
-		ex_id
+		v_ex_id
 	FROM
 		trading_schema.exchange
 	WHERE
@@ -89,16 +89,16 @@ BEGIN
 	;
 	-- TODO: Break on "no_data" with RAISE "Exchange not found"
 	-- Insert data
-	INSERT INTO trading_schema.symbol (exchange_id, symbol, name) VALUES (ex_id, p_symbol, p_name);
+	INSERT INTO trading_schema.symbol (exchange_id, symbol, name) VALUES (v_ex_id, p_symbol, p_name);
 
 	SELECT
 		*
 	INTO
-		inserted_id
+		v_inserted_id
 	FROM
 		LASTVAL();
 
-	RETURN inserted_id;
+	RETURN v_inserted_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -108,17 +108,17 @@ ALTER FUNCTION trading_schema.pInsSymbol OWNER TO trading;
 
 -- Disable Symbol
 CREATE OR REPLACE FUNCTION trading_schema.pDisableSymbol(
-	p_name		trading_schema.symbol.name%TYPE,
+	p_symbol		trading_schema.symbol.symbol%TYPE,
 	p_setting		trading_schema.symbol.enabled%TYPE default '-'
 	) RETURNS integer AS $$
 DECLARE
-	changed integer := 0;
+	v_changed integer := 0;
 BEGIN
-	UPDATE trading_schema.symbol SET enabled = p_setting WHERE symbol = p_name;
+	UPDATE trading_schema.symbol SET enabled = p_setting WHERE symbol = p_symbol;
 
-	GET DIAGNOSTICS changed = ROW_COUNT;
+	GET DIAGNOSTICS v_changed = ROW_COUNT;
 
-	RETURN changed;
+	RETURN v_changed;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -127,16 +127,16 @@ ALTER FUNCTION trading_schema.pDisableSymbol OWNER TO trading;
 
 -- Enable Symbol
 CREATE OR REPLACE FUNCTION trading_schema.pEnableSymbol(
-	p_name		trading_schema.symbol.name%TYPE
+	p_symbol		trading_schema.symbol.symbol%TYPE
 	) RETURNS integer AS $$
 DECLARE
-	changed integer := 0;
+	v_changed integer := 0;
 BEGIN
-	UPDATE trading_schema.symbol SET enabled = 'Y' WHERE symbol = p_name;
+	UPDATE trading_schema.symbol SET enabled = 'Y' WHERE symbol = p_symbol;
 
-	GET DIAGNOSTICS changed = ROW_COUNT;
+	GET DIAGNOSTICS v_changed = ROW_COUNT;
 
-	RETURN changed;
+	RETURN v_changed;
 END;
 $$ LANGUAGE plpgsql;
 
