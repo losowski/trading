@@ -148,7 +148,6 @@ class StockBase:
 					dataRows = self.getHistoricalData(symbol,lastUpdate, self.todayDate, update)
 					#	Insert the data
 					insertQuery = self.database.get_query()
-					psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, insertQuery)
 					self.insertQuote(insertQuery, symbol, dataRows)
 					#commit the data
 					self.database.commit()

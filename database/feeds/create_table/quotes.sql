@@ -53,7 +53,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsQuote(
 	p_low_price				trading_schema.quote.low_price%TYPE,
 	p_close_price			trading_schema.quote.close_price%TYPE,
 	p_adj_close_price		trading_schema.quote.adjusted_close_price%TYPE,
-	p_volume				numeric
+	p_volume				trading_schema.quote.volume%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	v_inserted_id integer := 0;
