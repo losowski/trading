@@ -76,6 +76,7 @@ class RequestBase(import_base.ImportBase):
 				self.logger.info("Param: %s : %s",params, details)
 				# Get and format the data
 				data = requestObject[ details[0] ]
+				self.logger.info("data: %s", data)
 				fmt = details[1]
 				# Build the data parameters
 				data_parameters[params] = fmt(data)
