@@ -222,11 +222,6 @@ class StockBase:
 		logging.debug("Inserting %s", data_parameters)
 		#execute the stored procedure
 		insertQuery.callproc(self.insertQuoteData, data_parameters)
-		# Workaround for callproc not working
-		#insertQuoteDataSQL = "SELECT * FROM trading_schema.pInsQuote('{p_symbol}'::text, '{p_date}'::timestamp without time zone, {p_open_price}, {p_high_price}, {p_low_price}, {p_close_price}, {p_adj_close_price}, {p_volume});"
-		#sql = insertQuoteDataSQL.format(**data_parameters)
-		#logging.debug("SQL Statement: \"%s\"", sql)
-		#insertQuery.execute(sql)
 
 	# Overridden Quote function
 	def getHistoricalData(self, symbol, lastUpdate, todayDate, update):
