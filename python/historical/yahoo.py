@@ -47,6 +47,5 @@ class Yahoo (stockBase.StockBase):
 		for date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume in zip(data.get('Date'), data.get('Open'), data.get('High'), data.get('Low'), data.get('Close'), data.get('Adj Close'), data.get('Volume')):
 			# Convert date into a datetime object
 			dateObj = datetime.datetime.fromisoformat(date)
-			self.logger.debug("Symbol: %s, (%s)", symbol, type(symbol))
 			# Calls rawInsertQuote
 			self.rawInsertQuote(dataQuery, symbol, dateObj, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume)

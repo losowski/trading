@@ -213,8 +213,7 @@ class StockBase:
 	#Generic insert quote date
 	def rawInsertQuote(self, insertQuery, symbol, date, openPrice, highPrice, lowPrice, closePrice, adjClosePrice, volume):
 		#data_parameters = collections.OrderedDict()
-		data_parameters = dict()	
-		self.logger.info("symbol: %s (%s) - %s", symbol, type(symbol), repr(symbol))
+		data_parameters = dict()
 		data_parameters['p_symbol']				= symbol
 		data_parameters['p_date']				= date
 		data_parameters['p_open_price']			= openPrice
