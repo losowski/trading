@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -u
+#!/usr/bin/python3
 '''
 Import the Stock Data from Yahoo Finance
 '''
