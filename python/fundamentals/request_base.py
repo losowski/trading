@@ -70,7 +70,7 @@ class RequestBase(import_base.ImportBase):
 			data_parameters = collections.OrderedDict()
 			data_parameters['p_symbol'] = symbol
 			data_parameters['p_length'] = 4 # Magic number
-			data_parameters['p_report_type'] = reportType
+			data_parameters['p_report_type'] = str(reportType)
 			# Fill in the data using the key map to populate it
 			for params, details in paramMap.items():
 				self.logger.info("Param: %s : %s",params, details)
@@ -83,8 +83,8 @@ class RequestBase(import_base.ImportBase):
 				self.logger.info("Formatted Data: %s", fdata)
 				# Build the data parameters
 				data_parameters[params] = fdata
-			self.logger.info("%s Params: %s", self.InsertStoredProcedure, data_parameters)
-			#TODO: Run the stored procedure
+			self.logger.warn("%s Params: %s", self.InsertStoredProcedure, data_parameters)
+			# Run the stored procedure
 			data_list = list(data_parameters.values())
 			query.callproc(self.InsertStoredProcedure, data_list)
 

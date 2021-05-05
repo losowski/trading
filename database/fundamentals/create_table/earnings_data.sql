@@ -166,8 +166,8 @@ $$ LANGUAGE plpgsql;
 -- Procedure to Categorise a single symbol LIST
 CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
-	p_length						numeric(12),
-	p_report_type					character(1)[],
+	p_length						integer,
+	p_report_type					trading_schema.earnings_data.report_type%TYPE,
 	--
 	p_datestamp						date[],
 	p_earnings_per_share			numeric[],
@@ -195,7 +195,7 @@ BEGIN
 		trading_schema.pInsertEarningData(
 			p_symbol,
 			p_datestamp[v_iterator],
-			p_report_type[v_iterator],
+			p_report_type,
 			p_earnings_per_share[v_iterator],
 			p_total_revenue[v_iterator],
 			p_cost_of_revenue[v_iterator],
