@@ -126,8 +126,19 @@ BEGIN
 			p_common_stock,
 			p_retained_earnings,
 			p_total_stockholder_equity
-		);
-	-- TODO: Add Catch on duplicates
+		)
+		ON CONFLICT ON CONSTRAINT uc_earnings_data_1 DO UPDATE SET
+				earnings_per_share				=	EXCLUDED.earnings_per_share,
+				total_revenue					=	EXCLUDED.total_revenue,
+				cost_of_revenue					=	EXCLUDED.cost_of_revenue,
+				gross_profit					=	EXCLUDED.gross_profit,
+				total_assets					=	EXCLUDED.total_assets,
+				total_liabilities				=	EXCLUDED.total_liabilities,
+				total_income_available_shares	=	EXCLUDED.total_income_available_shares,
+				common_stock					=	EXCLUDED.common_stock,
+				retained_earnings				=	EXCLUDED.retained_earnings,
+				total_stockholder_equity		=	EXCLUDED.total_stockholder_equity
+		;
 	-- Get the inserted index
 	SELECT
 		*
