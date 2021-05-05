@@ -40,16 +40,16 @@ class RequestFinancials(request_base.RequestBase):
 	RequestKeyDict = {
 		'Q':	{
 					"p_datestamp"						:	("Quarterly.endDate", datetime.datetime.fromisoformat),
-					"p_earnings_per_share"				:	("Quarterly.BasicEPS", str ),
-					"p_total_revenue"					:	("Quarterly.incomeBeforeTax", str ),
-					"p_cost_of_revenue"					:	("Quarterly.costOfRevenue", str ),
-					"p_gross_profit"					:	("Quarterly.grossProfit", str ),
-					"p_total_assets"					:	("Quarterly.totalAssets", str ),
-					"p_total_liabilities"				:	("Quarterly.totalLiab", str ),
-					"p_total_income_available_shares"	:	("Quarterly.netIncomeApplicableToCommonShares", str ),
-					"p_common_stock"					:	("Quarterly.commonStock", str ),
-					"p_retained_earnings"				:	("Quarterly.retainedEarnings", str ),
-					"p_total_stockholder_equity"		:	("Quarterly.totalStockholderEquity", str ),
+					"p_earnings_per_share"				:	("Quarterly.BasicEPS", float ),
+					"p_total_revenue"					:	("Quarterly.incomeBeforeTax", float ),
+					"p_cost_of_revenue"					:	("Quarterly.costOfRevenue", float ),
+					"p_gross_profit"					:	("Quarterly.grossProfit", float ),
+					"p_total_assets"					:	("Quarterly.totalAssets", float ),
+					"p_total_liabilities"				:	("Quarterly.totalLiab", float ),
+					"p_total_income_available_shares"	:	("Quarterly.netIncomeApplicableToCommonShares", float ),
+					"p_common_stock"					:	("Quarterly.commonStock", float ),
+					"p_retained_earnings"				:	("Quarterly.retainedEarnings", float ),
+					"p_total_stockholder_equity"		:	("Quarterly.totalStockholderEquity", float ),
 				}, # Q
 		#'Y':	{
 		#			"p_datestamp"						:	("", str ),

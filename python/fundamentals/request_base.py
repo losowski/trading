@@ -76,14 +76,29 @@ class RequestBase(import_base.ImportBase):
 				self.logger.info("Param: %s : %s",params, details)
 				# Get and format the data
 				data = requestObject[ details[0] ]
-				self.logger.info("data: %s", data)
+				self.logger.debug("data: %s", data)
 				fmt = details[1]
+				# format the data
+				fdata = self.__applyFormatting(data, fmt)
+				self.logger.info("Formatted Data: %s", fdata)
 				# Build the data parameters
-				data_parameters[params] = fmt(data)
+				data_parameters[params] = fdata
 			self.logger.info("%s Params: %s", self.InsertStoredProcedure, data_parameters)
 			#TODO: Run the stored procedure
 			data_list = list(data_parameters.values())
 			query.callproc(self.InsertStoredProcedure, data_list)
+
+	# Apply formatting
+	def __applyFormatting(self, data, formatting):
+		retVal = None
+		if type(data) is str:
+			retVal = formatting(data)
+		if type(data) is list:
+			retVal = list()
+			for d in data:
+				fd = formatting(d)
+				retVal.append(fd)
+		return retVal
 
 
 	# Make request
