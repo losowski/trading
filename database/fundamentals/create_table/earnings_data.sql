@@ -26,7 +26,6 @@ CREATE TABLE trading_schema.earnings_data
   common_stock numeric,
   retained_earnings numeric,
   total_stockholder_equity numeric,
-  return_on_equity numeric,
   CONSTRAINT pk_earnings_data_id PRIMARY KEY (id),
   CONSTRAINT fk_earnings_data_symbol_id FOREIGN KEY (symbol_id)
 	  REFERENCES trading_schema.symbol (id) MATCH SIMPLE
@@ -63,7 +62,6 @@ CREATE INDEX idx_earnings_data_symbol_datestamp_report_type
 
 
 -- Stored Procedures --
-
 -- Procedure to Categorise a single symbol
 CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningData(
 	p_symbol						trading_schema.symbol.symbol%TYPE,
@@ -79,8 +77,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningData(
 	p_total_income_available_shares	trading_schema.earnings_data.total_income_available_shares%TYPE,
 	p_common_stock					trading_schema.earnings_data.common_stock%TYPE,
 	p_retained_earnings				trading_schema.earnings_data.retained_earnings%TYPE,
-	p_total_stockholder_equity		trading_schema.earnings_data.total_stockholder_equity%TYPE,
-	p_return_on_equity				trading_schema.earnings_data.return_on_equity%TYPE
+	p_total_stockholder_equity		trading_schema.earnings_data.total_stockholder_equity%TYPE
 	) RETURNS integer AS $$
 DECLARE
 	v_inserted_id	integer := 0;
@@ -112,8 +109,7 @@ BEGIN
 			total_income_available_shares,
 			common_stock,
 			retained_earnings,
-			total_stockholder_equity,
-			return_on_equity
+			total_stockholder_equity
 		)
 	VALUES
 		(
@@ -129,8 +125,7 @@ BEGIN
 			p_total_income_available_shares,
 			p_common_stock,
 			p_retained_earnings,
-			p_total_stockholder_equity,
-			p_return_on_equity
+			p_total_stockholder_equity
 		)
 		ON CONFLICT ON CONSTRAINT uc_earnings_data_1 DO UPDATE SET
 				earnings_per_share				=	p_earnings_per_share,
@@ -142,8 +137,7 @@ BEGIN
 				total_income_available_shares	=	p_total_income_available_shares,
 				common_stock					=	p_common_stock,
 				retained_earnings				=	p_retained_earnings,
-				total_stockholder_equity		=	p_total_stockholder_equity,
-				return_on_equity				=	p_return_on_equity
+				total_stockholder_equity		=	p_total_stockholder_equity
 			WHERE
 				symbol_id	=	v_symbol_id
 			AND
@@ -183,7 +177,7 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 	) RETURNS void AS $$
 DECLARE
 	v_looped		text;
-	v_iterator		RECORD;
+	v_iterator		integer;
 BEGIN
 	-- Call the trading_schema.pInsertEarningData for each entry
 	FOR v_iterator IN (SELECT * FROM generate_series(0,p_length)) LOOP
@@ -205,8 +199,7 @@ BEGIN
 			p_total_income_available_shares[v_iterator],
 			p_common_stock[v_iterator],
 			p_retained_earnings[v_iterator],
-			p_total_stockholder_equity[v_iterator],
-			p_return_on_equity[v_iterator]
+			p_total_stockholder_equity[v_iterator]
 		);
 	END LOOP;
 END;
