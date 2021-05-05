@@ -89,13 +89,13 @@ BEGIN
 	INTO
 		v_symbol_id
 	FROM
-		trading_schema.symbol
+		trading_schema.symbol s
 	WHERE
-		symbol = p_symbol
+		s.symbol = p_symbol
 	;
 	-- Insert the details
 	INSERT INTO
-	trading_schema.quote
+		trading_schema.earnings_data
 		(
 			symbol_id,
 			datestamp,
@@ -126,25 +126,8 @@ BEGIN
 			p_common_stock,
 			p_retained_earnings,
 			p_total_stockholder_equity
-		)
-		ON CONFLICT ON CONSTRAINT uc_earnings_data_1 DO UPDATE SET
-				earnings_per_share				=	p_earnings_per_share,
-				total_revenue					=	p_total_revenue,
-				cost_of_revenue					=	p_cost_of_revenue,
-				gross_profit					=	p_gross_profit,
-				total_assets					=	p_total_assets,
-				total_liabilities				=	p_total_liabilities,
-				total_income_available_shares	=	p_total_income_available_shares,
-				common_stock					=	p_common_stock,
-				retained_earnings				=	p_retained_earnings,
-				total_stockholder_equity		=	p_total_stockholder_equity
-			WHERE
-				symbol_id	=	v_symbol_id
-			AND
-				datestamp	=	p_datestamp
-			AND
-				report_type	=	p_report_type
-		;
+		);
+	-- TODO: Add Catch on duplicates
 	-- Get the inserted index
 	SELECT
 		*
@@ -155,7 +138,9 @@ BEGIN
 	RETURN v_inserted_id;
 END;
 $$ LANGUAGE plpgsql;
--- Stored Procedures --
+
+-- Ownership
+ALTER FUNCTION trading_schema.pInsertEarningData OWNER TO trading;
 
 -- Procedure to Categorise a single symbol LIST
 CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
@@ -182,9 +167,7 @@ BEGIN
 	-- Call the trading_schema.pInsertEarningData for each entry
 	FOR v_iterator IN (SELECT * FROM generate_series(0,p_length)) LOOP
 		SELECT
-			trading_schema.pInsertEarningData::text
-		INTO
-			v_looped
+			*
 		FROM
 		trading_schema.pInsertEarningData(
 			p_symbol,
@@ -204,4 +187,7 @@ BEGIN
 	END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Ownership
+ALTER FUNCTION trading_schema.pInsertEarningDataList OWNER TO trading;
 
