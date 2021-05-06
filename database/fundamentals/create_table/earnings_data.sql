@@ -145,6 +145,7 @@ BEGIN
 	INTO
 		v_inserted_id
 	FROM
+		LASTVAL();
 	-- DONE
 	RETURN v_inserted_id;
 END;
@@ -174,11 +175,15 @@ CREATE OR REPLACE FUNCTION trading_schema.pInsertEarningDataList(
 DECLARE
 	v_looped		text;
 	v_iterator		integer;
+
 BEGIN
 	-- Call the trading_schema.pInsertEarningData for each entry
-	FOR v_iterator IN (SELECT * FROM generate_series(0,p_length)) LOOP
+	-- NOTE: PSQL is 1-indexed (not zero!)
+	FOR v_iterator IN (SELECT * FROM generate_series(1,p_length)) LOOP
 		SELECT
 			*
+		INTO
+			v_looped
 		FROM
 		trading_schema.pInsertEarningData(
 			p_symbol,
@@ -195,6 +200,7 @@ BEGIN
 			p_retained_earnings[v_iterator],
 			p_total_stockholder_equity[v_iterator]
 		);
+		raise notice 'Looped rows changed %', v_looped;
 	END LOOP;
 END;
 $$ LANGUAGE plpgsql;
