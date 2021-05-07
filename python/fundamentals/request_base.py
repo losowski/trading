@@ -2,6 +2,7 @@
 
 import logging
 import collections
+import time
 
 #Import Base
 from python.fundamentals import import_base
@@ -37,6 +38,7 @@ class RequestBase(import_base.ImportBase):
 			#Get the data from the request and build args for the stored procedure
 			# Build args for stored procedure using a map and run
 			self.runStoredProcedure(req, symbol[0])
+			time.sleep(8)
 
 
 	# Initialise the request Object
