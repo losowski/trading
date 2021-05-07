@@ -1,14 +1,9 @@
 # Request handling for the financial data
 
 import datetime
-import time
 import collections
 import logging
-import os
-import sys
-import traceback
 
-import psycopg2
 
 #Import Base
 from python.fundamentals import request_base
@@ -51,19 +46,19 @@ class RequestFinancials(request_base.RequestBase):
 					"p_retained_earnings"				:	("Quarterly.retainedEarnings", float ),
 					"p_total_stockholder_equity"		:	("Quarterly.totalStockholderEquity", float ),
 				}, # Q
-		#'Y':	{
-		#			"p_datestamp"						:	("", str ),
-		#			"p_earnings_per_share"				:	("", str ),
-		#			"p_total_revenue"					:	("", str ),
-		#			"p_cost_of_revenue"					:	("", str ),
-		#			"p_gross_profit"					:	("", str ),
-		#			"p_total_assets"					:	("", str ),
-		#			"p_total_liabilities"				:	("", str ),
-		#			"p_total_income_available_shares"	:	("", str ),
-		#			"p_common_stock"					:	("", str ),
-		#			"p_retained_earnings"				:	("", str ),
-		#			"p_total_stockholder_equity"		:	("", str ),
-		#		}, # Y
+	#	'Y':	{
+	#				"p_datestamp"						:	("Yearly.endDate", datetime.date.fromisoformat ),
+	#				"p_earnings_per_share"				:	("Yearly.BasicEPS", float ),
+	#				"p_total_revenue"					:	("Yearly.incomeBeforeTax", float ),
+	#				"p_cost_of_revenue"					:	("Yearly.costOfRevenue", float ),
+	#				"p_gross_profit"					:	("Yearly.grossProfit", float ),
+	#				"p_total_assets"					:	("Yearly.totalAssets", float ),
+	#				"p_total_liabilities"				:	("Yearly.totalLiab", float ),
+	#				"p_total_income_available_shares"	:	("Yearly.netIncomeApplicableToCommonShares", float ),
+	#				"p_common_stock"					:	("Yearly.commonStock", float ),
+	#				"p_retained_earnings"				:	("Yearly.retainedEarnings", float ),
+	#				"p_total_stockholder_equity"		:	("Yearly.totalStockholderEquity", float ),
+	#			}, # Y
 	} # RequestKeyDict
 
 
