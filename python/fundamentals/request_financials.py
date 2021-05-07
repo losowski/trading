@@ -46,19 +46,19 @@ class RequestFinancials(request_base.RequestBase):
 					"p_retained_earnings"				:	("Quarterly.retainedEarnings", float ),
 					"p_total_stockholder_equity"		:	("Quarterly.totalStockholderEquity", float ),
 				}, # Q
-	#	'Y':	{
-	#				"p_datestamp"						:	("Yearly.endDate", datetime.date.fromisoformat ),
-	#				"p_earnings_per_share"				:	("Yearly.BasicEPS", float ),
-	#				"p_total_revenue"					:	("Yearly.incomeBeforeTax", float ),
-	#				"p_cost_of_revenue"					:	("Yearly.costOfRevenue", float ),
-	#				"p_gross_profit"					:	("Yearly.grossProfit", float ),
-	#				"p_total_assets"					:	("Yearly.totalAssets", float ),
-	#				"p_total_liabilities"				:	("Yearly.totalLiab", float ),
-	#				"p_total_income_available_shares"	:	("Yearly.netIncomeApplicableToCommonShares", float ),
-	#				"p_common_stock"					:	("Yearly.commonStock", float ),
-	#				"p_retained_earnings"				:	("Yearly.retainedEarnings", float ),
-	#				"p_total_stockholder_equity"		:	("Yearly.totalStockholderEquity", float ),
-	#			}, # Y
+		'Y':	{
+					"p_datestamp"						:	("Yearly.endDate", datetime.date.fromisoformat ),
+					"p_earnings_per_share"				:	("Yearly.BasicEPS", float ),
+					"p_total_revenue"					:	("Yearly.incomeBeforeTax", float ),
+					"p_cost_of_revenue"					:	("Yearly.costOfRevenue", float ),
+					"p_gross_profit"					:	("Yearly.grossProfit", float ),
+					"p_total_assets"					:	("Yearly.totalAssets", float ),
+					"p_total_liabilities"				:	("Yearly.totalLiab", float ),
+					"p_total_income_available_shares"	:	("Yearly.netIncomeApplicableToCommonShares", float ),
+					"p_common_stock"					:	("Yearly.commonStock", float ),
+					"p_retained_earnings"				:	("Yearly.retainedEarnings", float ),
+					"p_total_stockholder_equity"		:	("Yearly.totalStockholderEquity", float ),
+				}, # Y
 	} # RequestKeyDict
 
 
