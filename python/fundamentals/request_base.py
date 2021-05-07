@@ -87,8 +87,7 @@ class RequestBase(import_base.ImportBase):
 				data_parameters[params] = fdata
 			self.logger.warn("%s Params: %s", self.InsertStoredProcedure, data_parameters)
 			# Run the stored procedure
-			data_list = list(data_parameters.values())
-			query.callproc(self.InsertStoredProcedure, data_list)
+			query.callproc(self.InsertStoredProcedure, data_parameters)
 
 	# Apply formatting
 	def __applyFormatting(self, data, formatting):
