@@ -34,10 +34,29 @@ class RequestBase(import_base.ImportBase):
 		super(RequestBase, self).run()
 		symbolsToUpdate = self.getSymbolsToUpdate()
 		for symbol in symbolsToUpdate:
-			req = self.initRequest(symbol = symbol[0])
-			#Get the data from the request and build args for the stored procedure
-			# Build args for stored procedure using a map and run
-			self.runStoredProcedure(req, symbol[0])
+			try:
+				req = self.initRequest(symbol = symbol[0])
+				#Get the data from the request and build args for the stored procedure
+				# Build args for stored procedure using a map and run
+				self.runStoredProcedure(req, symbol[0])
+				#commit the data
+				self.database.commit()
+			except psycopg2.Error as e:
+				self.logger.error("PGCODE: %s", e.pgcode)
+				self.logger.error("PGERROR: %s", e.pgerror)
+				if (('25P02' == e.pgcode) or ('42883' == e.pgcode)):
+					self.database.rollback()
+				elif ('25P02' != e.pgcode):
+					self.logger.critical("Irrecoverable error!")
+					self.logger.error("PGCODE: %s", e.pgcode)
+					self.logger.error("PGERROR: %s", e.pgerror)
+					sys.exit()
+			except UnboundLocalError as e:
+				self.logger.error("UnboundLocalError: %s", e)
+			except:
+				self.logger.critical("Unexpected error: %s", sys.exc_info()[0])
+				self.logger.critical("Traceback: %s", traceback.format_exc())
+			# Sleep to stop Yahoo kicking us
 			time.sleep(8)
 
 
