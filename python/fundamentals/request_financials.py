@@ -39,7 +39,7 @@ class RequestFinancials(request_base.RequestBase):
 	# Keys
 	RequestKeyDict = {
 		'Q':	{
-					"p_datestamp"						:	("Quarterly.endDate", datetime.datetime.fromisoformat),
+					"p_datestamp"						:	("Quarterly.endDate", datetime.date.fromisoformat),
 					"p_earnings_per_share"				:	("Quarterly.BasicEPS", float ),
 					"p_total_revenue"					:	("Quarterly.incomeBeforeTax", float ),
 					"p_cost_of_revenue"					:	("Quarterly.costOfRevenue", float ),

@@ -70,7 +70,7 @@ class RequestBase(import_base.ImportBase):
 			data_parameters = collections.OrderedDict()
 			data_parameters['p_symbol'] = symbol
 			data_parameters['p_length'] = 4 # Magic number
-			data_parameters['p_report_type'] = str(reportType)
+			data_parameters['p_report_type'] = reportType
 			# Fill in the data using the key map to populate it
 			for params, details in paramMap.items():
 				self.logger.info("Param: %s : %s",params, details)
