@@ -33,6 +33,7 @@ psql -h localhost -U trading -d tradingdb
 
 # Daily running
 ./stockQuote.py
+./fundamentals.py
 
 # Categorisation script
 ./scripts/categorise.sh

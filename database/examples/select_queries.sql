@@ -73,3 +73,20 @@ ORDER BY
 	s.category
 ;
 {code}
+
+
+-- Fundamentals Data
+{code:sql}
+SELECT
+	e.name,
+	s.name,
+	s.symbol,
+	ed.*
+FROM
+	trading_schema.exchange e
+	INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id)
+	INNER JOIN trading_schema.earnings_data ed ON  (ed.symbol_id = s.id)
+ORDER BY
+	s.name
+;
+{code}

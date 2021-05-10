@@ -7,3 +7,6 @@
 [submodule "python/comms"]
 	path = python/comms
 	url = https://github.com/losowski/lzerocomms.git
+[submodule "python/yahoo_fundamentals"]
+	path = python/yahoo_fundamentals
+	url = git@github.com:losowski/yahoo_fundamentals.git
