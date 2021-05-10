@@ -22,11 +22,11 @@ class RequestFinancials(request_base.RequestBase):
 		s.symbol
 	FROM
 		trading_schema.exchange e
-		INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled != 'Y')
+		INNER JOIN trading_schema.symbol s ON (e.id = s.exchange_id AND s.enabled = 'Y')
 		LEFT JOIN trading_schema.earnings_data ed ON (s.id = ed.symbol_id AND
-			(ed.report_type='Q' AND (datestamp IS NULL OR datestamp <= localtimestamp - INTERVAL '89 DAY'))
+			(ed.report_type = 'Q' AND (datestamp IS NULL OR datestamp <= localtimestamp - INTERVAL '89 DAY'))
 				OR
-			(ed.report_type='Y' AND (datestamp IS NULL OR datestamp <= localtimestamp - INTERVAL '365 DAY')) )
+			(ed.report_type = 'Y' AND (datestamp IS NULL OR datestamp <= localtimestamp - INTERVAL '365 DAY')) )
 	WHERE
 		e.enabled = 'Y'
 	ORDER BY

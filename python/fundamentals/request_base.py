@@ -50,6 +50,9 @@ class RequestBase(import_base.ImportBase):
 				self.logger.error("PGERROR: %s", e.pgerror)
 				if (('25P02' == e.pgcode) or ('42883' == e.pgcode)):
 					self.database.rollback()
+				elif ('23502' == e.pgcode):
+					self.logger.error("NULLs not allowed: %s", e.pgcode)
+					self.setSymbolDisabled(symbol, '?')
 				elif ('25P02' != e.pgcode):
 					self.logger.critical("Irrecoverable error!")
 					self.logger.error("PGCODE: %s", e.pgcode)
@@ -124,3 +127,17 @@ class RequestBase(import_base.ImportBase):
 				retVal.append(fd)
 		return retVal
 
+
+
+	#Disable problem symbols
+	def setSymbolDisabled(self, symbol, state ='-'):
+		self.logger.warn("Disable %s (%s)", symbol, state)
+		query = self.database.get_query()
+		data_parameters = collections.OrderedDict()
+		data_parameters['symbol']			= symbol
+		data_parameters['enable']			= state
+		data_list = list(data_parameters.values())
+		query.callproc("trading_schema.pDisableSymbol", data_list)
+		update_symbols = query.fetchall()
+		#commit the data
+		self.database.commit()
