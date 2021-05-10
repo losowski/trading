@@ -124,7 +124,3 @@ class RequestBase(import_base.ImportBase):
 				retVal.append(fd)
 		return retVal
 
-
-	# Make request
-	def makeRequest(self, symbol, timeBegin = None, timeEnd = None):
-		self.logger.info("Make Request\"%s\" (%s-%s)", symbol, timeBegin, timeEnd)

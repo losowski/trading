@@ -75,7 +75,3 @@ class RequestFinancials(request_base.RequestBase):
 
 	def __del__(self):
 		super(RequestFinancials, self).__del__()
-
-	# Make request
-	def makeRequest(self, symbol, timeBegin = None, timeEnd = None):
-		super(RequestFinancials, self).makeRequest(symbol, timeBegin, timeEnd)
