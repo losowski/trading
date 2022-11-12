@@ -27,6 +27,15 @@ psql -h localhost -U trading -d tradingdb
 \i symbol_data.sql
 \i quote_data.sql
 
+# Fix sequences
+select max(id) from trading_schema.exchange;
+select max(id) from trading_schema.symbol;
+select max(id) from trading_schema.quote;
+
+ALTER SEQUENCE IF EXISTS trading_schema.exchange_id_seq RESTART WITH 5;
+ALTER SEQUENCE IF EXISTS trading_schema.symbol_id_seq RESTART WITH 3639;
+ALTER SEQUENCE IF EXISTS trading_schema.quote_id_seq RESTART WITH 10773164;
+
 
 # Import Symbols
 cd scripts

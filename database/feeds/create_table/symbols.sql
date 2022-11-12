@@ -1,7 +1,7 @@
 -- Table: trading_schema.symbol
 CREATE SEQUENCE trading_schema.symbol_id_seq
   INCREMENT 1
-  MINVALUE 1
+  MINVALUE 3639
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;

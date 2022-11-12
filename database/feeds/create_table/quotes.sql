@@ -1,7 +1,7 @@
 -- Table: trading_schema.quote
 CREATE SEQUENCE trading_schema.quote_id_seq
   INCREMENT 1
-  MINVALUE 1
+  MINVALUE 10753074
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;

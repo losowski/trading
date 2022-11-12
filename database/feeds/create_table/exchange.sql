@@ -1,7 +1,7 @@
 -- Table: trading_schema.exchange
 CREATE SEQUENCE trading_schema.exchange_id_seq
   INCREMENT 1
-  MINVALUE 1
+  MINVALUE 4
   MAXVALUE 9223372036854775807
   START 1
   CACHE 1;
