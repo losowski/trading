@@ -58,13 +58,13 @@ CREATE INDEX idx_symbol_enabled
 CREATE INDEX idx_symbol_last_update
   ON trading_schema.symbol
   USING btree
-  (last_update COLLATE pg_catalog."default");
+  (last_update);
 
 -- Index: trading_schema.idx_symbol_category
 CREATE INDEX idx_symbol_category
   ON trading_schema.symbol
   USING btree
-  (category COLLATE pg_catalog."default");
+  (category);
 
 -- Stored Procedures --
 -- INSERT
