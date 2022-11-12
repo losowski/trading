@@ -19,6 +19,15 @@ sudo pip3 install yahoo-historical pyzmq
 	-- may need to cd back to directory --
 5) \i create_tradedb.sql
 
+# Database login (Default)
+psql -h localhost -U trading -d tradingdb
+
+# Restoring old data (after setup and login)
+\i exchange_data.sql
+\i symbol_data.sql
+\i quote_data.sql
+
+
 # Import Symbols
 cd scripts
 
@@ -28,15 +37,15 @@ cd scripts
 
 ./NYSE.sh
 
-# Database login (Default)
-psql -h localhost -U trading -d tradingdb
 
 # Daily running
 ./stockQuote.py
 ./fundamentals.py
 
+
 # Categorisation script
 ./scripts/categorise.sh
+
 
 # TEST
 ## Test Exchanges
@@ -67,6 +76,7 @@ psql -h localhost -U trading -d tradingdb
 + stockQuote.py
 	- Get the historical data for the stocks mentioned
 
+
 # ServerAPI
 	./stockTickerAPI.py
 		- Opens a ZeroMQ port 9456
@@ -74,3 +84,7 @@ psql -h localhost -U trading -d tradingdb
 
 	./queryStock.py
 		- User client for communicating with stockTickerAPI.py
+
+
+
+	
