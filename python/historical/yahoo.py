@@ -5,6 +5,7 @@
 #https://github.com/AndrewRPorter/yahoo-historical
 import yahoo_historical
 
+import time
 import datetime
 import collections
 import logging
@@ -20,13 +21,12 @@ class Yahoo (stockBase.StockBase):
 	def __del__(self):
 		stockBase.StockBase.__del__(self)
 
-
 	def __convertDateToHistoricalFormat(self, dateInput):
-		logging.debug("Date: %s", dateInput)
+		logging.info("Date: %s", dateInput)
 		logging.debug("Year: %s", dateInput.year)
 		logging.debug("Month: %s", dateInput.month)
 		logging.debug("Day: %s", dateInput.day)
-		dateData = [dateInput.year,dateInput.month, dateInput.day]
+		dateData = time.mktime(datetime.datetime(dateInput.year, dateInput.month, dateInput.day).timetuple())
 		return dateData
 
 
